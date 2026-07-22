@@ -1,0 +1,117 @@
+/* もしもカード・そよぎ 基本スタイル(外骨格)
+   ・そよぎブランド4色(明るい緑/水色/白/黒)を土台に、緊急表示だけ赤アクセント
+   ・シニア/要配慮者向け: でか文字・大ボタン・.pressing の沈み込み(tap.js連動) */
+:root{
+  --brand:#2e9e6b;
+  --brand-dark:#237a52;
+  --bg:#f2f7f3;
+  --ink:#1a1a1a;
+  --card:#ffffff;
+  --alert:#d43f3f;
+  --line:#d7e5da;
+}
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; }
+body{
+  font-family:"Hiragino Sans","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
+  background:var(--bg); color:var(--ink);
+  padding-bottom:84px;
+  line-height:1.6;
+}
+/* 文字サイズ3段階(せっていで切替・body class) */
+body.fs0{ font-size:18px; }
+body.fs1{ font-size:21px; }
+body.fs2{ font-size:25px; }
+
+header#hd{
+  background:var(--brand); color:#fff;
+  padding:12px 16px; font-weight:700; font-size:1.05em;
+}
+#main{ padding:16px; max-width:640px; margin:0 auto; }
+
+.screen.hidden, .hidden{ display:none; }
+
+.tagline{ font-weight:700; margin:4px 0 14px; }
+
+/* ホームの大ボタン(緊急時に迷わない) */
+.show-btn{
+  display:block; width:100%; min-height:96px;
+  font-size:1.5em; font-weight:800; font-family:inherit;
+  background:var(--card); color:var(--ink);
+  border:4px solid var(--alert); border-radius:16px;
+}
+.preview{ margin-top:14px; color:#444; }
+
+/* かきこみ */
+label{ display:block; font-weight:700; margin:14px 0 4px; }
+textarea{
+  width:100%; font-size:1em; font-family:inherit;
+  padding:10px; border:2px solid var(--line); border-radius:10px;
+  background:var(--card); resize:vertical;
+}
+.save-btn{
+  width:100%; min-height:64px; margin-top:16px;
+  background:var(--brand); color:#fff; border:none; border-radius:12px;
+  font-size:1.2em; font-weight:700; font-family:inherit;
+}
+
+/* せってい */
+.set-row{
+  display:flex; justify-content:space-between; align-items:center;
+  min-height:56px; gap:12px; border-bottom:1px solid var(--line);
+}
+.set-btn{
+  min-width:120px; min-height:48px; font-size:1em; font-family:inherit;
+  border:2px solid var(--brand); background:var(--card); border-radius:10px;
+}
+select{ min-height:48px; font-size:1em; font-family:inherit; }
+.credit{ color:#666; margin-top:20px; text-align:center; }
+
+/* タブバー */
+#tabbar{
+  position:fixed; left:0; right:0; bottom:0; display:flex;
+  background:var(--card); border-top:2px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tab{
+  flex:1; min-height:64px; border:none; background:none;
+  font-size:1em; font-weight:700; font-family:inherit; color:#555;
+  border-top:4px solid transparent;
+}
+.tab.active{ color:var(--brand); border-top-color:var(--brand); }
+
+/* tap.js の押下フィードバック */
+.pressing{ transform:scale(.97); filter:brightness(.92); }
+
+/* みせる(全画面・でか文字・高コントラスト) */
+.show-overlay{
+  position:fixed; inset:0; background:#fff; z-index:50;
+  overflow-y:auto; padding:20px 16px 120px;
+}
+.show-head{
+  font-size:1.3em; font-weight:800; color:var(--alert);
+  border:3px solid var(--alert); border-radius:12px;
+  padding:12px; text-align:center;
+}
+.show-block{ margin-top:18px; }
+.show-label{ font-size:.9em; color:#555; font-weight:700; }
+.show-value{
+  font-size:1.9em; font-weight:800; line-height:1.35;
+  background:var(--bg); border-radius:10px; padding:10px 12px;
+  overflow-wrap:anywhere;
+}
+.show-empty{ margin-top:24px; font-size:1.2em; text-align:center; color:#555; }
+.close-btn{
+  position:fixed; bottom:16px; left:16px; right:16px; min-height:64px;
+  background:var(--brand); color:#fff; border:none; border-radius:12px;
+  font-size:1.2em; font-weight:700; font-family:inherit; z-index:51;
+}
+
+/* トースト */
+.toast{
+  position:fixed; bottom:96px; left:50%; transform:translateX(-50%);
+  background:#333; color:#fff; padding:10px 18px; border-radius:999px;
+  opacity:0; transition:opacity .25s; pointer-events:none; z-index:60;
+  max-width:88%;
+}
+.toast.show{ opacity:1; }

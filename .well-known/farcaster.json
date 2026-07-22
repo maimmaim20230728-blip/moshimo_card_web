@@ -1,0 +1,21 @@
+{
+  "accountAssociation": {
+    "header": "",
+    "payload": "",
+    "signature": ""
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "もしもカード・そよぎ",
+    "iconUrl": "https://moshimo-card-web.vercel.app/icons/icon-512.png",
+    "homeUrl": "https://moshimo-card-web.vercel.app/",
+    "imageUrl": "https://moshimo-card-web.vercel.app/icons/fc-card-3x2.png",
+    "buttonTitle": "🆘 ひらく / Open",
+    "splashImageUrl": "https://moshimo-card-web.vercel.app/icons/icon-512.png",
+    "splashBackgroundColor": "#2e9e6b",
+    "subtitle": "もしもの時の意思表示カード",
+    "description": "もしもの時に見せる、緊急時の意思表示カード。びょうき・くすり・アレルギー・おねがいしたい配慮を端末の中だけに保存し、緊急時はでか文字の全画面で見せられます。無料・広告なし・登録不要・オフラインOK。",
+    "primaryCategory": "health-fitness",
+    "tags": ["emergency", "accessibility", "welfare", "disaster", "soyogi"]
+  }
+}

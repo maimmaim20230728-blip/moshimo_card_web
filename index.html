@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="もしもの時に見せる、緊急時の意思表示カード。びょうき・くすり・アレルギー・おねがいしたい配慮を端末の中だけに保存。無料・広告なし・オフラインOK。">
+<meta name="theme-color" content="#2e9e6b">
+<title>もしもカード・そよぎ</title>
+<meta property="og:title" content="もしもカード・そよぎ">
+<meta property="og:description" content="もしもの時は、これを見せてください。緊急時の意思表示カード。無料・広告なし・登録不要・オフラインOK。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://moshimo-card-web.vercel.app/">
+<meta property="og:image" content="https://moshimo-card-web.vercel.app/icons/fc-card-3x2.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- Farcaster Mini App 埋め込み（タイムラインで画像＋ボタン→タップで起動）🔴web側専用・Play側に入れない -->
+<meta name="fc:miniapp" content='{"version":"1","imageUrl":"https://moshimo-card-web.vercel.app/icons/fc-card-3x2.png","button":{"title":"🆘 ひらく / Open","action":{"type":"launch_miniapp","name":"もしもカード・そよぎ","url":"https://moshimo-card-web.vercel.app/","splashImageUrl":"https://moshimo-card-web.vercel.app/icons/icon-512.png","splashBackgroundColor":"#2e9e6b"}}}' />
+<!-- 旧クライアント/バリデータ互換の fc:frame 併記（中身同一） -->
+<meta name="fc:frame" content='{"version":"1","imageUrl":"https://moshimo-card-web.vercel.app/icons/fc-card-3x2.png","button":{"title":"🆘 ひらく / Open","action":{"type":"launch_frame","name":"もしもカード・そよぎ","url":"https://moshimo-card-web.vercel.app/","splashImageUrl":"https://moshimo-card-web.vercel.app/icons/icon-512.png","splashBackgroundColor":"#2e9e6b"}}}' />
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="fs0">
+<header id="hd">
+  <div id="hd-title">もしもカード・そよぎ</div>
+</header>
+
+<main id="main">
+
+  <!-- カード(ホーム) -->
+  <section id="scr-home" class="screen">
+    <p id="home-hint" class="tagline">もしもの時は、これを見せてください。</p>
+    <button id="btn-show" class="show-btn">🆘 これを みせる</button>
+    <div id="home-preview" class="preview"></div>
+  </section>
+
+  <!-- かきこみ -->
+  <section id="scr-edit" class="screen hidden">
+    <label id="lbl-name" for="fld-name">なまえ(かかなくてもOK)</label>
+    <textarea id="fld-name" rows="1"></textarea>
+
+    <label id="lbl-cond" for="fld-cond">びょうき・しょうがい</label>
+    <textarea id="fld-cond" rows="2"></textarea>
+
+    <label id="lbl-meds" for="fld-meds">のんでいる くすり</label>
+    <textarea id="fld-meds" rows="2"></textarea>
+
+    <label id="lbl-allergy" for="fld-allergy">アレルギー</label>
+    <textarea id="fld-allergy" rows="2"></textarea>
+
+    <label id="lbl-trouble" for="fld-trouble">にがてなこと・こまること</label>
+    <textarea id="fld-trouble" rows="2"></textarea>
+
+    <label id="lbl-request" for="fld-request">おねがいしたい こと</label>
+    <textarea id="fld-request" rows="2"></textarea>
+
+    <label id="lbl-contact" for="fld-contact">きんきゅう れんらくさき</label>
+    <textarea id="fld-contact" rows="2"></textarea>
+
+    <button id="btn-save" class="save-btn">ほぞんする</button>
+  </section>
+
+  <!-- せってい -->
+  <section id="scr-set" class="screen hidden">
+    <div class="set-row"><span id="lbl-fs">もじの大きさ</span><button id="btn-fs" class="set-btn"></button></div>
+    <div class="set-row"><span id="lbl-lang">ことば / Language</span>
+      <select id="set-lang">
+        <option value="ja">日本語</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+    <div class="set-row"><span id="lbl-sound">タップ音</span><button id="btn-sound" class="set-btn"></button></div>
+    <p id="about-credit" class="credit">介護と支援の相談どころ「そよぎ」/ SOYOGI</p>
+    <p id="about-ver" class="credit"></p>
+  </section>
+
+</main>
+
+<!-- みせる(全画面オーバーレイ) -->
+<section id="scr-show" class="show-overlay hidden">
+  <div id="show-head" class="show-head"></div>
+  <div id="show-list"></div>
+  <button id="show-close" class="close-btn">とじる</button>
+</section>
+
+<nav id="tabbar">
+  <button id="tab-card" class="tab active">カード</button>
+  <button id="tab-edit" class="tab">かきこみ</button>
+  <button id="tab-set" class="tab">せってい</button>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<script src="audio.js"></script>
+<script src="tap.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+<!-- Farcaster Mini App SDK：読込完了を通知しスプラッシュを閉じる（Farcaster外/オフラインでは無害にスキップ）🔴web側専用 -->
+<script type="module">
+  try {
+    const { sdk } = await import("https://esm.sh/@farcaster/miniapp-sdk");
+    await sdk.actions.ready();
+  } catch (e) { /* Farcaster外では何もしない */ }
+</script>
+</body>
+</html>

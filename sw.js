@@ -4,7 +4,7 @@
    ・HTMLはnetwork-first(更新をすぐ反映・オフライン時はキャッシュ)
    ・その他(css/js/json/icon)はcache-first
    ・開発/検証用ファイル(_始まり)はキャッシュしない */
-const CACHE = 'moshimo-v6';
+const CACHE = 'moshimo-v7';
 const ASSETS = [
   './',
   './index.html',
@@ -14,6 +14,7 @@ const ASSETS = [
   './i18n.js',
   './tap.js',
   './manifest.json',
+  './privacy.html',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];

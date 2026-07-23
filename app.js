@@ -74,7 +74,7 @@ const I18N_MAP = {
   'lbl-bgm':'set.bgm', 'lbl-sound':'set.sound',
   'lbl-fx':'set.fx', 'lbl-alert':'set.alert', 'lbl-vol':'set.vol',
   'bk-hint':'set.bkHint', 'bk-export':'set.bkExport', 'bk-import':'set.bkImport',
-  'paper-note':'set.paperNote', 'about-credit':'set.credit',
+  'paper-note':'set.paperNote', 'link-privacy':'set.privacy', 'about-credit':'set.credit',
   'tab-card':'tab.card', 'tab-edit':'tab.edit', 'tab-set':'tab.set'
 };
 

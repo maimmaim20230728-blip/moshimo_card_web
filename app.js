@@ -14,7 +14,8 @@ const LS_PREF = 'moshimo.pref.v1';
 const FIELD_KEYS = ['name','blood','cond','meds','allergy','doctor','trouble','request','contact','free'];
 
 /* せっていの選択肢(並びは i18n の set.themes 等と1:1) */
-const LANGS  = ['ja','en'];
+const LANGS  = ['ja','en','de','fr','es','it','pt','nl','sv','ko','zh','ar'];
+const RTL_LANGS = ['ar'];
 const THEMES = ['green','aqua','white','dark'];
 const BGMS   = ['off','green','blue'];
 const FXS    = ['plain','invert','blink','invertBlink'];
@@ -84,6 +85,7 @@ function applyI18n(){
     if(el) el.textContent = T(I18N_MAP[id]);
   }
   document.documentElement.lang = pref.lang;
+  document.documentElement.dir = (RTL_LANGS.indexOf(pref.lang) >= 0) ? 'rtl' : 'ltr';
   $('btn-fs').textContent    = T('set.fsSizes')[pref.fs];
   $('btn-theme').textContent = T('set.themes')[THEMES.indexOf(pref.theme)];
   $('btn-bgm').textContent   = T('set.bgms')[BGMS.indexOf(pref.bgm)];

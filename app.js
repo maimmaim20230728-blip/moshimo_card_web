@@ -17,8 +17,8 @@ const FIELD_KEYS = ['name','blood','cond','meds','allergy','doctor','trouble','r
 const LANGS  = ['ja','en'];
 const THEMES = ['green','aqua','white','dark'];
 const BGMS   = ['off','green','blue'];
-const FXS    = ['plain','invert','invertBlink'];
-const ALERTS = ['none','chime','alarm'];
+const FXS    = ['plain','invert','blink','invertBlink'];
+const ALERTS = ['none','chime','alarm','whistle'];
 
 const $ = id => document.getElementById(id);
 
@@ -201,8 +201,8 @@ function openShow(){
   const s = $('scr-show');
   s.classList.remove('hidden');
   s.classList.remove('landscape');
-  s.classList.toggle('fx-invert', pref.fx !== 'plain');
-  s.classList.toggle('fx-blink',  pref.fx === 'invertBlink');
+  s.classList.toggle('fx-invert', pref.fx === 'invert' || pref.fx === 'invertBlink');
+  s.classList.toggle('fx-blink',  pref.fx === 'blink'  || pref.fx === 'invertBlink');
   showing = true;
   Sound.pauseBgm();                     // 緊急表示中はBGMを止める
   if(pref.alert !== 'none'){

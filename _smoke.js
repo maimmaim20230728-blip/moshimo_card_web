@@ -143,21 +143,26 @@ check('保存内容が表示される', shown.includes('そばアレルギー') 
 tap(created['show-close']);
 check('とじるで閉じる', showEl().classList.contains('hidden'));
 
-console.log('[4] めだちかた(はんてん/てんめつ)とよこむき');
+console.log('[4] めだちかた(色を反転/点滅/両方)とよこむき');
 tap(created['tab-set']);
-tap(created['btn-fx']);                               // ふつう→はんてん
-check('めだちかたボタンが「はんてん」', created['btn-fx'].textContent === 'はんてん');
+tap(created['btn-fx']);                               // ふつう→色を反転
+check('めだちかたボタンが「色を反転」', created['btn-fx'].textContent === '色を反転');
 tap(created['tab-card']); tap(created['btn-show']);
-check('はんてんクラスが付く', showEl().classList.contains('fx-invert'));
-check('てんめつはまだ付かない', !showEl().classList.contains('fx-blink'));
+check('反転クラスが付く', showEl().classList.contains('fx-invert'));
+check('点滅はまだ付かない', !showEl().classList.contains('fx-blink'));
 tap(created['show-rot']);
 check('よこむきクラスが付く', showEl().classList.contains('landscape'));
 tap(created['show-rot']);
 check('よこむき解除', !showEl().classList.contains('landscape'));
 tap(created['show-close']);
-tap(created['tab-set']); tap(created['btn-fx']);      // はんてん→はんてん+てんめつ
+tap(created['tab-set']); tap(created['btn-fx']);      // 色を反転→点滅
+check('めだちかたボタンが「点滅」', created['btn-fx'].textContent === '点滅');
 tap(created['tab-card']); tap(created['btn-show']);
-check('はんてん+てんめつで両クラス', showEl().classList.contains('fx-invert') && showEl().classList.contains('fx-blink'));
+check('点滅だけ=反転しない', showEl().classList.contains('fx-blink') && !showEl().classList.contains('fx-invert'));
+tap(created['show-close']);
+tap(created['tab-set']); tap(created['btn-fx']);      // 点滅→色を反転+点滅
+tap(created['tab-card']); tap(created['btn-show']);
+check('色を反転+点滅で両クラス', showEl().classList.contains('fx-invert') && showEl().classList.contains('fx-blink'));
 check('開き直しでよこむきリセット', !showEl().classList.contains('landscape'));
 tap(created['show-close']);
 
@@ -172,7 +177,7 @@ check('SoundのBGMが有効化', evalCtx('Sound.bgmEnabled') === true);
 tap(created['btn-bgm']); tap(created['btn-bgm']);
 check('BGM一周で「なし」に戻る', created['btn-bgm'].textContent === 'なし' && evalCtx('Sound.bgmEnabled') === false);
 
-console.log('[6] みせるおと(チャイム)ととめるボタン');
+console.log('[6] みせるおと(チャイム/アラーム/ホイッスル)ととめるボタン');
 tap(created['btn-alert']);                            // ならさない→チャイム
 check('おとボタンが「チャイム」', created['btn-alert'].textContent === 'チャイム');
 tap(created['btn-vol']);
@@ -181,6 +186,14 @@ tap(created['tab-card']); tap(created['btn-show']);
 check('とめるボタンが出る', !created['show-mute'].classList.contains('hidden'));
 tap(created['show-mute']);
 check('とめるで非表示に', created['show-mute'].classList.contains('hidden'));
+tap(created['show-close']);
+tap(created['tab-set']);
+tap(created['btn-alert']);                            // チャイム→アラーム
+check('おとボタンが「アラーム」', created['btn-alert'].textContent === 'アラーム');
+tap(created['btn-alert']);                            // アラーム→ホイッスル
+check('おとボタンが「ホイッスル」', created['btn-alert'].textContent === 'ホイッスル');
+tap(created['tab-card']); tap(created['btn-show']);
+check('ホイッスルでもとめるボタンが出る', !created['show-mute'].classList.contains('hidden'));
 tap(created['show-close']);
 
 console.log('[7] 言語切替(en)');

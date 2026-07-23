@@ -149,19 +149,45 @@ const Sound = (() => {
       }
     }catch(_){}
   }
+  /* ホイッスル: 防災笛(呼子笛)の「ピーッ ピーッ」。高音+コロ玉のふるえ(約25Hzのビブラート) */
+  function whistleBurst(volMult){
+    try{
+      const t = ctx.currentTime;
+      [0, 0.5].forEach(dt => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'triangle'; o.frequency.value = 2500;
+        const lfo = ctx.createOscillator(), lg = ctx.createGain();
+        lfo.type = 'sine'; lfo.frequency.value = 25; lg.gain.value = 150;
+        lfo.connect(lg); lg.connect(o.frequency);
+        const st = t + dt;
+        g.gain.setValueAtTime(0.0001, st);
+        g.gain.linearRampToValueAtTime(0.07 * volMult, st + 0.02);
+        g.gain.setValueAtTime(0.07 * volMult, st + 0.3);
+        g.gain.exponentialRampToValueAtTime(0.0008, st + 0.38);
+        o.connect(g); g.connect(ctx.destination);
+        o.start(st); o.stop(st + 0.4);
+        lfo.start(st); lfo.stop(st + 0.4);
+      });
+    }catch(_){}
+  }
+
+  const ALERT_KINDS = {
+    chime:   { burst: chimeBurst,   span: 2400 },
+    alarm:   { burst: alarmBurst,   span: 1300 },
+    whistle: { burst: whistleBurst, span: 1800 }
+  };
 
   function startAlert(kind, volLevel){
     stopAlert();
-    if(kind !== 'chime' && kind !== 'alarm') return;
+    const def = ALERT_KINDS[kind];
+    if(!def) return;
     ensure();
     if(!ctx) return;
     stopBgm();                 // みせる表示中はBGMを止める
     alertOn = true;
     const volMult = ALERT_GAIN[volLevel] || 1;
-    const burst = (kind === 'chime') ? chimeBurst : alarmBurst;
-    const span  = (kind === 'chime') ? 2400 : 1300;
-    burst(volMult);
-    alertTimer = setInterval(() => { if(ctx && ctx.state !== 'suspended') burst(volMult); }, span);
+    def.burst(volMult);
+    alertTimer = setInterval(() => { if(ctx && ctx.state !== 'suspended') def.burst(volMult); }, def.span);
   }
   function stopAlert(){
     if(alertTimer){ clearInterval(alertTimer); alertTimer = 0; }

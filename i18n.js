@@ -6,7 +6,8 @@
    ・{n} は app.js が実値に差し替えるプレースホルダ(訳文でも記号のまま残す)
    ・set.lang は言語切替ラベルなので全言語 'ことば / Language' 固定
    ・配列(fsSizes等)は選択肢の並び。全言語で要素数を揃える
-   ・ar は RTL。app.js が ar のとき document.dir='rtl' にする */
+   ・ar は RTL。app.js が ar のとき document.dir='rtl' にする
+   ・edit.allOptional=かきこみ画面の全体案内(どの項目も任意)。show.call=緊急連絡先の発信ボタン(2026-07-23追加) */
 (function(){
 'use strict';
 
@@ -23,7 +24,8 @@ var ja = {
     filled:'かいてあること: {n}こ'
   },
   edit: {
-    name:'なまえ(かかなくてもOK)',
+    allOptional:'ぜんぶ 書かなくても だいじょうぶです。ひつような ところだけ 書いてください。',
+    name:'なまえ',
     blood:'血液型',
     cond:'びょうき・しょうがい',
     meds:'のんでいる くすり',
@@ -43,7 +45,8 @@ var ja = {
     empty:'まだ なにも かかれていません',
     rot:'⟳ よこむき',
     play:'🔔 おとを ならす',
-    stop:'🔇 おとを とめる'
+    stop:'🔇 おとを とめる',
+    call:'📞 でんわする'
   },
   set: {
     hNormal:'ふだんの せってい',
@@ -89,7 +92,8 @@ var en = {
     filled:'Filled items: {n}'
   },
   edit: {
-    name:'Name (optional)',
+    allOptional:"You don't need to fill in everything. Just write the parts that matter for you.",
+    name:'Name',
     blood:'Blood type',
     cond:'Conditions / disabilities',
     meds:'Medicines I take',
@@ -109,7 +113,8 @@ var en = {
     empty:'Nothing is written yet',
     rot:'⟳ Rotate',
     play:'🔔 Play sound',
-    stop:'🔇 Stop sound'
+    stop:'🔇 Stop sound',
+    call:'📞 Call'
   },
   set: {
     hNormal:'Everyday settings',
@@ -142,7 +147,7 @@ var en = {
   }
 };
 
-/* ============ de(Workflow翻訳・ネイティブ検証済み 2026-07-23) ============ */
+/* ============ de ============ */
 var de = {
   "app": { "name": "MOSHIMO Card / Soyogi", "tagline": "Bitte zeigen Sie im Notfall diese Karte." },
   "tab": { "card": "Karte", "edit": "Eintragen", "set": "Einstellungen" },
@@ -152,7 +157,8 @@ var de = {
     "filled": "Ausgefüllte Angaben: {n}"
   },
   "edit": {
-    "name": "Name (optional)",
+    "allOptional": "Sie müssen nicht alles ausfüllen. Schreiben Sie nur, was für Sie wichtig ist.",
+    "name": "Name",
     "blood": "Blutgruppe",
     "cond": "Krankheiten / Behinderungen",
     "meds": "Medikamente, die ich nehme",
@@ -172,7 +178,8 @@ var de = {
     "empty": "Es ist noch nichts eingetragen",
     "rot": "⟳ Drehen",
     "play": "🔔 Ton abspielen",
-    "stop": "🔇 Ton stoppen"
+    "stop": "🔇 Ton stoppen",
+    "call": "📞 Anrufen"
   },
   "set": {
     "hNormal": "Alltägliche Einstellungen",
@@ -215,7 +222,8 @@ var fr = {
     "filled": "Éléments remplis : {n}"
   },
   "edit": {
-    "name": "Nom (facultatif)",
+    "allOptional": "Vous n'avez pas besoin de tout remplir. Notez seulement ce qui compte pour vous.",
+    "name": "Nom",
     "blood": "Groupe sanguin",
     "cond": "Maladies / handicaps",
     "meds": "Médicaments que je prends",
@@ -235,7 +243,8 @@ var fr = {
     "empty": "Rien n'a encore été écrit",
     "rot": "⟳ Pivoter",
     "play": "🔔 Émettre un son",
-    "stop": "🔇 Arrêter le son"
+    "stop": "🔇 Arrêter le son",
+    "call": "📞 Appeler"
   },
   "set": {
     "hNormal": "Réglages habituels",
@@ -278,7 +287,8 @@ var es = {
     "filled": "Elementos rellenados: {n}"
   },
   "edit": {
-    "name": "Nombre (opcional)",
+    "allOptional": "No hace falta rellenarlo todo. Escriba solo lo que le importe.",
+    "name": "Nombre",
     "blood": "Grupo sanguíneo",
     "cond": "Enfermedades / discapacidades",
     "meds": "Medicamentos que tomo",
@@ -298,7 +308,8 @@ var es = {
     "empty": "Aún no hay nada escrito",
     "rot": "⟳ Girar",
     "play": "🔔 Reproducir sonido",
-    "stop": "🔇 Detener sonido"
+    "stop": "🔇 Detener sonido",
+    "call": "📞 Llamar"
   },
   "set": {
     "hNormal": "Ajustes habituales",
@@ -341,7 +352,8 @@ var it = {
     "filled": "Voci compilate: {n}"
   },
   "edit": {
-    "name": "Nome (facoltativo)",
+    "allOptional": "Non devi compilare tutto. Scrivi solo ciò che conta per te.",
+    "name": "Nome",
     "blood": "Gruppo sanguigno",
     "cond": "Malattie / disabilità",
     "meds": "Farmaci che assumo",
@@ -361,7 +373,8 @@ var it = {
     "empty": "Non è ancora stato scritto nulla",
     "rot": "⟳ Ruota",
     "play": "🔔 Riproduci il suono",
-    "stop": "🔇 Ferma il suono"
+    "stop": "🔇 Ferma il suono",
+    "call": "📞 Chiama"
   },
   "set": {
     "hNormal": "Impostazioni abituali",
@@ -404,7 +417,8 @@ var pt = {
     "filled": "Itens preenchidos: {n}"
   },
   "edit": {
-    "name": "Nome (opcional)",
+    "allOptional": "Não precisa preencher tudo. Escreva apenas o que for importante para você.",
+    "name": "Nome",
     "blood": "Tipo sanguíneo",
     "cond": "Doenças / deficiências",
     "meds": "Medicamentos que tomo",
@@ -424,7 +438,8 @@ var pt = {
     "empty": "Ainda não há nada escrito",
     "rot": "⟳ Girar",
     "play": "🔔 Tocar som",
-    "stop": "🔇 Parar som"
+    "stop": "🔇 Parar som",
+    "call": "📞 Ligar"
   },
   "set": {
     "hNormal": "Ajustes do dia a dia",
@@ -467,7 +482,8 @@ var nl = {
     "filled": "Ingevulde onderdelen: {n}"
   },
   "edit": {
-    "name": "Naam (niet verplicht)",
+    "allOptional": "Je hoeft niet alles in te vullen. Schrijf alleen wat voor jou belangrijk is.",
+    "name": "Naam",
     "blood": "Bloedgroep",
     "cond": "Ziektes / beperkingen",
     "meds": "Medicijnen die ik gebruik",
@@ -487,7 +503,8 @@ var nl = {
     "empty": "Er is nog niets ingevuld",
     "rot": "⟳ Draaien",
     "play": "🔔 Geluid afspelen",
-    "stop": "🔇 Geluid stoppen"
+    "stop": "🔇 Geluid stoppen",
+    "call": "📞 Bellen"
   },
   "set": {
     "hNormal": "Gewone instellingen",
@@ -530,7 +547,8 @@ var sv = {
     "filled": "Ifyllda uppgifter: {n}"
   },
   "edit": {
-    "name": "Namn (frivilligt)",
+    "allOptional": "Du behöver inte fylla i allt. Skriv bara det som är viktigt för dig.",
+    "name": "Namn",
     "blood": "Blodgrupp",
     "cond": "Sjukdomar / funktionsnedsättningar",
     "meds": "Läkemedel jag tar",
@@ -550,7 +568,8 @@ var sv = {
     "empty": "Inget är skrivet än",
     "rot": "⟳ Vrid",
     "play": "🔔 Spela ljud",
-    "stop": "🔇 Stoppa ljud"
+    "stop": "🔇 Stoppa ljud",
+    "call": "📞 Ring"
   },
   "set": {
     "hNormal": "Vanliga inställningar",
@@ -593,7 +612,8 @@ var ko = {
     "filled": "적힌 항목: {n}개"
   },
   "edit": {
-    "name": "이름 (안 적어도 괜찮아요)",
+    "allOptional": "모두 적지 않아도 괜찮아요. 필요한 것만 적어 주세요.",
+    "name": "이름",
     "blood": "혈액형",
     "cond": "질병 · 장애",
     "meds": "복용 중인 약",
@@ -613,7 +633,8 @@ var ko = {
     "empty": "아직 아무것도 적혀 있지 않아요",
     "rot": "⟳ 가로 보기",
     "play": "🔔 소리 내기",
-    "stop": "🔇 소리 멈추기"
+    "stop": "🔇 소리 멈추기",
+    "call": "📞 전화하기"
   },
   "set": {
     "hNormal": "평소 설정",
@@ -656,7 +677,8 @@ var zh = {
     "filled": "已填写的内容：{n} 项"
   },
   "edit": {
-    "name": "姓名（可不填）",
+    "allOptional": "不必全部填写。只写对您重要的部分就好。",
+    "name": "姓名",
     "blood": "血型",
     "cond": "疾病、残障",
     "meds": "正在服用的药",
@@ -676,7 +698,8 @@ var zh = {
     "empty": "还没有写任何内容",
     "rot": "⟳ 横向",
     "play": "🔔 播放声音",
-    "stop": "🔇 停止声音"
+    "stop": "🔇 停止声音",
+    "call": "📞 拨打电话"
   },
   "set": {
     "hNormal": "平时的设置",
@@ -719,7 +742,8 @@ var ar = {
     "filled": "العناصر المكتوبة: {n}"
   },
   "edit": {
-    "name": "الاسم (اختياري)",
+    "allOptional": "لا حاجة لتعبئة كل شيء. اكتب فقط ما يهمّك.",
+    "name": "الاسم",
     "blood": "فصيلة الدم",
     "cond": "الأمراض / الإعاقات",
     "meds": "الأدوية التي أتناولها",
@@ -739,7 +763,8 @@ var ar = {
     "empty": "لم تُكتب أي معلومات بعد",
     "rot": "⟳ تدوير",
     "play": "🔔 تشغيل الصوت",
-    "stop": "🔇 إيقاف الصوت"
+    "stop": "🔇 إيقاف الصوت",
+    "call": "📞 اتصال"
   },
   "set": {
     "hNormal": "الإعدادات اليومية",

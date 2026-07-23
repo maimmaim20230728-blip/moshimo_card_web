@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '0.2.0';
+const VER = '1.0';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -63,6 +63,7 @@ function T(key){
 /* 静的要素id → i18nキー(疑似DOMスモークで機械検証できるよう明示マップ方式) */
 const I18N_MAP = {
   'hd-title':'app.name', 'home-hint':'app.tagline', 'btn-show':'home.show',
+  'edit-hint':'edit.allOptional',
   'lbl-name':'edit.name', 'lbl-blood':'edit.blood', 'lbl-cond':'edit.cond',
   'lbl-meds':'edit.meds', 'lbl-allergy':'edit.allergy', 'lbl-doctor':'edit.doctor',
   'lbl-trouble':'edit.trouble', 'lbl-request':'edit.request',
@@ -180,6 +181,12 @@ function releaseWake(){
   wakeLock = null;
 }
 
+/* 緊急連絡先の文字列から電話番号を1つ取り出す(見つからなければnull) */
+function extractPhone(text){
+  const m = String(text).match(/\+?\d[\d\-().\s]{5,}\d/);
+  return m ? m[0].replace(/[^\d+]/g, '') : null;
+}
+
 function buildShow(){
   const card = loadJSON(LS_CARD);
   const list = $('show-list');
@@ -205,6 +212,17 @@ function buildShow(){
     value.textContent = v;
     block.appendChild(label);
     block.appendChild(value);
+    // 緊急連絡先に電話番号があれば、そのまま発信できるボタンを添える
+    if(k === 'contact'){
+      const tel = extractPhone(v);
+      if(tel){
+        const a = document.createElement('a');
+        a.className = 'call-btn';
+        a.href = 'tel:' + tel;
+        a.textContent = T('show.call');
+        block.appendChild(a);
+      }
+    }
     list.appendChild(block);
   });
 }

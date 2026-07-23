@@ -65,6 +65,11 @@ function allText(node){
   for(const c of node.children) s += ' ' + allText(c);
   return s;
 }
+function findTel(node){
+  if(node.href && String(node.href).indexOf('tel:') === 0) return node.href;
+  for(const c of node.children){ const r = findTel(c); if(r) return r; }
+  return null;
+}
 
 /* ---- sandbox ---- */
 const lsData = {};
@@ -122,14 +127,17 @@ console.log('[2] かきこみ(10項目)→保存');
 tap(created['tab-edit']);
 check('かきこみ画面へ遷移', !created['scr-edit'].classList.contains('hidden'));
 check('血液型/かかりつけ/自由欄がある', !!created['fld-blood'] && !!created['fld-doctor'] && !!created['fld-free']);
+check('なまえラベルは注記なし(全体案内に統一)', created['lbl-name'].textContent === 'なまえ');
+check('全項目が任意という案内が出る', (created['edit-hint'].textContent || '').includes('ひつような ところだけ'));
 created['fld-allergy'].value = 'そばアレルギー';
 created['fld-blood'].value = 'A型';
 created['fld-free'].value = 'じゆうきにゅうテスト';
+created['fld-contact'].value = 'はは 090-1234-5678';
 tap(created['btn-save']);
 const saved = JSON.parse(lsData['moshimo.card.v1'] || 'null');
 check('localStorageに保存される', !!saved && saved.fields.allergy === 'そばアレルギー');
 check('血液型も保存される', saved.fields.blood === 'A型');
-check('ホーム件数が更新される', created['home-preview'].textContent.includes('3'));
+check('ホーム件数が更新される', created['home-preview'].textContent.includes('4'));
 /* 自動保存: 「ほぞんする」を押さなくても入力しただけで保存される(押し忘れ消失の防止) */
 created['fld-cond'].value = 'じどうほぞんテスト';
 fire(created['fld-cond'], 'input');
@@ -147,6 +155,7 @@ check('てんめつもしていない', !showEl().classList.contains('fx-blink')
 check('おとなし=「ならす」ボタンが出ている', created['show-sound'].textContent === '🔔 おとを ならす');
 const shown = allText(created['show-list']);
 check('保存内容が表示される', shown.includes('そばアレルギー') && shown.includes('A型') && shown.includes('じゆうきにゅうテスト'));
+check('緊急連絡先が発信ボタン(tel:)になる', findTel(created['show-list']) === 'tel:09012345678');
 tap(created['show-close']);
 check('とじるで閉じる', showEl().classList.contains('hidden'));
 

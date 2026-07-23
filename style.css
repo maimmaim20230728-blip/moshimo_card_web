@@ -86,6 +86,16 @@ textarea{
 }
 select{ min-height:48px; font-size:1em; font-family:inherit; }
 .hint{ color:var(--sub); font-size:.92em; }
+.edit-hint{
+  background:var(--card); border:1.5px solid var(--brand); border-radius:10px;
+  padding:10px 12px; color:var(--ink); font-size:.95em; margin:0 0 6px;
+}
+/* みせる画面の発信ボタン(テーマに依存せず固定の緑・大きくタップしやすく) */
+.call-btn{
+  display:block; margin-top:10px; min-height:64px; line-height:64px;
+  background:#2e9e6b; color:#fff; text-align:center;
+  font-size:1.3em; font-weight:800; border-radius:12px; text-decoration:none;
+}
 .bk-row{ display:flex; gap:12px; }
 .bk-row .set-btn{ flex:1; }
 input[type="file"].hidden{ display:none; }

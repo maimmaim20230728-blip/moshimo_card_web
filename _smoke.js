@@ -130,6 +130,13 @@ const saved = JSON.parse(lsData['moshimo.card.v1'] || 'null');
 check('localStorageに保存される', !!saved && saved.fields.allergy === 'そばアレルギー');
 check('血液型も保存される', saved.fields.blood === 'A型');
 check('ホーム件数が更新される', created['home-preview'].textContent.includes('3'));
+/* 自動保存: 「ほぞんする」を押さなくても入力しただけで保存される(押し忘れ消失の防止) */
+created['fld-cond'].value = 'じどうほぞんテスト';
+fire(created['fld-cond'], 'input');
+check('自動保存: 保存ボタンなしでも即保存', JSON.parse(lsData['moshimo.card.v1']).fields.cond === 'じどうほぞんテスト');
+/* タブ移動→戻っても保存済みが復元される(消えない) */
+tap(created['tab-set']); tap(created['tab-edit']);
+check('タブ往復で入力が消えない', created['fld-cond'].value === 'じどうほぞんテスト');
 
 console.log('[3] みせる(既定=ふつう・おとなし)');
 tap(created['tab-card']);
@@ -137,7 +144,7 @@ tap(created['btn-show']);
 check('みせるが開く', !showEl().classList.contains('hidden'));
 check('ふつう=反転していない', !showEl().classList.contains('fx-invert'));
 check('てんめつもしていない', !showEl().classList.contains('fx-blink'));
-check('おとなし=とめるボタン非表示', created['show-mute'].classList.contains('hidden'));
+check('おとなし=「ならす」ボタンが出ている', created['show-sound'].textContent === '🔔 おとを ならす');
 const shown = allText(created['show-list']);
 check('保存内容が表示される', shown.includes('そばアレルギー') && shown.includes('A型') && shown.includes('じゆうきにゅうテスト'));
 tap(created['show-close']);
@@ -177,24 +184,28 @@ check('SoundのBGMが有効化', evalCtx('Sound.bgmEnabled') === true);
 tap(created['btn-bgm']); tap(created['btn-bgm']);
 check('BGM一周で「なし」に戻る', created['btn-bgm'].textContent === 'なし' && evalCtx('Sound.bgmEnabled') === false);
 
-console.log('[6] みせるおと(チャイム/アラーム/ホイッスル)ととめるボタン');
+console.log('[6] みせるおと: 設定音の自動再生+おとなしでも鳴らせる');
 tap(created['btn-alert']);                            // ならさない→チャイム
 check('おとボタンが「チャイム」', created['btn-alert'].textContent === 'チャイム');
 tap(created['btn-vol']);
 check('おおきさが「おおきい」', created['btn-vol'].textContent === 'おおきい');
 tap(created['tab-card']); tap(created['btn-show']);
-check('とめるボタンが出る', !created['show-mute'].classList.contains('hidden'));
-tap(created['show-mute']);
-check('とめるで非表示に', created['show-mute'].classList.contains('hidden'));
+check('チャイム設定→「とめる」状態で開く', created['show-sound'].textContent === '🔇 おとを とめる');
+tap(created['show-sound']);
+check('押すと「ならす」に切替(止まる)', created['show-sound'].textContent === '🔔 おとを ならす');
+tap(created['show-sound']);
+check('もう一度で「とめる」に戻る(また鳴る)', created['show-sound'].textContent === '🔇 おとを とめる');
 tap(created['show-close']);
+/* おとを「ならさない」に戻し、みせる画面からその場で鳴らせるか(後から鳴らせない問題の修正) */
 tap(created['tab-set']);
-tap(created['btn-alert']);                            // チャイム→アラーム
-check('おとボタンが「アラーム」', created['btn-alert'].textContent === 'アラーム');
-tap(created['btn-alert']);                            // アラーム→ホイッスル
-check('おとボタンが「ホイッスル」', created['btn-alert'].textContent === 'ホイッスル');
+tap(created['btn-alert']); tap(created['btn-alert']); tap(created['btn-alert']); // →アラーム→ホイッスル→ならさない
+check('おとを「ならさない」に戻す', created['btn-alert'].textContent === 'ならさない');
 tap(created['tab-card']); tap(created['btn-show']);
-check('ホイッスルでもとめるボタンが出る', !created['show-mute'].classList.contains('hidden'));
+check('おとなしでも「ならす」ボタンがある', created['show-sound'].textContent === '🔔 おとを ならす');
+tap(created['show-sound']);
+check('おとなしでもその場で鳴らせる=「とめる」表示に', created['show-sound'].textContent === '🔇 おとを とめる');
 tap(created['show-close']);
+check('とじたら音は止まる', evalCtx('Sound.alertOn') === false);
 
 console.log('[7] 言語切替(en)');
 created['set-lang'].value = 'en';

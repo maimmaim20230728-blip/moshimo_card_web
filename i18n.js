@@ -41,7 +41,8 @@ var ja = {
     close:'とじる',
     empty:'まだ なにも かかれていません',
     rot:'⟳ よこむき',
-    mute:'🔇 おとを とめる'
+    play:'🔔 おとを ならす',
+    stop:'🔇 おとを とめる'
   },
   set: {
     hNormal:'ふだんの せってい',
@@ -105,7 +106,8 @@ var en = {
     close:'Close',
     empty:'Nothing is written yet',
     rot:'⟳ Rotate',
-    mute:'🔇 Stop sound'
+    play:'🔔 Play sound',
+    stop:'🔇 Stop sound'
   },
   set: {
     hNormal:'Everyday settings',

@@ -68,7 +68,7 @@ const I18N_MAP = {
   'lbl-contact':'edit.contact', 'lbl-free':'edit.free',
   'btn-save':'edit.save',
   'show-head':'show.head', 'show-close':'show.close',
-  'show-rot':'show.rot', 'show-mute':'show.mute',
+  'show-rot':'show.rot',
   'set-h-normal':'set.hNormal', 'set-h-show':'set.hShow', 'set-h-backup':'set.hBackup',
   'lbl-fs':'set.fs', 'lbl-lang':'set.lang', 'lbl-theme':'set.theme',
   'lbl-bgm':'set.bgm', 'lbl-sound':'set.sound',
@@ -92,6 +92,7 @@ function applyI18n(){
   $('btn-alert').textContent = T('set.alerts')[ALERTS.indexOf(pref.alert)];
   $('btn-vol').textContent   = T('set.vols')[pref.vol];
   $('about-ver').textContent = 'v' + VER;
+  updateSoundBtn();
   renderHome();
 }
 
@@ -119,6 +120,7 @@ function showScreen(id){
     $(SCREENS[s]).classList.toggle('active', s === id);
   }
   if(id === 'scr-edit') fillEditForm();
+  if(id === 'scr-home') renderHome();
 }
 
 /* ---- ホーム ---- */
@@ -137,20 +139,29 @@ function fillEditForm(){
     $('fld-' + k).value = (card && card.fields[k]) || '';
   });
 }
-function saveCard(){
+function collectCard(){
   const fields = {};
   FIELD_KEYS.forEach(k => { fields[k] = ($('fld-' + k).value || '').trim(); });
-  if(saveJSON(LS_CARD, { v:1, fields, updated: Date.now() })){
-    toast(T('edit.saved'));
-  } else {
-    toast(T('edit.saveFail'));
-  }
+  return fields;
+}
+function persistCard(){
+  return saveJSON(LS_CARD, { v:1, fields: collectCard(), updated: Date.now() });
+}
+/* 自動保存: 入力のたびに静かに保存(押し忘れで消えるのを防ぐ)。トーストは出さない */
+function autoSaveCard(){ persistCard(); }
+/* 「ほぞんする」ボタン=明示保存。自動保存済みでも「保存できた」実感のため残す */
+function saveCard(){
+  if(persistCard()) toast(T('edit.saved'));
+  else toast(T('edit.saveFail'));
   renderHome();
 }
 
 /* ---- みせる(全画面・でか文字・演出/音/wakeLock) ---- */
 let showing = false;
+let soundPlaying = false;
 let wakeLock = null;
+/* おとなし設定でも緊急時にその場で鳴らせるようにする既定音(せってい未設定時) */
+const DEFAULT_ALERT = 'alarm';
 
 function acquireWake(){
   try{
@@ -206,19 +217,37 @@ function openShow(){
   showing = true;
   Sound.pauseBgm();                     // 緊急表示中はBGMを止める
   if(pref.alert !== 'none'){
-    Sound.startAlert(pref.alert, pref.vol);
-    $('show-mute').classList.remove('hidden');
+    Sound.startAlert(pref.alert, pref.vol);   // せっていで音を選んでいれば自動で鳴らす
+    soundPlaying = true;
   } else {
-    $('show-mute').classList.add('hidden');
+    soundPlaying = false;
   }
+  updateSoundBtn();
   acquireWake();                        // スリープ防止
 }
 function closeShow(){
   showing = false;
+  soundPlaying = false;
   $('scr-show').classList.add('hidden');
   Sound.stopAlert();
   releaseWake();
   Sound.resumeBgm();
+}
+/* みせる画面の音トグル: 事前設定が「ならさない」でも、その場で鳴らし始められる */
+function toggleShowSound(){
+  if(soundPlaying){
+    Sound.stopAlert();
+    soundPlaying = false;
+  } else {
+    const kind = (pref.alert !== 'none') ? pref.alert : DEFAULT_ALERT;
+    Sound.startAlert(kind, pref.vol);
+    soundPlaying = true;
+  }
+  updateSoundBtn();
+}
+function updateSoundBtn(){
+  const btn = $('show-sound');
+  if(btn) btn.textContent = soundPlaying ? T('show.stop') : T('show.play');
 }
 
 /* ---- 機種変更(バックアップ)・おうち介護記録の方式流用 ---- */
@@ -272,8 +301,13 @@ function init(){
   Tap.bind($('btn-show'), openShow);
   Tap.bind($('show-close'), closeShow);
   Tap.bind($('show-rot'), () => $('scr-show').classList.toggle('landscape'));
-  Tap.bind($('show-mute'), () => { Sound.stopAlert(); $('show-mute').classList.add('hidden'); });
+  Tap.bind($('show-sound'), toggleShowSound);
   Tap.bind($('btn-save'), saveCard);
+
+  /* 自動保存: 各こうもくは入力した瞬間に保存される(「ほぞんする」の押し忘れで消えない) */
+  FIELD_KEYS.forEach(k => {
+    $('fld-' + k).addEventListener('input', autoSaveCard);
+  });
 
   Tap.bind($('btn-fs'), () => {
     pref.fs = (pref.fs + 1) % 3;

@@ -47,10 +47,13 @@ header#hd{
 
 .tagline{ font-weight:700; margin:4px 0 14px; }
 
-/* ホームの大ボタン(緊急時に迷わない・枠は大きく押しやすく=2026-07-23監修) */
+/* ホームの大ボタン(緊急時に迷わない・画面の約半分を占める=2026-07-23監修。
+   空欄をボタンに使い切る。押しやすいに越したことない) */
 .show-btn{
-  display:block; width:100%; min-height:150px;
-  font-size:1.7em; font-weight:800; font-family:inherit; line-height:1.4;
+  display:block; width:100%;
+  min-height:50vh;
+  min-height:50dvh;   /* URLバーの伸縮があるモバイルでは実表示高さ基準(対応ブラウザのみ上書き) */
+  font-size:1.8em; font-weight:800; font-family:inherit; line-height:1.4;
   background:var(--card); color:var(--ink);
   border:7px solid var(--alert); border-radius:22px;
   padding:14px;
@@ -87,6 +90,10 @@ select{ min-height:48px; font-size:1em; font-family:inherit; }
 .bk-row .set-btn{ flex:1; }
 input[type="file"].hidden{ display:none; }
 .credit{ color:var(--sub); margin-top:20px; text-align:center; }
+.credit a{
+  color:var(--brand); text-decoration:underline;
+  display:inline-block; padding:8px 4px;   /* タップしやすい余白 */
+}
 
 /* タブバー */
 #tabbar{

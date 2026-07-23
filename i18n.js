@@ -69,7 +69,7 @@ var ja = {
     imported:'よみこみました ✓',
     importFail:'よみこめませんでした',
     paperNote:'お住まいの ちいきの 紙のヘルプカード・ヘルプマークと あわせて つかえます。',
-    credit:'介護と支援の相談どころ「そよぎ」/ SOYOGI'
+    credit:'アプリ開発：介護と支援の相談どころ そよぎ'
   }
 };
 
@@ -133,7 +133,7 @@ var en = {
     imported:'Imported ✓',
     importFail:'Could not import',
     paperNote:'You can use this together with the paper help card or help mark of your local area.',
-    credit:'Soyogi / SOYOGI'
+    credit:'App development: Soyogi / SOYOGI'
   }
 };
 

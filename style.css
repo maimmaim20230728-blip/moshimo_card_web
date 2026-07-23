@@ -47,12 +47,13 @@ header#hd{
 
 .tagline{ font-weight:700; margin:4px 0 14px; }
 
-/* ホームの大ボタン(緊急時に迷わない) */
+/* ホームの大ボタン(緊急時に迷わない・枠は大きく押しやすく=2026-07-23監修) */
 .show-btn{
-  display:block; width:100%; min-height:96px;
-  font-size:1.5em; font-weight:800; font-family:inherit;
+  display:block; width:100%; min-height:150px;
+  font-size:1.7em; font-weight:800; font-family:inherit; line-height:1.4;
   background:var(--card); color:var(--ink);
-  border:4px solid var(--alert); border-radius:16px;
+  border:7px solid var(--alert); border-radius:22px;
+  padding:14px;
 }
 .preview{ margin-top:14px; color:var(--sub); }
 

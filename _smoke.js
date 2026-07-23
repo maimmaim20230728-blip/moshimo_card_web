@@ -145,8 +145,8 @@ check('とじるで閉じる', showEl().classList.contains('hidden'));
 
 console.log('[4] めだちかた(色を反転/点滅/両方)とよこむき');
 tap(created['tab-set']);
-tap(created['btn-fx']);                               // ふつう→色を反転
-check('めだちかたボタンが「色を反転」', created['btn-fx'].textContent === '色を反転');
+tap(created['btn-fx']);                               // ふつう→いろを はんてん
+check('めだちかたボタンが「いろを はんてん」', created['btn-fx'].textContent === 'いろを はんてん');
 tap(created['tab-card']); tap(created['btn-show']);
 check('反転クラスが付く', showEl().classList.contains('fx-invert'));
 check('点滅はまだ付かない', !showEl().classList.contains('fx-blink'));
@@ -155,8 +155,8 @@ check('よこむきクラスが付く', showEl().classList.contains('landscape')
 tap(created['show-rot']);
 check('よこむき解除', !showEl().classList.contains('landscape'));
 tap(created['show-close']);
-tap(created['tab-set']); tap(created['btn-fx']);      // 色を反転→点滅
-check('めだちかたボタンが「点滅」', created['btn-fx'].textContent === '点滅');
+tap(created['tab-set']); tap(created['btn-fx']);      // いろを はんてん→てんめつ
+check('めだちかたボタンが「てんめつ」', created['btn-fx'].textContent === 'てんめつ');
 tap(created['tab-card']); tap(created['btn-show']);
 check('点滅だけ=反転しない', showEl().classList.contains('fx-blink') && !showEl().classList.contains('fx-invert'));
 tap(created['show-close']);

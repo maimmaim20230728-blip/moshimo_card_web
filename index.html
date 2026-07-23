@@ -35,10 +35,13 @@
     <div id="home-preview" class="preview"></div>
   </section>
 
-  <!-- かきこみ -->
+  <!-- かきこみ(10項目・SPEC_V1) -->
   <section id="scr-edit" class="screen hidden">
     <label id="lbl-name" for="fld-name">なまえ(かかなくてもOK)</label>
     <textarea id="fld-name" rows="1"></textarea>
+
+    <label id="lbl-blood" for="fld-blood">血液型</label>
+    <textarea id="fld-blood" rows="1"></textarea>
 
     <label id="lbl-cond" for="fld-cond">びょうき・しょうがい</label>
     <textarea id="fld-cond" rows="2"></textarea>
@@ -49,6 +52,9 @@
     <label id="lbl-allergy" for="fld-allergy">アレルギー</label>
     <textarea id="fld-allergy" rows="2"></textarea>
 
+    <label id="lbl-doctor" for="fld-doctor">かかりつけ(びょういん・くすりや)</label>
+    <textarea id="fld-doctor" rows="2"></textarea>
+
     <label id="lbl-trouble" for="fld-trouble">にがてなこと・こまること</label>
     <textarea id="fld-trouble" rows="2"></textarea>
 
@@ -58,11 +64,15 @@
     <label id="lbl-contact" for="fld-contact">きんきゅう れんらくさき</label>
     <textarea id="fld-contact" rows="2"></textarea>
 
+    <label id="lbl-free" for="fld-free">じゆうに かくところ</label>
+    <textarea id="fld-free" rows="3"></textarea>
+
     <button id="btn-save" class="save-btn">ほぞんする</button>
   </section>
 
   <!-- せってい -->
   <section id="scr-set" class="screen hidden">
+    <h2 id="set-h-normal" class="sec-h">ふだんの せってい</h2>
     <div class="set-row"><span id="lbl-fs">もじの大きさ</span><button id="btn-fs" class="set-btn"></button></div>
     <div class="set-row"><span id="lbl-lang">ことば / Language</span>
       <select id="set-lang">
@@ -70,7 +80,24 @@
         <option value="en">English</option>
       </select>
     </div>
+    <div class="set-row"><span id="lbl-theme">いろ</span><button id="btn-theme" class="set-btn"></button></div>
+    <div class="set-row"><span id="lbl-bgm">BGM</span><button id="btn-bgm" class="set-btn"></button></div>
     <div class="set-row"><span id="lbl-sound">タップ音</span><button id="btn-sound" class="set-btn"></button></div>
+
+    <h2 id="set-h-show" class="sec-h">みせるときの せってい</h2>
+    <div class="set-row"><span id="lbl-fx">めだちかた</span><button id="btn-fx" class="set-btn"></button></div>
+    <div class="set-row"><span id="lbl-alert">おと</span><button id="btn-alert" class="set-btn"></button></div>
+    <div class="set-row"><span id="lbl-vol">おとの おおきさ</span><button id="btn-vol" class="set-btn"></button></div>
+
+    <h2 id="set-h-backup" class="sec-h">きしゅへんこう(バックアップ)</h2>
+    <p id="bk-hint" class="hint">あたらしい スマホに うつるときは、「かきだす」で ファイルを ほぞんして、あたらしい スマホで「よみこむ」を おしてください。</p>
+    <div class="bk-row">
+      <button id="bk-export" class="set-btn">かきだす</button>
+      <button id="bk-import" class="set-btn">よみこむ</button>
+    </div>
+    <input id="bk-file" type="file" accept="application/json,.json" class="hidden">
+
+    <p id="paper-note" class="hint">お住まいの ちいきの 紙のヘルプカード・ヘルプマークと あわせて つかえます。</p>
     <p id="about-credit" class="credit">介護と支援の相談どころ「そよぎ」/ SOYOGI</p>
     <p id="about-ver" class="credit"></p>
   </section>
@@ -79,9 +106,15 @@
 
 <!-- みせる(全画面オーバーレイ) -->
 <section id="scr-show" class="show-overlay hidden">
-  <div id="show-head" class="show-head"></div>
-  <div id="show-list"></div>
-  <button id="show-close" class="close-btn">とじる</button>
+  <div id="show-rotate">
+    <div id="show-ctrl">
+      <button id="show-rot" class="ctrl-btn">⟳ よこむき</button>
+      <button id="show-mute" class="ctrl-btn hidden">🔇 おとを とめる</button>
+    </div>
+    <div id="show-head" class="show-head"></div>
+    <div id="show-list"></div>
+    <button id="show-close" class="close-btn">とじる</button>
+  </div>
 </section>
 
 <nav id="tabbar">

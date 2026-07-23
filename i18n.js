@@ -1,11 +1,11 @@
-/* もしもカード・そよぎ 多言語テーブル(外骨格 v0.1)
-   ・window.MOSHIMO_I18N = { ja, en, ... }。キー構造は全言語で完全一致させる
-   ・いまは ja(正)+ en(下書き)の2言語だけ。最終的に他アプリと同じ12言語体制へ
-     (進め方はおうち介護記録と同じ: en複製の仮値を置き、Fableが言語ごとに差し替え。
-      未翻訳検出の _check_i18n.js は本実装時に導入する)
+/* もしもカード・そよぎ 多言語テーブル(SPEC_V1)
+   ・window.MOSHIMO_I18N = { ja, en, ... }。キー構造は全言語で完全一致させる(_check.jsが機械検証)
+   ・いまは ja(正)+ en(下書き)の2言語。最終的に他アプリと同じ12言語体制へ
+     (進め方はおうち介護記録と同じ: en複製の仮値を置き、Fableが言語ごとに差し替える)
    ・クレジット(set.credit)は全言語で「そよぎ / SOYOGI」の名前を必ず残す
    ・{n} などは app.js が実値に差し替えるプレースホルダ(訳文でも記号のまま残す)
-   ・🔴文言は仮置き。ヒロさん(現場専門家)監修で確定する */
+   ・配列(fsSizes等)は選択肢の並び。全言語で要素数を揃える
+   ・🔴文言はヒロさん監修済みの項目構成(SPEC_V1)に基づく。表現の微調整は監修つづきで */
 (function(){
 'use strict';
 
@@ -23,12 +23,15 @@ var ja = {
   },
   edit: {
     name:'なまえ(かかなくてもOK)',
+    blood:'血液型',
     cond:'びょうき・しょうがい',
     meds:'のんでいる くすり',
     allergy:'アレルギー',
+    doctor:'かかりつけ(びょういん・くすりや)',
     trouble:'にがてなこと・こまること',
     request:'おねがいしたい こと',
     contact:'きんきゅう れんらくさき',
+    free:'じゆうに かくところ',
     save:'ほぞんする',
     saved:'ほぞんしました ✓',
     saveFail:'ほぞんできませんでした'
@@ -36,14 +39,36 @@ var ja = {
   show: {
     head:'これは わたしの「もしもカード」です。よんでください。',
     close:'とじる',
-    empty:'まだ なにも かかれていません'
+    empty:'まだ なにも かかれていません',
+    rot:'⟳ よこむき',
+    mute:'🔇 おとを とめる'
   },
   set: {
+    hNormal:'ふだんの せってい',
+    hShow:'みせるときの せってい',
+    hBackup:'きしゅへんこう(バックアップ)',
     fs:'もじの大きさ',
     fsSizes:['ふつう','大きい','とても大きい'],
     lang:'ことば / Language',
+    theme:'いろ',
+    themes:['みどり','みずいろ','しろ','くろ'],
+    bgm:'BGM',
+    bgms:['なし','みどりの音','あおの音'],
     sound:'タップ音',
     on:'ON', off:'OFF',
+    fx:'めだちかた',
+    fxs:['ふつう','はんてん','はんてん+てんめつ'],
+    alert:'おと',
+    alerts:['ならさない','チャイム','アラーム'],
+    vol:'おとの おおきさ',
+    vols:['ちいさい','ふつう','おおきい'],
+    bkHint:'あたらしい スマホに うつるときは、「かきだす」で ファイルを ほぞんして、あたらしい スマホで「よみこむ」を おしてください。',
+    bkExport:'かきだす',
+    bkImport:'よみこむ',
+    exported:'かきだしました ✓',
+    imported:'よみこみました ✓',
+    importFail:'よみこめませんでした',
+    paperNote:'お住まいの ちいきの 紙のヘルプカード・ヘルプマークと あわせて つかえます。',
     credit:'介護と支援の相談どころ「そよぎ」/ SOYOGI'
   }
 };
@@ -62,12 +87,15 @@ var en = {
   },
   edit: {
     name:'Name (optional)',
+    blood:'Blood type',
     cond:'Conditions / disabilities',
     meds:'Medicines I take',
     allergy:'Allergies',
+    doctor:'My doctor / pharmacy',
     trouble:'Things I struggle with',
     request:'What I would like you to do',
     contact:'Emergency contact',
+    free:'Anything else',
     save:'Save',
     saved:'Saved ✓',
     saveFail:'Could not save'
@@ -75,14 +103,36 @@ var en = {
   show: {
     head:'This is my MOSHIMO Card. Please read it.',
     close:'Close',
-    empty:'Nothing is written yet'
+    empty:'Nothing is written yet',
+    rot:'⟳ Rotate',
+    mute:'🔇 Stop sound'
   },
   set: {
+    hNormal:'Everyday settings',
+    hShow:'Settings for showing',
+    hBackup:'Phone change (backup)',
     fs:'Text size',
     fsSizes:['Normal','Large','Extra large'],
     lang:'ことば / Language',
+    theme:'Color',
+    themes:['Green','Aqua','White','Black'],
+    bgm:'Music',
+    bgms:['Off','Green tone','Blue tone'],
     sound:'Tap sound',
     on:'ON', off:'OFF',
+    fx:'Attention style',
+    fxs:['Normal','Inverted','Inverted + flashing'],
+    alert:'Sound',
+    alerts:['Silent','Chime','Alarm'],
+    vol:'Volume',
+    vols:['Soft','Normal','Loud'],
+    bkHint:'When moving to a new phone, tap "Export" to save a file, then tap "Import" on the new phone.',
+    bkExport:'Export',
+    bkImport:'Import',
+    exported:'Exported ✓',
+    imported:'Imported ✓',
+    importFail:'Could not import',
+    paperNote:'You can use this together with the paper help card or help mark of your local area.',
     credit:'Soyogi / SOYOGI'
   }
 };

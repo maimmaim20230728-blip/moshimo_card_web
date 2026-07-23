@@ -44,6 +44,35 @@ for(const t of TARGETS){
   }
 }
 
+/* i18n.js の言語間キー構造チェック(ja=正 と他言語の構造完全一致・配列は要素数も一致) */
+const vm = require('vm');
+const i18nSandbox = { window:{} };
+vm.createContext(i18nSandbox);
+vm.runInContext(fs.readFileSync(path.join(__dirname, 'i18n.js'), 'utf8'), i18nSandbox, { filename:'i18n.js' });
+const TBL = i18nSandbox.window.MOSHIMO_I18N || {};
+function shape(o, prefix){
+  const out = [];
+  for(const k of Object.keys(o).sort()){
+    const v = o[k], p = (prefix ? prefix + '.' : '') + k;
+    if(Array.isArray(v)) out.push(p + '[' + v.length + ']');
+    else if(v && typeof v === 'object') out.push(...shape(v, p));
+    else out.push(p);
+  }
+  return out;
+}
+if(!TBL.ja){
+  errors++; console.error('NG  i18n.js: ja テーブルが読めません');
+} else {
+  const jaShape = shape(TBL.ja, '').join('\n');
+  for(const lang of Object.keys(TBL)){
+    if(lang === 'ja') continue;
+    if(shape(TBL[lang], '').join('\n') !== jaShape){
+      errors++;
+      console.error('NG  i18n.js: ' + lang + ' のキー構造が ja と一致しません');
+    }
+  }
+}
+
 /* sw.js ASSETS の実在チェック */
 const sw = fs.readFileSync(path.join(__dirname, 'sw.js'), 'utf8');
 const assets = [...sw.matchAll(/'\.\/([^']+)'/g)].map(m => m[1]).filter(a => a !== '');

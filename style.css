@@ -1,15 +1,29 @@
-/* もしもカード・そよぎ 基本スタイル(外骨格)
-   ・そよぎブランド4色(明るい緑/水色/白/黒)を土台に、緊急表示だけ赤アクセント
+/* もしもカード・そよぎ スタイル(SPEC_V1)
+   ・そよぎブランド4色(明るい緑/水色/白/黒) = 4テーマ(body data-theme)
+   ・みせる画面はテーマに関わらず常に白地+黒でか文字(緊急時の読みやすさ最優先)。
+     はんてん(.fx-invert)だけが黒地白文字にする
+   ・てんめつ(.fx-blink)は光過敏に配慮して約0.8Hzの枠の明滅のみ(全画面ストロボ禁止)
    ・シニア/要配慮者向け: でか文字・大ボタン・.pressing の沈み込み(tap.js連動) */
 :root{
   --brand:#2e9e6b;
-  --brand-dark:#237a52;
   --bg:#f2f7f3;
   --ink:#1a1a1a;
   --card:#ffffff;
   --alert:#d43f3f;
   --line:#d7e5da;
+  --sub:#555;
 }
+body[data-theme="aqua"]{
+  --brand:#2b8fb5; --bg:#eff7fa; --line:#cfe5ee;
+}
+body[data-theme="white"]{
+  --brand:#3d8a63; --bg:#ffffff; --card:#f7f9f8; --line:#e2e6e4;
+}
+body[data-theme="dark"]{
+  --brand:#43c08a; --bg:#191d1b; --card:#242a27; --ink:#f2f2f2;
+  --line:#3a423e; --sub:#b5bdb8;
+}
+
 *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 html,body{ margin:0; }
 body{
@@ -40,14 +54,14 @@ header#hd{
   background:var(--card); color:var(--ink);
   border:4px solid var(--alert); border-radius:16px;
 }
-.preview{ margin-top:14px; color:#444; }
+.preview{ margin-top:14px; color:var(--sub); }
 
 /* かきこみ */
 label{ display:block; font-weight:700; margin:14px 0 4px; }
 textarea{
   width:100%; font-size:1em; font-family:inherit;
   padding:10px; border:2px solid var(--line); border-radius:10px;
-  background:var(--card); resize:vertical;
+  background:var(--card); color:var(--ink); resize:vertical;
 }
 .save-btn{
   width:100%; min-height:64px; margin-top:16px;
@@ -56,16 +70,22 @@ textarea{
 }
 
 /* せってい */
+.sec-h{ font-size:1.05em; margin:26px 0 6px; }
 .set-row{
   display:flex; justify-content:space-between; align-items:center;
   min-height:56px; gap:12px; border-bottom:1px solid var(--line);
 }
 .set-btn{
   min-width:120px; min-height:48px; font-size:1em; font-family:inherit;
-  border:2px solid var(--brand); background:var(--card); border-radius:10px;
+  border:2px solid var(--brand); background:var(--card); color:var(--ink);
+  border-radius:10px;
 }
 select{ min-height:48px; font-size:1em; font-family:inherit; }
-.credit{ color:#666; margin-top:20px; text-align:center; }
+.hint{ color:var(--sub); font-size:.92em; }
+.bk-row{ display:flex; gap:12px; }
+.bk-row .set-btn{ flex:1; }
+input[type="file"].hidden{ display:none; }
+.credit{ color:var(--sub); margin-top:20px; text-align:center; }
 
 /* タブバー */
 #tabbar{
@@ -75,7 +95,7 @@ select{ min-height:48px; font-size:1em; font-family:inherit; }
 }
 .tab{
   flex:1; min-height:64px; border:none; background:none;
-  font-size:1em; font-weight:700; font-family:inherit; color:#555;
+  font-size:1em; font-weight:700; font-family:inherit; color:var(--sub);
   border-top:4px solid transparent;
 }
 .tab.active{ color:var(--brand); border-top-color:var(--brand); }
@@ -83,11 +103,20 @@ select{ min-height:48px; font-size:1em; font-family:inherit; }
 /* tap.js の押下フィードバック */
 .pressing{ transform:scale(.97); filter:brightness(.92); }
 
-/* みせる(全画面・でか文字・高コントラスト) */
+/* ======== みせる(全画面・でか文字) ========
+   テーマに関わらず白地+黒文字。.fx-invert だけ黒地白文字 */
 .show-overlay{
-  position:fixed; inset:0; background:#fff; z-index:50;
-  overflow-y:auto; padding:20px 16px 120px;
+  position:fixed; inset:0; background:#fff; color:#1a1a1a; z-index:50;
+  overflow-y:auto;
 }
+#show-rotate{ min-height:100%; padding:20px 16px 120px; }
+
+#show-ctrl{ display:flex; gap:10px; margin-bottom:14px; }
+.ctrl-btn{
+  min-height:48px; padding:0 14px; font-size:.95em; font-family:inherit;
+  border:2px solid #bbb; background:#f4f4f4; color:#333; border-radius:10px;
+}
+
 .show-head{
   font-size:1.3em; font-weight:800; color:var(--alert);
   border:3px solid var(--alert); border-radius:12px;
@@ -97,7 +126,7 @@ select{ min-height:48px; font-size:1em; font-family:inherit; }
 .show-label{ font-size:.9em; color:#555; font-weight:700; }
 .show-value{
   font-size:1.9em; font-weight:800; line-height:1.35;
-  background:var(--bg); border-radius:10px; padding:10px 12px;
+  background:#f2f7f3; border-radius:10px; padding:10px 12px;
   overflow-wrap:anywhere;
 }
 .show-empty{ margin-top:24px; font-size:1.2em; text-align:center; color:#555; }
@@ -105,6 +134,35 @@ select{ min-height:48px; font-size:1em; font-family:inherit; }
   position:fixed; bottom:16px; left:16px; right:16px; min-height:64px;
   background:var(--brand); color:#fff; border:none; border-radius:12px;
   font-size:1.2em; font-weight:700; font-family:inherit; z-index:51;
+}
+
+/* はんてん(白黒反転) */
+.show-overlay.fx-invert{ background:#000; color:#fff; }
+.fx-invert .show-value{ background:#161616; color:#fff; }
+.fx-invert .show-label{ color:#ccc; }
+.fx-invert .show-empty{ color:#ccc; }
+.fx-invert .show-head{ color:#ff5c5c; border-color:#ff5c5c; }
+.fx-invert .ctrl-btn{ background:#222; color:#eee; border-color:#555; }
+
+/* てんめつ(約0.8Hzの枠の明滅・全画面ストロボにしない) */
+.show-overlay.fx-blink{ animation: blinkframe 1.2s ease-in-out infinite; }
+@keyframes blinkframe{
+  0%,100%{ box-shadow: inset 0 0 0 6px rgba(212,63,63,.25); }
+  50%    { box-shadow: inset 0 0 0 16px rgba(212,63,63,.95); }
+}
+
+/* よこむき(90度回転・OSの画面回転に頼らない) */
+#scr-show.landscape{ overflow:hidden; }
+#scr-show.landscape #show-rotate{
+  position:absolute; top:0; left:0;
+  width:100vh; height:100vw;
+  transform: rotate(90deg) translateY(-100vh);
+  transform-origin: top left;
+  overflow-y:auto;
+  padding:20px 16px;
+}
+#scr-show.landscape .close-btn{
+  position:static; display:block; width:100%; margin-top:20px;
 }
 
 /* トースト */

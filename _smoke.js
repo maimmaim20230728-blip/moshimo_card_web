@@ -182,16 +182,19 @@ check('色を反転+点滅で両クラス', showEl().classList.contains('fx-inve
 check('開き直しでよこむきリセット', !showEl().classList.contains('landscape'));
 tap(created['show-close']);
 
-console.log('[5] いろ・BGM');
+console.log('[5] いろ・BGM(既定=みどりの音で初期ON)');
 tap(created['tab-set']);
 tap(created['btn-theme']);
 check('テーマがみずいろに', sandbox.document.body.getAttribute('data-theme') === 'aqua');
 check('いろボタン表示も更新', created['btn-theme'].textContent === 'みずいろ');
+check('BGM既定は「みどりの音」(初期ON)', created['btn-bgm'].textContent === 'みどりの音');
+check('BGM既定で有効(穏やかなBGMが最初からON)', evalCtx('Sound.bgmEnabled') === true);
 tap(created['btn-bgm']);
-check('BGMボタンが「みどりの音」', created['btn-bgm'].textContent === 'みどりの音');
-check('SoundのBGMが有効化', evalCtx('Sound.bgmEnabled') === true);
-tap(created['btn-bgm']); tap(created['btn-bgm']);
-check('BGM一周で「なし」に戻る', created['btn-bgm'].textContent === 'なし' && evalCtx('Sound.bgmEnabled') === false);
+check('1回で「あおの音」(まだ有効)', created['btn-bgm'].textContent === 'あおの音' && evalCtx('Sound.bgmEnabled') === true);
+tap(created['btn-bgm']);
+check('2回で「なし」(BGM無効)', created['btn-bgm'].textContent === 'なし' && evalCtx('Sound.bgmEnabled') === false);
+tap(created['btn-bgm']);
+check('3回で「みどりの音」に戻る(初期ONと同じ)', created['btn-bgm'].textContent === 'みどりの音' && evalCtx('Sound.bgmEnabled') === true);
 
 console.log('[6] みせるおと: 設定音の自動再生+おとなしでも鳴らせる');
 tap(created['btn-alert']);                            // ならさない→チャイム
@@ -252,6 +255,31 @@ tap(created['btn-fs']);
 check('body classがfs1になる', sandbox.document.body.className === 'fs1');
 tap(created['btn-fs']); tap(created['btn-fs']);
 check('3段階で一周してfs0に戻る', sandbox.document.body.className === 'fs0');
+
+console.log('[11] アラーム優先: 緊急よびだし音とBGMは重ならない');
+/* Soundのpause/resume/alertの呼び出しを記録し、みせる画面の排他制御を検証する */
+evalCtx('window.__snd=[];["pauseBgm","resumeBgm","startAlert","stopAlert"].forEach(function(m){var _o=Sound[m];Sound[m]=function(){window.__snd.push(m);return _o.apply(Sound,arguments);};});');
+tap(created['btn-bgm']);                              // なし→みどりの音(穏やかなBGMを初期ON相当に戻す)
+check('準備: 穏やかなBGMをみどりに戻す', created['btn-bgm'].textContent === 'みどりの音' && evalCtx('Sound.bgmEnabled') === true);
+/* (a) よびだし音=ならさない: みせるを開いてもBGMは止めない(穏やかなBGMは継続) */
+evalCtx('window.__snd.length=0;');
+tap(created['tab-card']); tap(created['btn-show']);
+check('ならさない時: BGMを止めない(継続)', evalCtx('window.__snd.indexOf("pauseBgm") < 0'));
+check('ならさない時: よびだし音は鳴らさない', evalCtx('window.__snd.indexOf("startAlert") < 0'));
+tap(created['show-close']);
+/* (b) よびだし音=アラーム: みせるでBGMを止めてから鳴らす(緊急音を最優先・重ならない) */
+tap(created['tab-set']);
+tap(created['btn-alert']); tap(created['btn-alert']); // ならさない→チャイム→アラーム
+check('準備: よびだし音をアラームに', created['btn-alert'].textContent === 'アラーム');
+evalCtx('window.__snd.length=0;');
+tap(created['tab-card']); tap(created['btn-show']);
+check('アラーム時: BGMを止めてから鳴らす(重ならない)',
+  evalCtx('window.__snd.length===2 && window.__snd[0]==="pauseBgm" && window.__snd[1]==="startAlert"'));
+/* とじる: 緊急音を止めてからBGMを再開する */
+evalCtx('window.__snd.length=0;');
+tap(created['show-close']);
+check('とじる時: 緊急音を止めてからBGM再開',
+  evalCtx('window.__snd.length===2 && window.__snd[0]==="stopAlert" && window.__snd[1]==="resumeBgm"'));
 
 console.log('');
 if(ng){ console.error('SMOKE NG: ' + ng + '件 失敗 / OK ' + ok + '件'); process.exit(1); }

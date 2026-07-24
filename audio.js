@@ -79,6 +79,7 @@ const Sound = (() => {
   }
 
   function startBgm(){
+    if(alertOn) return;                     // 緊急よびだし音を最優先(BGMと絶対に重ねない)
     ensure();
     if(!ctx || playing) return;
     if(ctx.state === 'suspended') return;   // まだ操作前→次のタップで始まる

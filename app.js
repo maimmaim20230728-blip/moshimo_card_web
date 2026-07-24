@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.2';
+const VER = '1.3';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -40,7 +40,7 @@ function sanitizePref(p){
     fs:    [0,1,2].indexOf(p.fs)   >= 0 ? p.fs    : 0,
     sound: (p.sound === undefined) ? true : !!p.sound,
     theme: THEMES.indexOf(p.theme) >= 0 ? p.theme : 'green',
-    bgm:   BGMS.indexOf(p.bgm)     >= 0 ? p.bgm   : 'off',
+    bgm:   BGMS.indexOf(p.bgm)     >= 0 ? p.bgm   : 'green',
     fx:    FXS.indexOf(p.fx)       >= 0 ? p.fx    : 'plain',
     alert: ALERTS.indexOf(p.alert) >= 0 ? p.alert : 'none',
     vol:   [0,1,2].indexOf(p.vol)  >= 0 ? p.vol   : 1
@@ -235,12 +235,12 @@ function openShow(){
   s.classList.toggle('fx-invert', pref.fx === 'invert' || pref.fx === 'invertBlink');
   s.classList.toggle('fx-blink',  pref.fx === 'blink'  || pref.fx === 'invertBlink');
   showing = true;
-  Sound.pauseBgm();                     // 緊急表示中はBGMを止める
   if(pref.alert !== 'none'){
+    Sound.pauseBgm();                   // 緊急音優先: よびだし音の間は穏やかなBGMを止める(重ならない)
     Sound.startAlert(pref.alert, pref.vol);   // せっていで音を選んでいれば自動で鳴らす
     soundPlaying = true;
   } else {
-    soundPlaying = false;
+    soundPlaying = false;               // よびだし音=ならさない → 穏やかなBGMは継続でよい
   }
   updateSoundBtn();
   acquireWake();                        // スリープ防止
@@ -258,8 +258,10 @@ function toggleShowSound(){
   if(soundPlaying){
     Sound.stopAlert();
     soundPlaying = false;
+    Sound.resumeBgm();                  // 緊急音を止めたら穏やかなBGMを戻す
   } else {
     const kind = (pref.alert !== 'none') ? pref.alert : DEFAULT_ALERT;
+    Sound.pauseBgm();                   // 緊急音優先: 鳴らす前にBGMを止める(重ならない)
     Sound.startAlert(kind, pref.vol);
     soundPlaying = true;
   }

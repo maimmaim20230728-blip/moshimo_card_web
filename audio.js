@@ -1,9 +1,10 @@
 'use strict';
-/* 音まわり: タップ音 + 生成BGM(2パターン) + 緊急よびだし音(チャイム/アラーム・音量3段階)
+/* 音まわり: タップ音 + 生成BGM(2パターン) + 緊急よびだし音(チャイム/アラーム/ホイッスル・音量4段階)
    ・BGMはWeb Audioでその場で生成(音源ファイル無し = 軽量・完全オフライン)。おうち介護記録の方式を流用
    ・green(みどり・あたたかい音色) / blue(あお・澄んだ音色)。ブラウザの自動再生制限があるため最初のタップで自然に始まる
    ・よびだし音は「みせる」表示中だけループ。周囲に気づいてもらうための音(チャイム=ひかえめ/アラーム=はっきり)
-   ・てんかん・光過敏への配慮は表示側(style.css)で。音側は音量3段階で環境に合わせる
+   ・てんかん・光過敏への配慮は表示側(style.css)で。音側は音量4段階で環境に合わせる
+   ・いちばん上の「爆音(災害用)」だけは倍音を足して遠くまで届かせる(下の boomOut を参照)
    ・tap.js が Sound.tap() を参照する(音はこの1本に集約) */
 const Sound = (() => {
   let ctx = null;
@@ -118,9 +119,38 @@ const Sound = (() => {
 
   /* ---- 緊急よびだし音(みせる表示中ループ) ---- */
   let alertTimer = 0, alertOn = false;
-  const ALERT_GAIN = [0.4, 1, 2.2];   // おとのおおきさ3段階の倍率
+  const ALERT_GAIN = [0.4, 1, 2.2, 9];   // おとのおおきさ4段階の倍率(3=爆音・災害用)
+  const BOOM_LEVEL = 3;
 
-  function chimeBurst(volMult){
+  /* ---- 爆音(災害用)の出口 ----
+     🔴 倍率を上げるだけでは遠くへ届かない。スマホの小さなスピーカーは低い音がほとんど鳴らず、
+     人の耳も 2〜4kHz が一番よく聞こえるため。そこで波形をやわらかくつぶして(ソフトクリップ)
+     倍音を足し、音の力をその「よく聞こえる帯域」へ移す。
+     ・tanhカーブは出口が必ず 1.0 未満に収まる = 耳ざわりな「バリッ」という破綻音にならない
+     ・仕上げに保険のリミッター(音量は削らない設定)を通し、0.95 に落として出す
+       (タップ音と重なっても割れないように少しだけ余裕を残す)
+     ・ふつう〜おおきい(0〜2)はこの出口を通さない = 今までの音は一切変えない */
+  let boomIn = null, boomCtx = null;
+  function boomOut(){
+    if(boomIn && boomCtx === ctx) return boomIn;
+    const shaper = ctx.createWaveShaper();
+    const n = 2048, curve = new Float32Array(n);
+    for(let i = 0; i < n; i++){
+      const x = (i / (n - 1)) * 2 - 1;
+      curve[i] = Math.tanh(x * 3.2);
+    }
+    shaper.curve = curve;
+    shaper.oversample = '4x';                     // 折り返しノイズを抑える(汚い高音にしない)
+    const lim = ctx.createDynamicsCompressor();   // 念のための頭打ち
+    lim.threshold.value = -1; lim.knee.value = 0; lim.ratio.value = 20;
+    lim.attack.value = 0.001; lim.release.value = 0.05;
+    const out = ctx.createGain(); out.gain.value = 0.95;
+    shaper.connect(lim); lim.connect(out); out.connect(ctx.destination);
+    boomIn = shaper; boomCtx = ctx;
+    return boomIn;
+  }
+
+  function chimeBurst(volMult, out){
     try{
       const t = ctx.currentTime;
       [[660, 0], [524, 0.28]].forEach(([f, dt]) => {
@@ -129,12 +159,12 @@ const Sound = (() => {
         g.gain.setValueAtTime(0.0001, t + dt);
         g.gain.linearRampToValueAtTime(0.11 * volMult, t + dt + 0.03);
         g.gain.exponentialRampToValueAtTime(0.0008, t + dt + 0.55);
-        o.connect(g); g.connect(ctx.destination);
+        o.connect(g); g.connect(out);
         o.start(t + dt); o.stop(t + dt + 0.6);
       });
     }catch(_){}
   }
-  function alarmBurst(volMult){
+  function alarmBurst(volMult, out){
     try{
       const t = ctx.currentTime;
       for(let i = 0; i < 3; i++){
@@ -145,13 +175,13 @@ const Sound = (() => {
         g.gain.linearRampToValueAtTime(0.09 * volMult, st + 0.015);
         g.gain.setValueAtTime(0.09 * volMult, st + 0.09);
         g.gain.exponentialRampToValueAtTime(0.0008, st + 0.12);
-        o.connect(g); g.connect(ctx.destination);
+        o.connect(g); g.connect(out);
         o.start(st); o.stop(st + 0.13);
       }
     }catch(_){}
   }
   /* ホイッスル: 防災笛(呼子笛)の「ピーッ ピーッ」。高音+コロ玉のふるえ(約25Hzのビブラート) */
-  function whistleBurst(volMult){
+  function whistleBurst(volMult, out){
     try{
       const t = ctx.currentTime;
       [0, 0.5].forEach(dt => {
@@ -165,7 +195,7 @@ const Sound = (() => {
         g.gain.linearRampToValueAtTime(0.07 * volMult, st + 0.02);
         g.gain.setValueAtTime(0.07 * volMult, st + 0.3);
         g.gain.exponentialRampToValueAtTime(0.0008, st + 0.38);
-        o.connect(g); g.connect(ctx.destination);
+        o.connect(g); g.connect(out);
         o.start(st); o.stop(st + 0.4);
         lfo.start(st); lfo.stop(st + 0.4);
       });
@@ -186,9 +216,12 @@ const Sound = (() => {
     if(!ctx) return;
     stopBgm();                 // みせる表示中はBGMを止める
     alertOn = true;
-    const volMult = ALERT_GAIN[volLevel] || 1;
-    def.burst(volMult);
-    alertTimer = setInterval(() => { if(ctx && ctx.state !== 'suspended') def.burst(volMult); }, def.span);
+    const lv = (volLevel >= 0 && volLevel < ALERT_GAIN.length) ? volLevel : 1;
+    const volMult = ALERT_GAIN[lv];
+    /* 爆音のときだけ「よく聞こえる帯域へ移す出口」を通す(0〜2は今までどおり素通し) */
+    const out = (lv === BOOM_LEVEL) ? boomOut() : ctx.destination;
+    def.burst(volMult, out);
+    alertTimer = setInterval(() => { if(ctx && ctx.state !== 'suspended') def.burst(volMult, out); }, def.span);
   }
   function stopAlert(){
     if(alertTimer){ clearInterval(alertTimer); alertTimer = 0; }

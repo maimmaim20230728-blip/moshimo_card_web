@@ -201,6 +201,20 @@ tap(created['btn-alert']);                            // ならさない→チ�
 check('おとボタンが「チャイム」', created['btn-alert'].textContent === 'チャイム');
 tap(created['btn-vol']);
 check('おおきさが「おおきい」', created['btn-vol'].textContent === 'おおきい');
+/* 爆音(災害用): 4段目として増設・注意書きは爆音のときだけ出す */
+check('おおきい では 爆音の注意書きを出さない', created['boom-hint'].classList.contains('hidden'));
+tap(created['btn-vol']);
+check('4段目が「爆音(災害用)」', created['btn-vol'].textContent === '爆音(災害用)');
+check('爆音を選ぶと注意書きが出る', !created['boom-hint'].classList.contains('hidden'));
+check('注意書きに「みみの ちかく」と「音量」が入る',
+  created['boom-hint'].textContent.indexOf('みみの ちかく') >= 0 &&
+  created['boom-hint'].textContent.indexOf('音量') >= 0);
+check('爆音は保存される(pref.vol=3)', JSON.parse(lsData['moshimo.pref.v1']).vol === 3);
+tap(created['btn-vol']);
+check('5回目で「ちいさい」に一周', created['btn-vol'].textContent === 'ちいさい');
+check('一周したら注意書きは消える', created['boom-hint'].classList.contains('hidden'));
+tap(created['btn-vol']); tap(created['btn-vol']);   // ちいさい→ふつう→おおきい に戻す
+check('「おおきい」に戻して以降の検査に影響させない', created['btn-vol'].textContent === 'おおきい');
 tap(created['tab-card']); tap(created['btn-show']);
 check('チャイム設定→「とめる」状態で開く', created['show-sound'].textContent === '🔇 おとを とめる');
 tap(created['show-sound']);

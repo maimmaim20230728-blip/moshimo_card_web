@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.3';
+const VER = '1.6';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -20,6 +20,8 @@ const THEMES = ['green','aqua','white','dark'];
 const BGMS   = ['off','green','blue'];
 const FXS    = ['plain','invert','blink','invertBlink'];
 const ALERTS = ['none','chime','alarm','whistle'];
+const VOL_LEVELS = 4;    // ちいさい / ふつう / おおきい / 爆音(災害用)
+const BOOM_VOL = 3;      // 爆音(災害用)
 
 const $ = id => document.getElementById(id);
 
@@ -43,7 +45,7 @@ function sanitizePref(p){
     bgm:   BGMS.indexOf(p.bgm)     >= 0 ? p.bgm   : 'green',
     fx:    FXS.indexOf(p.fx)       >= 0 ? p.fx    : 'plain',
     alert: ALERTS.indexOf(p.alert) >= 0 ? p.alert : 'none',
-    vol:   [0,1,2].indexOf(p.vol)  >= 0 ? p.vol   : 1
+    vol:   (Number.isInteger(p.vol) && p.vol >= 0 && p.vol < VOL_LEVELS) ? p.vol : 1
   };
 }
 let pref = sanitizePref(loadJSON(LS_PREF));
@@ -74,7 +76,7 @@ const I18N_MAP = {
   'set-h-normal':'set.hNormal', 'set-h-show':'set.hShow', 'set-h-backup':'set.hBackup',
   'lbl-fs':'set.fs', 'lbl-lang':'set.lang', 'lbl-theme':'set.theme',
   'lbl-bgm':'set.bgm', 'lbl-sound':'set.sound',
-  'lbl-fx':'set.fx', 'lbl-alert':'set.alert', 'lbl-vol':'set.vol',
+  'lbl-fx':'set.fx', 'lbl-alert':'set.alert', 'lbl-vol':'set.vol', 'boom-hint':'set.boomHint',
   'bk-hint':'set.bkHint', 'bk-export':'set.bkExport', 'bk-import':'set.bkImport',
   'paper-note':'set.paperNote', 'link-privacy':'set.privacy', 'about-credit':'set.credit',
   'tab-card':'tab.card', 'tab-edit':'tab.edit', 'tab-set':'tab.set'
@@ -94,6 +96,8 @@ function applyI18n(){
   $('btn-fx').textContent    = T('set.fxs')[FXS.indexOf(pref.fx)];
   $('btn-alert').textContent = T('set.alerts')[ALERTS.indexOf(pref.alert)];
   $('btn-vol').textContent   = T('set.vols')[pref.vol];
+  /* 爆音を選んだときだけ、耳の近くで鳴らさない・本体音量も上げる、の注意を出す */
+  if($('boom-hint')) $('boom-hint').classList.toggle('hidden', pref.vol !== BOOM_VOL);
   $('about-ver').textContent = 'v' + VER;
   updateSoundBtn();
   renderHome();
@@ -358,7 +362,7 @@ function init(){
     savePref(); applyI18n();
   });
   Tap.bind($('btn-vol'), () => {
-    pref.vol = (pref.vol + 1) % 3;
+    pref.vol = (pref.vol + 1) % VOL_LEVELS;   // ちいさい→ふつう→おおきい→爆音(災害用)
     savePref(); applyI18n();
   });
 

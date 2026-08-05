@@ -12,6 +12,9 @@
   --alert:#d43f3f;
   --line:#d7e5da;
   --sub:#555;
+  /* 下タブの高さ。app.js が実測値で上書きする(文字の大きさ・言語・端末の下部インセットで変わるため)。
+     ここの値はJSが動く前のフォールバック(84px + ナビゲーションバー/ジェスチャーバーの分) */
+  --tabbar-h:calc(84px + env(safe-area-inset-bottom));
 }
 body[data-theme="aqua"]{
   --brand:#2b8fb5; --bg:#eff7fa; --line:#cfe5ee;
@@ -29,7 +32,9 @@ html,body{ margin:0; }
 body{
   font-family:"Hiragino Sans","Yu Gothic UI","Noto Sans JP",system-ui,sans-serif;
   background:var(--bg); color:var(--ink);
-  padding-bottom:84px;
+  /* 下タブに隠れないよう「CSSだけで安全な下限」と「実測値+10px」の大きい方を採る。
+     JSの計測が遅れても・小さく出ても、下限を割らない */
+  padding-bottom:max(calc(84px + env(safe-area-inset-bottom)), calc(var(--tabbar-h) + 10px));
   line-height:1.6;
 }
 /* 文字サイズ3段階(せっていで切替・body class) */
@@ -39,8 +44,12 @@ body.fs2{ font-size:25px; }
 
 header#hd{
   background:var(--brand); color:#fff;
-  min-height:120px;   /* 帯が薄すぎて実機で押しにくい対策=縦幅を約2倍に(2026-07-26) */
-  padding:24px 16px; font-weight:700; font-size:1.05em;
+  /* 帯が薄すぎて実機で押しにくい対策=縦幅を約2倍に(2026-07-26)。
+     上はステータスバー(時計・電池)の分だけ下げる=その高さ分だけ帯も伸ばす */
+  min-height:calc(120px + env(safe-area-inset-top));
+  padding:calc(24px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+          24px max(16px, env(safe-area-inset-left));
+  font-weight:700; font-size:1.05em;
   display:flex; align-items:center; justify-content:space-between; gap:10px;
 }
 #hd-title{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -51,7 +60,11 @@ header#hd{
   border:none; border-radius:8px; padding:2px 6px;
   background:#fff; color:var(--ink);
 }
-#main{ padding:16px; max-width:640px; margin:0 auto; }
+/* 横は画面の丸みやノッチ(横向き時)に食われないよう最低16px確保 */
+#main{
+  padding:16px max(16px, env(safe-area-inset-right)) 16px max(16px, env(safe-area-inset-left));
+  max-width:640px; margin:0 auto;
+}
 
 .screen.hidden, .hidden{ display:none; }
 
@@ -119,7 +132,10 @@ input[type="file"].hidden{ display:none; }
 #tabbar{
   position:fixed; left:0; right:0; bottom:0; display:flex;
   background:var(--card); border-top:2px solid var(--line);
+  /* 下=ナビゲーションバー/ジェスチャーバー、横=横向き時のノッチを避ける */
   padding-bottom:env(safe-area-inset-bottom);
+  padding-left:env(safe-area-inset-left);
+  padding-right:env(safe-area-inset-right);
 }
 .tab{
   flex:1; min-height:64px; border:none; background:none;
@@ -137,7 +153,12 @@ input[type="file"].hidden{ display:none; }
   position:fixed; inset:0; background:#fff; color:#1a1a1a; z-index:50;
   overflow-y:auto;
 }
-#show-rotate{ min-height:100%; padding:20px 16px 120px; }
+/* 全画面オーバーレイの中身。上はステータスバー、下は「とじる」ボタン+ナビゲーションバーの分を空ける */
+#show-rotate{
+  min-height:100%;
+  padding:calc(20px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+          calc(120px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
 
 #show-ctrl{ display:flex; gap:10px; margin-bottom:14px; }
 .ctrl-btn{
@@ -158,8 +179,12 @@ input[type="file"].hidden{ display:none; }
   overflow-wrap:anywhere;
 }
 .show-empty{ margin-top:24px; font-size:1.2em; text-align:center; color:#555; }
+/* 緊急時に必ず押せるボタン。ナビゲーションバーに食い込ませない */
 .close-btn{
-  position:fixed; bottom:16px; left:16px; right:16px; min-height:64px;
+  position:fixed; min-height:64px;
+  bottom:calc(16px + env(safe-area-inset-bottom));
+  left:max(16px, env(safe-area-inset-left));
+  right:max(16px, env(safe-area-inset-right));
   background:var(--brand); color:#fff; border:none; border-radius:12px;
   font-size:1.2em; font-weight:700; font-family:inherit; z-index:51;
 }
@@ -184,10 +209,17 @@ input[type="file"].hidden{ display:none; }
 #scr-show.landscape #show-rotate{
   position:absolute; top:0; left:0;
   width:100vh; height:100vw;
-  transform: rotate(90deg) translateY(-100vh);
+  /* 🔴 min-height:100vw が要る。基底の min-height:100% は親(=画面の高さ)を指すので、
+     打ち消さないと箱が812px高のまま回り、見出しと「よこむき解除」が画面外へ飛ぶ */
+  min-height:100vw;
+  /* 🔴 translateY は -100vh ではなく -100%(=回転後の自分の高さ)。箱の実寸に追従させる */
+  transform: rotate(90deg) translateY(-100%);
   transform-origin: top left;
   overflow-y:auto;
-  padding:20px 16px;
+  /* 90度回すと端末のバーの向きも入れ替わる:
+     画面の上(ステータスバー)= この箱の左辺 / 画面の下(ナビゲーションバー)= この箱の右辺 */
+  padding:20px calc(16px + env(safe-area-inset-bottom))
+          20px calc(16px + env(safe-area-inset-top));
 }
 #scr-show.landscape .close-btn{
   position:static; display:block; width:100%; margin-top:20px;
@@ -195,7 +227,8 @@ input[type="file"].hidden{ display:none; }
 
 /* トースト */
 .toast{
-  position:fixed; bottom:96px; left:50%; transform:translateX(-50%);
+  position:fixed; left:50%; transform:translateX(-50%);
+  bottom:max(calc(96px + env(safe-area-inset-bottom)), calc(var(--tabbar-h) + 12px));
   background:#333; color:#fff; padding:10px 18px; border-radius:999px;
   opacity:0; transition:opacity .25s; pointer-events:none; z-index:60;
   max-width:88%;

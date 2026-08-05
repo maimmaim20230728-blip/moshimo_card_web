@@ -26,6 +26,8 @@ function makeEl(tag){
     addEventListener(t, h){ (this._ev[t] = this._ev[t] || []).push(h); },
     removeEventListener(){},
     focus(){}, click(){}, scrollIntoView(){}, scrollTo(){}, remove(){},
+    /* セーフエリア検査用: 下タブの実測に使う(疑似DOMでは高さ50px固定) */
+    getBoundingClientRect(){ return { width:0, height:50, top:0, left:0, right:0, bottom:50 }; },
     classList:{
       _s:new Set(),
       add(...c){ c.forEach(x => this._s.add(x)); },
@@ -73,10 +75,22 @@ function findTel(node){
 
 /* ---- sandbox ---- */
 const lsData = {};
+/* セーフエリア検査用の記録: CSS変数の書き込み・windowイベント登録・ResizeObserverの監視先 */
+const setProps = {};
+const winEvents = {};
+let roTarget = null;
+const docEl = makeEl('html');
+docEl.style.setProperty = (k, v) => { setProps[k] = v; };
 const sandbox = {
   console,
   setTimeout, clearTimeout, setInterval, clearInterval,
   Date, Math, JSON, String,
+  addEventListener(t, h){ (winEvents[t] = winEvents[t] || []).push(h); },
+  ResizeObserver: function(cb){
+    this.cb = cb;
+    this.observe = el => { roTarget = el; };
+    this.disconnect = () => {};
+  },
   localStorage: {
     getItem: k => (k in lsData) ? lsData[k] : null,
     setItem: (k, v) => { lsData[k] = String(v); },
@@ -87,7 +101,7 @@ const sandbox = {
   document: {
     getElementById: byId,
     createElement: makeEl,
-    documentElement: makeEl('html'),
+    documentElement: docEl,
     body: makeEl('body'),
     addEventListener(){},
     visibilityState: 'visible'
@@ -294,6 +308,47 @@ evalCtx('window.__snd.length=0;');
 tap(created['show-close']);
 check('とじる時: 緊急音を止めてからBGM再開',
   evalCtx('window.__snd.length===2 && window.__snd[0]==="stopAlert" && window.__snd[1]==="resumeBgm"'));
+
+/* ---- [v1.7] セーフエリア(上のステータスバー/下のナビゲーションバー) ----
+   Android15+(targetSdk36)はエッジtoエッジ強制で、WebViewが画面の上端・下端まで描かれる。
+   固定余白のままだと本文の末尾が下タブに隠れ、「とじる」がナビゲーションバーに食い込む。
+   実機がないと目視できない箇所なので、CSSとJSの両方が消えていないことを機械で見張る。 */
+console.log('[12] セーフエリア(ステータスバー/ナビゲーションバー)');
+const cssFlat = fs.readFileSync(__dirname + '/style.css', 'utf8').replace(/\s+/g, '');
+check('--tabbar-h のフォールバックに env(safe-area-inset-bottom) が入る',
+  /--tabbar-h:calc\(84px\+env\(safe-area-inset-bottom\)\)/.test(cssFlat));
+check('body の下余白が max(CSS下限, 実測+10px)(本文の末尾が下タブに隠れない)',
+  /body\{[^}]*padding-bottom:max\(calc\(84px\+env\(safe-area-inset-bottom\)\),calc\(var\(--tabbar-h\)\+10px\)\)/.test(cssFlat));
+check('固定値の padding-bottom:84px が残っていない', !/padding-bottom:84px/.test(cssFlat));
+check('header#hd の上余白に env(safe-area-inset-top)(時計・電池と重ならない)',
+  /header#hd\{[^}]*padding:calc\(24px\+env\(safe-area-inset-top\)\)/.test(cssFlat));
+check('header#hd の min-height も env(safe-area-inset-top) の分だけ伸びる',
+  /header#hd\{[^}]*min-height:calc\(120px\+env\(safe-area-inset-top\)\)/.test(cssFlat));
+check('#tabbar 自身の下余白に env(safe-area-inset-bottom) が残っている',
+  /#tabbar\{[^}]*padding-bottom:env\(safe-area-inset-bottom\)/.test(cssFlat));
+check('「とじる」がナビゲーションバーに食い込まない',
+  /\.close-btn\{[^}]*bottom:calc\(16px\+env\(safe-area-inset-bottom\)\)/.test(cssFlat));
+check('みせる画面の中身の上余白に env(safe-area-inset-top)',
+  /#show-rotate\{[^}]*padding:calc\(20px\+env\(safe-area-inset-top\)\)/.test(cssFlat));
+check('みせる画面の中身の下余白に env(safe-area-inset-bottom)(最後まで読める)',
+  /#show-rotate\{[^}]*calc\(120px\+env\(safe-area-inset-bottom\)\)/.test(cssFlat));
+check('トーストの位置も max(CSS下限, 実測+12px)(タブに重ならない)',
+  /\.toast\{[^}]*bottom:max\(calc\(96px\+env\(safe-area-inset-bottom\)\),calc\(var\(--tabbar-h\)\+12px\)\)/.test(cssFlat));
+
+/* JS側: タブバーの実寸を測って --tabbar-h に書き戻しているか(固定値では言語・文字サイズで足りない) */
+check('起動時にタブバーの実測高さが --tabbar-h に入る(疑似DOMは50px)', setProps['--tabbar-h'] === '50px');
+check('ResizeObserver でタブバーの箱そのものを見張っている', roTarget === created['tabbar']);
+check('load/resize/orientationchange でも測り直す(ResizeObserver非対応の保険)',
+  !!winEvents.load && !!winEvents.resize && !!winEvents.orientationchange);
+setProps['--tabbar-h'] = '';
+tap(created['btn-fs']);
+check('文字サイズを変えたら測り直す', setProps['--tabbar-h'] === '50px');
+tap(created['btn-fs']); tap(created['btn-fs']);   // fs0 に戻す
+delete docEl.style.setProperty;
+let okNoSet = true;
+try{ winEvents.resize[0](); }catch(e){ okNoSet = false; console.log('    ' + e.message); }
+check('setProperty が無い環境でも例外を出さない(安全側に無視)', okNoSet);
+docEl.style.setProperty = (k, v) => { setProps[k] = v; };
 
 console.log('');
 if(ng){ console.error('SMOKE NG: ' + ng + '件 失敗 / OK ' + ok + '件'); process.exit(1); }

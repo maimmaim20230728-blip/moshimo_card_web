@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.6';
+const VER = '1.7';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -101,6 +101,28 @@ function applyI18n(){
   $('about-ver').textContent = 'v' + VER;
   updateSoundBtn();
   renderHome();
+  applyBarSpace();   // 文字サイズ・言語でタブの高さが変わるので測り直す
+}
+
+/* ---- 下タブの実寸を余白に反映(セーフエリア対応) ----
+   Android15+(targetSdk36)はエッジtoエッジ強制で、WebViewがナビゲーションバーの下まで描かれる。
+   タブの高さは文字サイズ・言語・端末の下部インセットで変わるため、固定値ではなく実測してCSSに渡す */
+function applyBarSpace(){
+  const st = document.documentElement && document.documentElement.style;
+  if(!st || !st.setProperty) return;
+  const bar = $('tabbar');
+  if(!bar || !bar.getBoundingClientRect) return;
+  const h = Math.ceil(bar.getBoundingClientRect().height);
+  if(h > 0) st.setProperty('--tabbar-h', h + 'px');
+}
+/* タブバーの実寸が変わった瞬間に測り直す。フォントの読み込み・画面回転・文字サイズ変更の
+   どれで変わっても取りこぼさないよう、イベント頼みではなく箱そのものを見張る
+   (ResizeObserver 非対応環境は init の load/resize/orientationchange で代替) */
+function watchBarSpace(){
+  const bar = $('tabbar');
+  if(!bar || typeof ResizeObserver === 'undefined') return false;
+  try{ new ResizeObserver(applyBarSpace).observe(bar); return true; }
+  catch(_){ return false; }
 }
 
 /* ---- 見た目/音の反映 ---- */
@@ -384,6 +406,15 @@ function init(){
 
   applyAll();
   showScreen('scr-home');
+
+  applyBarSpace();
+  watchBarSpace();
+  /* 保険: ResizeObserver 非対応や、フォント読み込み後・画面回転後のズレを拾う */
+  if(typeof window !== 'undefined' && window.addEventListener){
+    window.addEventListener('load', applyBarSpace);
+    window.addEventListener('resize', applyBarSpace);
+    window.addEventListener('orientationchange', applyBarSpace);
+  }
 
   if(typeof navigator !== 'undefined' && 'serviceWorker' in navigator &&
      /^https?:/.test(location.protocol)){

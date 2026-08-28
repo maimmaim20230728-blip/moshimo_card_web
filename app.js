@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.7';
+const VER = '1.8';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 

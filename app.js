@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.8';
+const VER = '1.9';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -298,15 +298,88 @@ function updateSoundBtn(){
   if(btn) btn.textContent = soundPlaying ? T('show.stop') : T('show.play');
 }
 
+/* ---- Play版(Capacitor)だけで使う部品(2026-09-30・キットの templates/app.js と同じ考え方) ----
+   🔴 プラグインはネイティブが入れる Capacitor.Plugins.X を使う(registerPlugin は @capacitor/core の関数で WebView には無い)。
+   Web版(ブラウザ)では isNativeApp() が false なので、どれも動かない */
+function isNativeApp(){
+  try{ const c = window.Capacitor; return !!(c && typeof c.isNativePlatform === 'function' && c.isNativePlatform()); }catch(_){ return false; }
+}
+function nativePlugin(name, fn){
+  try{
+    const c = window.Capacitor;
+    if(typeof c.isPluginAvailable === 'function' && !c.isPluginAvailable(name)) return null;
+    const p = c.Plugins && c.Plugins[name];
+    return (p && typeof p[fn] === 'function') ? p : null;
+  }catch(_){ return null; }
+}
+
+/* Play版のファイル保存: Capacitor 8 の WebView には DownloadListener が無く、<a download> では何も保存されない
+   (なのに「かきだしました」と出ていた)。端末の一時フォルダ(CACHE)に書いてから Android の共有の画面を出し、保存先は利用者が選ぶ。
+   done('ok')=送り先を選べた / done('quiet')=共有の画面を閉じた(何も出さない) / done('fail')=書けない・共有できない・プラグインが無い */
+function shareQuiet(err){
+  const m = String((err && (err.message || err.errorMessage)) || err || '');
+  return !!err && (err.name === 'AbortError' || /cancel|in progress/i.test(m));
+}
+function nativeSaveFile(name, data, label, done){
+  const fsp = nativePlugin('Filesystem', 'writeFile'), shp = nativePlugin('Share', 'share');
+  if(!fsp || !shp){ done('fail'); return; }
+  let w;
+  try{ w = fsp.writeFile({ path:name, data:data, directory:'CACHE', encoding:'utf8' }); }catch(_){ done('fail'); return; }
+  if(!w || typeof w.then !== 'function'){ done('fail'); return; }
+  w.then(r => {
+    if(!r || !r.uri){ done('fail'); return; }
+    let s;
+    try{ s = shp.share({ title:name, files:[r.uri], dialogTitle:label }); }catch(err){ done(shareQuiet(err) ? 'quiet' : 'fail'); return; }
+    if(s && typeof s.then === 'function') s.then(() => done('ok'), err => done(shareQuiet(err) ? 'quiet' : 'fail'));
+    else done('ok');
+  }, () => done('fail'));
+}
+
+/* ---- Android の戻るボタン(Play版だけ・2026-09-30) ----
+   @capacitor/app が無いと、戻るでアプリごと後ろに下がっていた(Android 11 以前は閉じる)。
+   押したときの順: ①みせる(全画面)が出ていれば「とじる」と同じ(音も止まる)
+                  ②かきこみ・せってい → カード(下のタブ「カード」と同じ)
+                  ③カード → アプリを後ろに下げる(minimizeApp。中身はそのまま)
+   かきこみは入れたらすぐ保存される(自動保存)ので、離れる前の確かめは出さない。けす・送る窓はこのアプリに無い。
+   Web版(ブラウザ)は何も変えない(戻るはブラウザのまま) */
+function minimizeApp(){
+  const ap = nativePlugin('App', 'minimizeApp');
+  try{ if(ap){ const p = ap.minimizeApp(); if(p && p.catch) p.catch(() => {}); } }catch(_){}
+}
+function currentScreen(){
+  for(const s in SCREENS){ if($(s) && !$(s).classList.contains('hidden')) return s; }
+  return 'scr-home';
+}
+function onBack(){
+  if(showing){ closeShow(); return; }
+  if(currentScreen() !== 'scr-home'){ showScreen('scr-home'); return; }
+  minimizeApp();
+}
+function watchBack(){
+  if(!isNativeApp()) return;
+  const ap = nativePlugin('App', 'addListener');
+  if(!ap) return;
+  try{ ap.addListener('backButton', () => onBack()); }catch(_){}
+}
+
 /* ---- 機種変更(バックアップ)・おうち介護記録の方式流用 ---- */
 function exportBackup(){
   const data = { app:'moshimo_card', ver:1, card: loadJSON(LS_CARD), prefs: pref };
+  const d = new Date();
+  const fname = 'moshimo-backup-' + d.getFullYear() +
+    String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '.json';
+  /* Play版(2026-09-30): 一時フォルダに書いて共有の画面へ。選べたら「かきだしました」・閉じたら何も出さない・書けなければ「ほぞんできませんでした」 */
+  if(isNativeApp()){
+    nativeSaveFile(fname, JSON.stringify(data), T('set.bkExport'), r => {
+      if(r === 'ok') toast(T('set.exported'));
+      else if(r === 'fail') toast(T('edit.saveFail'));
+    });
+    return;
+  }
   const blob = new Blob([JSON.stringify(data)], { type:'application/json' });
   const a = document.createElement('a');
-  const d = new Date();
   a.href = URL.createObjectURL(blob);
-  a.download = 'moshimo-backup-' + d.getFullYear() +
-    String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + '.json';
+  a.download = fname;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 3000);
   toast(T('set.exported'));
@@ -407,6 +480,7 @@ function init(){
   applyAll();
   showScreen('scr-home');
 
+  watchBack();                          // Android の戻るボタン(Play版だけ)
   applyBarSpace();
   watchBarSpace();
   /* 保険: ResizeObserver 非対応や、フォント読み込み後・画面回転後のズレを拾う */

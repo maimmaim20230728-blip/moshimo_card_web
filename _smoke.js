@@ -75,6 +75,8 @@ function findTel(node){
 
 /* ---- sandbox ---- */
 const lsData = {};
+/* はじめての つかいかた(2026-09-30)は読み終えた扱いで始める(案内そのものは store/_back_check.js で本物のChromeで試す) */
+lsData['moshimo.guide.v1'] = 'true';
 /* セーフエリア検査用の記録: CSS変数の書き込み・windowイベント登録・ResizeObserverの監視先 */
 const setProps = {};
 const winEvents = {};

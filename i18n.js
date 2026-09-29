@@ -77,6 +77,32 @@ var ja = {
     paperNote:'お住まいの ちいきの 紙のヘルプカード・ヘルプマークと あわせて つかえます。',
     privacy:'プライバシーポリシー',
     credit:'アプリ開発：介護と支援の相談どころ そよぎ'
+  },
+  /* はじめての つかいかた(app.js openGuide・初回に必ず出す・2026-09-30)。heads と bodies は同じ数。
+     ボタン名・画面名は その言語の画面の文字と同じにする(画面の文言を変えたら ここも)。隠れた入口は無い=せっていから もう一度 見られる */
+  "guide": {
+    "title": "つかいかた",
+    "step": "{n} / {m}",
+    "start": "はじめる",
+    "again": "もういちど 見る",
+    "prev": "まえ",
+    "next": "つぎ",
+    "heads": [
+      "もしもカード・そよぎ へ ようこそ",
+      "まず「かきこみ」で カードを つくる",
+      "「🆘 これを みせる」で 見せる",
+      "おとと めだちかた",
+      "書いた ことは この 端末の 中だけ",
+      "見やすく する・もう一度 見る"
+    ],
+    "bodies": [
+      "この アプリは、もしもの ときに まわりの 人に 見せる カードです。\nびょうき・のんでいる くすり・アレルギー・きんきゅう れんらくさき などを 書いておけます。\nことばで 説明できない ときも、画面を 見せれば つたわります。",
+      "下の「かきこみ」を おして、なまえ・血液型・のんでいる くすり・きんきゅう れんらくさき などを 書きます。\nぜんぶ 書かなくても だいじょうぶです。ひつような ところだけ 書いてください。\n書いた ことは すぐに ほぞんされます。「ほぞんする」を おすと「ほぞんしました ✓」と 出ます。",
+      "もしもの ときは、「カード」の 画面で「🆘 これを みせる」を おします。書いた ことが 大きな 字で 画面いっぱいに 出ます。\n「きんきゅう れんらくさき」に 電話ばんごうが あれば「📞 でんわする」が 出て、そのまま 電話を かけられます。\n「⟳ よこむき」で 横に できます。見せ おわったら「とじる」を おします。",
+      "見せる 画面で「🔔 おとを ならす」を おすと、まわりの 人に 気づいて もらう ための おとが 鳴ります。「🔇 おとを とめる」で 止まります。\n「せってい」の「みせるときの せってい」で、「めだちかた」(ふつう・いろを はんてん・てんめつ・いろを はんてん+てんめつ)、見せた ときに 鳴らす「おと」、「おとの おおきさ」を えらべます。\n「爆音(災害用)」は、みみの ちかくで 鳴らさないで ください。",
+      "書いた ことは この 端末の 中だけに ほぞんされ、どこにも 送られません。登録も いりません。\nスマホを かえる ときは、「せってい」の「かきだす」で ファイルを のこし、あたらしい スマホで「よみこむ」を おします。",
+      "「せってい」の「ふだんの せってい」で、「もじの大きさ」(ふつう・大きい・とても大きい)、「いろ」(みどり・みずいろ・しろ・くろ)、「BGM」、「タップ音」を かえられます。\nことばは 右上の 🌐 で えらべます。\nこの 案内は「せってい」の「つかいかた」の「もういちど 見る」で、いつでも もう一度 見られます。"
+    ]
   }
 };
 
@@ -146,6 +172,30 @@ var en = {
     paperNote:'You can use this together with the paper help card or help mark of your local area.',
     privacy:'Privacy Policy',
     credit:'App development: Soyogi / SOYOGI'
+  },
+  "guide": {
+    "title": "How to use",
+    "step": "{n} / {m}",
+    "start": "Start",
+    "again": "Show again",
+    "prev": "Previous",
+    "next": "Next",
+    "heads": [
+      "Welcome to MOSHIMO Card / Soyogi",
+      "First, make your card in \"Write\"",
+      "Show it with \"🆘 Show this card\"",
+      "Sound and attention style",
+      "What you write stays on this device",
+      "Make it easier to see, and see this again"
+    ],
+    "bodies": [
+      "This app is a card you show to the people around you in an emergency.\nYou can write down your conditions, the medicines you take, allergies, an emergency contact and more.\nEven when you cannot explain in words, showing the screen gets the message across.",
+      "Tap \"Write\" at the bottom and fill in things like your name, blood type, the medicines you take and an emergency contact.\nYou don't need to fill in everything. Just write the parts that matter for you.\nWhat you write is saved right away. When you tap \"Save\", \"Saved ✓\" appears.",
+      "In an emergency, tap \"🆘 Show this card\" on the \"Card\" screen. What you wrote appears in large letters across the whole screen.\nIf the \"Emergency contact\" includes a phone number, \"📞 Call\" appears so you can call right away.\n\"⟳ Rotate\" turns the view sideways. When you are done, tap \"Close\".",
+      "On the showing screen, tap \"🔔 Play sound\" to sound an alert so people nearby notice you. \"🔇 Stop sound\" stops it.\nIn \"Settings\", under \"Settings for showing\", you can choose the \"Attention style\" (Normal, Inverted colors, Flashing, Inverted + flashing), the \"Sound\" played when showing, and the \"Volume\".\nDo not play \"Max (disaster)\" close to anyone's ears.",
+      "Everything you write is stored only on this device. Nothing is sent anywhere, and no sign-up is needed.\nWhen you change phones, tap \"Export\" in \"Settings\" to save a file, then tap \"Import\" on the new phone.",
+      "Under \"Everyday settings\" in \"Settings\", you can change the \"Text size\" (Normal, Large, Extra large), \"Color\" (Green, Aqua, White, Black), \"Music\" and \"Tap sound\".\nChoose the language with 🌐 at the top right.\nYou can see this guide again at any time with \"Show again\" next to \"How to use\" in \"Settings\"."
+    ]
   }
 };
 
@@ -212,6 +262,30 @@ var de = {
     "paperNote": "Sie können diese Karte zusammen mit der gedruckten Hilfekarte oder dem Hilfe-Symbol Ihrer Region verwenden.",
     "privacy": "Datenschutzerklärung",
     "credit": "App-Entwicklung: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Anleitung",
+    "step": "{n} / {m}",
+    "start": "Loslegen",
+    "again": "Noch einmal ansehen",
+    "prev": "Vorherige",
+    "next": "Weiter",
+    "heads": [
+      "Willkommen bei MOSHIMO Card / Soyogi",
+      "Zuerst die Karte unter „Eintragen“ anlegen",
+      "Mit „🆘 Diese Karte zeigen“ zeigen",
+      "Ton und Auffälligkeit",
+      "Ihre Angaben bleiben auf diesem Gerät",
+      "Besser lesbar machen und erneut ansehen"
+    ],
+    "bodies": [
+      "Diese App ist eine Karte, die Sie im Notfall den Menschen um Sie herum zeigen.\nSie können Krankheiten, Ihre Medikamente, Allergien, einen Notfallkontakt und mehr eintragen.\nAuch wenn Sie etwas nicht mit Worten erklären können, genügt es, den Bildschirm zu zeigen.",
+      "Tippen Sie unten auf „Eintragen“ und tragen Sie zum Beispiel Name, Blutgruppe, Ihre Medikamente und einen Notfallkontakt ein.\nSie müssen nicht alles ausfüllen. Schreiben Sie nur, was für Sie wichtig ist.\nWas Sie schreiben, wird sofort gespeichert. Wenn Sie auf „Speichern“ tippen, erscheint „Gespeichert ✓“.",
+      "Im Notfall tippen Sie im Bereich „Karte“ auf „🆘 Diese Karte zeigen“. Ihre Angaben erscheinen in großer Schrift auf dem ganzen Bildschirm.\nSteht beim „Notfallkontakt“ eine Telefonnummer, erscheint „📞 Anrufen“, und Sie können direkt anrufen.\nMit „⟳ Drehen“ wird die Ansicht quer. Wenn Sie fertig sind, tippen Sie auf „Schließen“.",
+      "Auf dem Zeige-Bildschirm tippen Sie auf „🔔 Ton abspielen“, damit Menschen in der Nähe auf Sie aufmerksam werden. „🔇 Ton stoppen“ beendet ihn.\nIn den „Einstellungen“ unter „Einstellungen zum Zeigen“ wählen Sie die „Auffälligkeit“ (Normal, Farben umkehren, Blinken, Farben umkehren + Blinken), den „Ton“ beim Zeigen und die „Lautstärke“.\nLassen Sie „Maximal (Katastrophe)“ nicht direkt am Ohr ertönen.",
+      "Alles, was Sie schreiben, wird nur auf diesem Gerät gespeichert. Nichts wird gesendet, und eine Anmeldung ist nicht nötig.\nBeim Handywechsel tippen Sie in den „Einstellungen“ auf „Exportieren“, um eine Datei zu speichern, und auf dem neuen Handy auf „Importieren“.",
+      "Unter „Alltägliche Einstellungen“ in den „Einstellungen“ ändern Sie „Schriftgröße“ (Normal, Groß, Sehr groß), „Farbe“ (Grün, Hellblau, Weiß, Schwarz), „Musik“ und „Tippton“.\nDie Sprache wählen Sie oben rechts mit 🌐.\nDiese Anleitung können Sie jederzeit mit „Noch einmal ansehen“ bei „Anleitung“ in den „Einstellungen“ erneut ansehen."
+    ]
   }
 };
 
@@ -278,6 +352,30 @@ var fr = {
     "paperNote": "Vous pouvez l'utiliser avec la carte d'aide ou le pictogramme d'aide en papier de votre région.",
     "privacy": "Politique de confidentialité",
     "credit": "Développement de l'application : Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Mode d'emploi",
+    "step": "{n} / {m}",
+    "start": "Commencer",
+    "again": "Revoir",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "heads": [
+      "Bienvenue dans MOSHIMO Card / Soyogi",
+      "D'abord, créez la carte dans « Écrire »",
+      "Montrer avec « 🆘 Montrer cette carte »",
+      "Son et mise en évidence",
+      "Ce que vous écrivez reste sur cet appareil",
+      "Mieux voir et revoir ce guide"
+    ],
+    "bodies": [
+      "Cette application est une carte à montrer aux personnes autour de vous en cas d'urgence.\nVous pouvez y noter vos maladies, les médicaments que vous prenez, vos allergies, un contact d'urgence, etc.\nMême quand vous ne pouvez pas expliquer avec des mots, il suffit de montrer l'écran.",
+      "Appuyez sur « Écrire » en bas et notez par exemple votre nom, votre groupe sanguin, vos médicaments et un contact d'urgence.\nVous n'avez pas besoin de tout remplir. Notez seulement ce qui compte pour vous.\nCe que vous écrivez est enregistré tout de suite. Si vous appuyez sur « Enregistrer », « Enregistré ✓ » s'affiche.",
+      "En cas d'urgence, appuyez sur « 🆘 Montrer cette carte » dans l'écran « Carte ». Ce que vous avez écrit s'affiche en grands caractères sur tout l'écran.\nSi le « Contact d'urgence » contient un numéro de téléphone, « 📞 Appeler » apparaît et vous pouvez appeler directement.\n« ⟳ Pivoter » met l'affichage à l'horizontale. Quand vous avez fini, appuyez sur « Fermer ».",
+      "Sur l'écran affiché, appuyez sur « 🔔 Émettre un son » pour que les personnes proches vous remarquent. « 🔇 Arrêter le son » l'arrête.\nDans « Réglages », sous « Réglages pour montrer la carte », vous choisissez la « Mise en évidence » (Normal, Couleurs inversées, Clignotement, Couleurs inversées + clignotement), le « Son » joué quand vous montrez la carte et le « Volume ».\nNe faites pas retentir « Maximum (catastrophe) » près des oreilles.",
+      "Tout ce que vous écrivez est enregistré uniquement sur cet appareil. Rien n'est envoyé, et aucune inscription n'est nécessaire.\nPour changer de téléphone, appuyez sur « Exporter » dans « Réglages » pour enregistrer un fichier, puis sur « Importer » sur le nouveau téléphone.",
+      "Dans « Réglages », sous « Réglages habituels », vous pouvez changer la « Taille du texte » (Normale, Grande, Très grande), la « Couleur » (Vert, Bleu clair, Blanc, Noir), la « Musique » et le « Son au toucher ».\nChoisissez la langue avec 🌐 en haut à droite.\nVous pouvez revoir ce guide à tout moment avec « Revoir », à la ligne « Mode d'emploi » des « Réglages »."
+    ]
   }
 };
 
@@ -344,6 +442,30 @@ var es = {
     "paperNote": "Puede usarla junto con la tarjeta de ayuda o el distintivo de ayuda en papel de su localidad.",
     "privacy": "Política de privacidad",
     "credit": "Desarrollo de la app: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Cómo se usa",
+    "step": "{n} / {m}",
+    "start": "Empezar",
+    "again": "Ver de nuevo",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "heads": [
+      "Le damos la bienvenida a MOSHIMO Card / Soyogi",
+      "Primero, cree la tarjeta en «Escribir»",
+      "Mostrar con «🆘 Mostrar esta tarjeta»",
+      "Sonido y forma de destacar",
+      "Lo que escribe se queda en este dispositivo",
+      "Verlo mejor y volver a ver esta guía"
+    ],
+    "bodies": [
+      "Esta app es una tarjeta para mostrar a las personas de su alrededor en una emergencia.\nPuede anotar sus enfermedades, los medicamentos que toma, alergias, un contacto de emergencia y más.\nAunque no pueda explicarlo con palabras, basta con mostrar la pantalla.",
+      "Toque «Escribir» abajo y anote, por ejemplo, su nombre, su grupo sanguíneo, los medicamentos que toma y un contacto de emergencia.\nNo hace falta rellenarlo todo. Escriba solo lo que le importe.\nLo que escribe se guarda al momento. Al tocar «Guardar», aparece «Guardado ✓».",
+      "En una emergencia, toque «🆘 Mostrar esta tarjeta» en la pantalla «Tarjeta». Lo que escribió aparece en letras grandes en toda la pantalla.\nSi el «Contacto de emergencia» tiene un número de teléfono, aparece «📞 Llamar» y puede llamar directamente.\n«⟳ Girar» pone la vista en horizontal. Cuando termine, toque «Cerrar».",
+      "En la pantalla que muestra, toque «🔔 Reproducir sonido» para que las personas cercanas se den cuenta. «🔇 Detener sonido» lo para.\nEn «Ajustes», dentro de «Ajustes para mostrar», puede elegir la «Forma de destacar» (Normal, Colores invertidos, Parpadeo, Invertidos + parpadeo), el «Sonido» al mostrar y el «Volumen».\nNo haga sonar «Máximo (catástrofe)» cerca de los oídos.",
+      "Todo lo que escribe se guarda solo en este dispositivo. No se envía nada y no hace falta registrarse.\nAl cambiar de teléfono, toque «Exportar» en «Ajustes» para guardar un archivo y luego «Importar» en el teléfono nuevo.",
+      "En «Ajustes», dentro de «Ajustes habituales», puede cambiar el «Tamaño del texto» (Normal, Grande, Muy grande), el «Color» (Verde, Celeste, Blanco, Negro), la «Música» y el «Sonido al tocar».\nElija el idioma con 🌐 arriba a la derecha.\nPuede volver a ver esta guía cuando quiera con «Ver de nuevo», junto a «Cómo se usa» en «Ajustes»."
+    ]
   }
 };
 
@@ -410,6 +532,30 @@ var it = {
     "paperNote": "Puoi usarla insieme alla scheda o al contrassegno cartaceo di assistenza della tua zona.",
     "privacy": "Informativa sulla privacy",
     "credit": "Sviluppo dell'app: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Come si usa",
+    "step": "{n} / {m}",
+    "start": "Inizia",
+    "again": "Rivedi",
+    "prev": "Prima",
+    "next": "Avanti",
+    "heads": [
+      "Ti diamo il benvenuto in MOSHIMO Card / Soyogi",
+      "Per prima cosa, crea la scheda in \"Compila\"",
+      "Mostrala con \"🆘 Mostra questa scheda\"",
+      "Suono e modalità di risalto",
+      "Ciò che scrivi resta su questo dispositivo",
+      "Vedere meglio e rivedere questa guida"
+    ],
+    "bodies": [
+      "Questa app è una scheda da mostrare alle persone intorno a te in caso di emergenza.\nPuoi annotare malattie, farmaci che assumi, allergie, un contatto di emergenza e altro.\nAnche quando non riesci a spiegarlo a parole, basta mostrare lo schermo.",
+      "Tocca \"Compila\" in basso e scrivi, per esempio, nome, gruppo sanguigno, i farmaci che assumi e un contatto di emergenza.\nNon devi compilare tutto. Scrivi solo ciò che conta per te.\nQuello che scrivi viene salvato subito. Toccando \"Salva\" appare \"Salvato ✓\".",
+      "In caso di emergenza, tocca \"🆘 Mostra questa scheda\" nella schermata \"Scheda\". Ciò che hai scritto appare a caratteri grandi su tutto lo schermo.\nSe nel \"Contatto di emergenza\" c'è un numero di telefono, appare \"📞 Chiama\" e puoi chiamare subito.\n\"⟳ Ruota\" mette la vista in orizzontale. Quando hai finito, tocca \"Chiudi\".",
+      "Nella schermata che mostri, tocca \"🔔 Riproduci il suono\" perché le persone vicine ti notino. \"🔇 Ferma il suono\" lo interrompe.\nIn \"Impostazioni\", sotto \"Impostazioni per mostrare la scheda\", scegli la \"Modalità di risalto\" (Normale, Colori invertiti, Lampeggiante, Colori invertiti + lampeggio), il \"Suono\" quando mostri la scheda e il \"Volume\".\nNon far suonare \"Massimo (catastrofe)\" vicino alle orecchie.",
+      "Tutto ciò che scrivi viene salvato solo su questo dispositivo. Non viene inviato nulla e non serve registrarsi.\nQuando cambi telefono, tocca \"Esporta\" in \"Impostazioni\" per salvare un file, poi \"Importa\" sul nuovo telefono.",
+      "In \"Impostazioni\", sotto \"Impostazioni abituali\", puoi cambiare \"Dimensione del testo\" (Normale, Grande, Molto grande), \"Colore\" (Verde, Azzurro, Bianco, Nero), \"Musica\" e \"Suono del tocco\".\nScegli la lingua con 🌐 in alto a destra.\nPuoi rivedere questa guida in qualsiasi momento con \"Rivedi\", accanto a \"Come si usa\" in \"Impostazioni\"."
+    ]
   }
 };
 
@@ -476,6 +622,30 @@ var pt = {
     "paperNote": "Pode usar isto junto com o cartão de ajuda em papel ou o símbolo de ajuda da sua região.",
     "privacy": "Política de Privacidade",
     "credit": "Desenvolvimento do app: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Como usar",
+    "step": "{n} / {m}",
+    "start": "Começar",
+    "again": "Ver de novo",
+    "prev": "Anterior",
+    "next": "Próximo",
+    "heads": [
+      "Boas-vindas ao MOSHIMO Card / Soyogi",
+      "Primeiro, crie o cartão em «Preencher»",
+      "Mostrar com «🆘 Mostrar este cartão»",
+      "Som e modo de destaque",
+      "O que você escreve fica neste aparelho",
+      "Ver melhor e rever este guia"
+    ],
+    "bodies": [
+      "Este app é um cartão para mostrar às pessoas ao seu redor em uma emergência.\nVocê pode anotar doenças, os medicamentos que toma, alergias, um contato de emergência e mais.\nMesmo quando não conseguir explicar com palavras, basta mostrar a tela.",
+      "Toque em «Preencher» embaixo e escreva, por exemplo, seu nome, tipo sanguíneo, os medicamentos que toma e um contato de emergência.\nNão precisa preencher tudo. Escreva apenas o que for importante para você.\nO que você escreve é salvo na hora. Ao tocar em «Salvar», aparece «Salvo ✓».",
+      "Em uma emergência, toque em «🆘 Mostrar este cartão» na tela «Cartão». O que você escreveu aparece em letras grandes na tela inteira.\nSe o «Contato de emergência» tiver um número de telefone, aparece «📞 Ligar» e você pode ligar direto.\n«⟳ Girar» deixa a tela na horizontal. Quando terminar, toque em «Fechar».",
+      "Na tela que você mostra, toque em «🔔 Tocar som» para que as pessoas por perto percebam. «🔇 Parar som» faz parar.\nEm «Ajustes», na parte «Ajustes para mostrar o cartão», você escolhe o «Modo de destaque» (Normal, Cores invertidas, Intermitente, Invertidas + intermitente), o «Som» ao mostrar e o «Volume».\nNão toque «Máximo (catástrofe)» perto dos ouvidos.",
+      "Tudo o que você escreve fica salvo apenas neste aparelho. Nada é enviado e não é preciso cadastro.\nAo trocar de telefone, toque em «Exportar» em «Ajustes» para salvar um arquivo e depois em «Importar» no telefone novo.",
+      "Em «Ajustes», na parte «Ajustes do dia a dia», você pode mudar o «Tamanho do texto» (Normal, Grande, Muito grande), a «Cor» (Verde, Azul-claro, Branco, Preto), a «Música» e o «Som do toque».\nEscolha o idioma com 🌐 no canto superior direito.\nVocê pode ver este guia de novo a qualquer momento com «Ver de novo», ao lado de «Como usar» em «Ajustes»."
+    ]
   }
 };
 
@@ -542,6 +712,30 @@ var nl = {
     "paperNote": "Je kunt dit samen gebruiken met de papieren hulpkaart of het hulpteken uit jouw regio.",
     "privacy": "Privacybeleid",
     "credit": "App-ontwikkeling: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Zo werkt het",
+    "step": "{n} / {m}",
+    "start": "Beginnen",
+    "again": "Nog eens bekijken",
+    "prev": "Vorige",
+    "next": "Volgende",
+    "heads": [
+      "Welkom bij MOSHIMO Card / Soyogi",
+      "Maak eerst je kaart bij \"Invullen\"",
+      "Laten zien met \"🆘 Laat deze kaart zien\"",
+      "Geluid en opvallen",
+      "Wat je schrijft, blijft op dit apparaat",
+      "Beter leesbaar maken en opnieuw bekijken"
+    ],
+    "bodies": [
+      "Deze app is een kaart die je in geval van nood aan de mensen om je heen laat zien.\nJe kunt ziektes, medicijnen die je gebruikt, allergieën, een contactpersoon voor noodgevallen en meer invullen.\nOok als je het niet met woorden kunt uitleggen, is het scherm laten zien genoeg.",
+      "Tik onderaan op \"Invullen\" en vul bijvoorbeeld je naam, bloedgroep, je medicijnen en een contactpersoon voor noodgevallen in.\nJe hoeft niet alles in te vullen. Schrijf alleen wat voor jou belangrijk is.\nWat je schrijft, wordt meteen opgeslagen. Als je op \"Opslaan\" tikt, verschijnt \"Opgeslagen ✓\".",
+      "Tik in geval van nood op \"🆘 Laat deze kaart zien\" in het scherm \"Kaart\". Wat je hebt geschreven, verschijnt in grote letters over het hele scherm.\nStaat er bij \"Contactpersoon voor noodgevallen\" een telefoonnummer, dan verschijnt \"📞 Bellen\" en kun je direct bellen.\nMet \"⟳ Draaien\" zet je het beeld dwars. Ben je klaar, tik dan op \"Sluiten\".",
+      "Tik op het getoonde scherm op \"🔔 Geluid afspelen\", zodat mensen in de buurt je opmerken. \"🔇 Geluid stoppen\" zet het uit.\nBij \"Instellingen\", onder \"Instellingen voor het tonen\", kies je \"Opvallen\" (Normaal, Kleuren omkeren, Knipperen, Kleuren omkeren + knipperen), het \"Geluid\" bij het tonen en het \"Volume\".\nLaat \"Maximaal (ramp)\" niet vlak bij iemands oren klinken.",
+      "Alles wat je schrijft, wordt alleen op dit apparaat opgeslagen. Er wordt niets verzonden en je hoeft je niet te registreren.\nBij een nieuwe telefoon tik je bij \"Instellingen\" op \"Exporteren\" om een bestand op te slaan, en daarna op de nieuwe telefoon op \"Importeren\".",
+      "Bij \"Instellingen\", onder \"Gewone instellingen\", kun je \"Tekstgrootte\" (Normaal, Groot, Extra groot), \"Kleur\" (Groen, Lichtblauw, Wit, Zwart), \"Muziek\" en \"Tikgeluid\" wijzigen.\nKies de taal met 🌐 rechtsboven.\nDeze uitleg kun je altijd opnieuw bekijken met \"Nog eens bekijken\" bij \"Zo werkt het\" in \"Instellingen\"."
+    ]
   }
 };
 
@@ -608,6 +802,30 @@ var sv = {
     "paperNote": "Du kan använda den tillsammans med ett hjälpkort eller en hjälpmärkning i pappersform från din kommun.",
     "privacy": "Integritetspolicy",
     "credit": "Apputveckling: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "Så används appen",
+    "step": "{n} / {m}",
+    "start": "Börja",
+    "again": "Visa igen",
+    "prev": "Föregående",
+    "next": "Nästa",
+    "heads": [
+      "Välkommen till MOSHIMO Card / Soyogi",
+      "Gör först ditt kort under \"Skriv\"",
+      "Visa med \"🆘 Visa det här kortet\"",
+      "Ljud och synlighet",
+      "Det du skriver stannar på den här enheten",
+      "Gör det lättare att se och visa igen"
+    ],
+    "bodies": [
+      "Den här appen är ett kort som du visar för personer omkring dig om något händer.\nDu kan skriva in sjukdomar, läkemedel du tar, allergier, en kontakt vid nödfall och mer.\nÄven när du inte kan förklara med ord räcker det att visa skärmen.",
+      "Tryck på \"Skriv\" längst ner och fyll i till exempel namn, blodgrupp, dina läkemedel och en kontakt vid nödfall.\nDu behöver inte fylla i allt. Skriv bara det som är viktigt för dig.\nDet du skriver sparas direkt. När du trycker på \"Spara\" visas \"Sparat ✓\".",
+      "Om något händer trycker du på \"🆘 Visa det här kortet\" på skärmen \"Kort\". Det du har skrivit visas med stor text över hela skärmen.\nOm det finns ett telefonnummer under \"Kontakt vid nödfall\" visas \"📞 Ring\", så att du kan ringa direkt.\n\"⟳ Vrid\" vänder bilden på tvären. När du är klar trycker du på \"Stäng\".",
+      "På skärmen du visar trycker du på \"🔔 Spela ljud\" så att personer i närheten märker dig. \"🔇 Stoppa ljud\" stänger av det.\nUnder \"Inställningar\", i delen \"Inställningar för att visa\", väljer du \"Synlighet\" (Normal, Omvända färger, Blinkande, Omvända färger + blinkande), vilket \"Ljud\" som spelas när du visar kortet och \"Volym\".\nSpela inte \"Maximalt (katastrof)\" nära någons öron.",
+      "Allt du skriver sparas bara på den här enheten. Inget skickas någonstans och ingen registrering behövs.\nNär du byter telefon trycker du på \"Exportera\" under \"Inställningar\" för att spara en fil, och sedan på \"Importera\" på den nya telefonen.",
+      "Under \"Inställningar\", i delen \"Vanliga inställningar\", kan du ändra \"Textstorlek\" (Normal, Stor, Mycket stor), \"Färg\" (Grön, Ljusblå, Vit, Svart), \"Musik\" och \"Tryckljud\".\nVälj språk med 🌐 uppe till höger.\nDen här guiden kan du se igen när som helst med \"Visa igen\" vid \"Så används appen\" under \"Inställningar\"."
+    ]
   }
 };
 
@@ -674,6 +892,30 @@ var ko = {
     "paperNote": "사시는 지역의 종이 도움 카드 · 도움 마크와 함께 사용할 수 있어요.",
     "privacy": "개인정보 처리방침",
     "credit": "앱 개발: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "사용 방법",
+    "step": "{n} / {m}",
+    "start": "시작하기",
+    "again": "다시 보기",
+    "prev": "이전",
+    "next": "다음",
+    "heads": [
+      "MOSHIMO Card / Soyogi에 오신 것을 환영해요",
+      "먼저 \"작성\"에서 카드를 만들어요",
+      "\"🆘 이것을 보여 주기\"로 보여 줘요",
+      "소리와 눈에 띄는 방식",
+      "적은 내용은 이 기기 안에만 있어요",
+      "보기 쉽게 하기 · 다시 보기"
+    ],
+    "bodies": [
+      "이 앱은 위급할 때 주변 사람에게 보여 주는 카드예요.\n질병, 복용 중인 약, 알레르기, 긴급 연락처 등을 적어 둘 수 있어요.\n말로 설명하기 어려울 때도 화면을 보여 주면 전해져요.",
+      "아래의 \"작성\"을 누르고 이름, 혈액형, 복용 중인 약, 긴급 연락처 등을 적어요.\n모두 적지 않아도 괜찮아요. 필요한 것만 적어 주세요.\n적은 내용은 바로 저장돼요. \"저장하기\"를 누르면 \"저장했어요 ✓\"가 나와요.",
+      "위급할 때는 \"카드\" 화면에서 \"🆘 이것을 보여 주기\"를 눌러요. 적은 내용이 화면 가득 큰 글자로 나와요.\n\"긴급 연락처\"에 전화번호가 있으면 \"📞 전화하기\"가 나와서 바로 전화를 걸 수 있어요.\n\"⟳ 가로 보기\"로 화면을 가로로 볼 수 있어요. 다 보여 주었으면 \"닫기\"를 눌러요.",
+      "보여 주는 화면에서 \"🔔 소리 내기\"를 누르면 주변 사람이 알아차리도록 소리가 나요. \"🔇 소리 멈추기\"로 멈춰요.\n\"설정\"의 \"보여 줄 때 설정\"에서 \"눈에 띄는 방식\"(보통, 색 반전, 깜빡임, 색 반전+깜빡임), 보여 줄 때 울릴 \"소리\", \"소리 크기\"를 고를 수 있어요.\n\"최대 (재난용)\"은 귀 가까이에서 울리지 마세요.",
+      "적은 내용은 모두 이 기기 안에만 저장되고, 어디에도 보내지지 않아요. 가입도 필요 없어요.\n스마트폰을 바꿀 때는 \"설정\"의 \"내보내기\"로 파일을 저장하고, 새 스마트폰에서 \"불러오기\"를 눌러요.",
+      "\"설정\"의 \"평소 설정\"에서 \"글자 크기\"(보통, 크게, 아주 크게), \"색\"(초록, 하늘색, 흰색, 검정), \"배경 음악\", \"탭 소리\"를 바꿀 수 있어요.\n언어는 오른쪽 위의 🌐에서 고를 수 있어요.\n이 안내는 \"설정\"의 \"사용 방법\" 옆 \"다시 보기\"로 언제든지 다시 볼 수 있어요."
+    ]
   }
 };
 
@@ -740,6 +982,30 @@ var zh = {
     "paperNote": "可以和您所在地区发放的纸质帮助卡、帮助标志一起使用。",
     "privacy": "隐私政策",
     "credit": "应用开发：护理与支援咨询处 Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "使用方法",
+    "step": "{n} / {m}",
+    "start": "开始",
+    "again": "再看一次",
+    "prev": "上一步",
+    "next": "下一步",
+    "heads": [
+      "欢迎使用 MOSHIMO Card / Soyogi",
+      "先在“填写”里制作卡片",
+      "用“🆘 出示这张卡片”出示",
+      "声音和醒目方式",
+      "写下的内容只保存在这台设备里",
+      "调整显示方式・再看一次"
+    ],
+    "bodies": [
+      "这个应用是一张在紧急时刻出示给周围人看的卡片。\n可以写下疾病、正在服用的药、过敏、紧急联系人等。\n即使无法用语言说明，只要出示画面就能传达。",
+      "点按下方的“填写”，写下姓名、血型、正在服用的药、紧急联系人等。\n不必全部填写。只写对您重要的部分就好。\n写下的内容会立即保存。点按“保存”后会显示“已保存 ✓”。",
+      "遇到紧急情况时，在“卡片”画面点按“🆘 出示这张卡片”。写下的内容会以大字显示在整个画面上。\n如果“紧急联系人”里有电话号码，会出现“📞 拨打电话”，可以直接打电话。\n“⟳ 横向”可以把画面横过来。出示完毕后点按“关闭”。",
+      "在出示的画面上点按“🔔 播放声音”，就会发出让周围人注意到的声音。点按“🔇 停止声音”即可停止。\n在“设置”的“出示时的设置”中，可以选择“醒目方式”（普通、反转颜色、闪烁、反转颜色+闪烁）、出示时播放的“声音”和“声音大小”。\n请不要在耳边播放“最大音量(灾害用)”。",
+      "写下的内容只保存在这台设备里，不会发送到任何地方，也不需要注册。\n更换手机时，请在“设置”中点按“导出”保存文件，再在新手机上点按“导入”。",
+      "在“设置”的“平时的设置”中，可以更改“文字大小”（普通、大、非常大）、“颜色”（绿色、水蓝色、白色、黑色）、“背景音乐”和“点按音”。\n语言可以用右上角的 🌐 选择。\n在“设置”中“使用方法”一行点按“再看一次”，随时可以再次查看本说明。"
+    ]
   }
 };
 
@@ -806,6 +1072,30 @@ var ar = {
     "paperNote": "يمكنك استخدامها مع بطاقة المساعدة الورقية أو شارة المساعدة الخاصة بمنطقتك.",
     "privacy": "سياسة الخصوصية",
     "credit": "تطوير التطبيق: Soyogi / SOYOGI"
+  },
+  "guide": {
+    "title": "طريقة الاستخدام",
+    "step": "{n} / {m}",
+    "start": "ابدأ",
+    "again": "عرض مرة أخرى",
+    "prev": "السابق",
+    "next": "التالي",
+    "heads": [
+      "مرحبًا بك في MOSHIMO Card / Soyogi",
+      "أولًا، أنشئ بطاقتك من «الكتابة»",
+      "أظهرها بزر «🆘 أظهر هذه البطاقة»",
+      "الصوت وطريقة لفت الانتباه",
+      "ما تكتبه يبقى على هذا الجهاز",
+      "اجعل العرض أوضح، وشاهد الدليل مرة أخرى"
+    ],
+    "bodies": [
+      "هذا التطبيق بطاقة تُظهرها لمن حولك عند الطوارئ.\nيمكنك أن تكتب فيها الأمراض والأدوية التي تتناولها والحساسية وجهة الاتصال في الطوارئ وغير ذلك.\nحتى إن لم تستطع الشرح بالكلام، يكفي أن تُظهر الشاشة.",
+      "اضغط «الكتابة» في الأسفل واكتب مثلًا اسمك وفصيلة دمك والأدوية التي تتناولها وجهة الاتصال في الطوارئ.\nلا حاجة لتعبئة كل شيء. اكتب فقط ما يهمّك.\nما تكتبه يُحفظ فورًا. عند الضغط على «حفظ» تظهر «تم الحفظ ✓».",
+      "عند الطوارئ اضغط «🆘 أظهر هذه البطاقة» في شاشة «البطاقة». يظهر ما كتبته بخط كبير على الشاشة كلها.\nإذا كان في «جهة الاتصال في الطوارئ» رقم هاتف، يظهر زر «📞 اتصال» لتتصل مباشرة.\nزر «⟳ تدوير» يجعل العرض أفقيًا. عند الانتهاء اضغط «إغلاق».",
+      "في شاشة العرض اضغط «🔔 تشغيل الصوت» ليصدر صوت ينبّه من حولك، وزر «🔇 إيقاف الصوت» يوقفه.\nفي «الإعدادات» ضمن «إعدادات العرض» تختار «طريقة لفت الانتباه» (عادي، ألوان معكوسة، وميض، ألوان معكوسة + وميض)، و«الصوت» الذي يُشغَّل عند العرض، و«مستوى الصوت».\nلا تشغّل «أقصى (للكوارث)» قرب أذن أحد.",
+      "كل ما تكتبه يُحفظ على هذا الجهاز فقط، ولا يُرسل إلى أي مكان، ولا حاجة للتسجيل.\nعند تغيير الهاتف اضغط «تصدير» في «الإعدادات» لحفظ ملف، ثم اضغط «استيراد» في الهاتف الجديد.",
+      "في «الإعدادات» ضمن «الإعدادات اليومية» يمكنك تغيير «حجم الخط» (عادي، كبير، كبير جدًا) و«اللون» (أخضر، سماوي، أبيض، أسود) و«الموسيقى» و«صوت اللمس».\nاختر اللغة من 🌐 في أعلى الشاشة.\nيمكنك مشاهدة هذا الدليل مرة أخرى في أي وقت بزر «عرض مرة أخرى» بجانب «طريقة الاستخدام» في «الإعدادات»."
+    ]
   }
 };
 

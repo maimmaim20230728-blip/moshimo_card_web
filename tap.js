@@ -44,7 +44,7 @@ const Tap = (() => {
   function bind(el, fn, opts){
     const o = opts || {};
     el.style.touchAction = o.game ? 'none' : 'manipulation';
-    let sx = 0, sy = 0, pid = null;
+    let sx = 0, sy = 0, pid = null, lastFire = 0;
     el.addEventListener('pointerdown', e=>{
       if(!e.isPrimary) return;
       pid = e.pointerId; sx = e.clientX; sy = e.clientY;
@@ -60,10 +60,19 @@ const Tap = (() => {
       el.classList.remove('pressing');
       if(Math.hypot(e.clientX - sx, e.clientY - sy) <= MOVE_LIMIT){
         ghost = { x:e.clientX, y:e.clientY, until:Date.now() + 700 };   // このあとの同じ指の click を捨てる(上の 👻)
+        lastFire = Date.now();
         fn(e);
       }
     });
     el.addEventListener('pointercancel', ()=>{ pid = null; el.classList.remove('pressing'); });
+    /* 🔴 click も受ける(2026-09-30・キットの tap.js と同じ直し): TalkBack などの読み上げ操作・スイッチ操作・音声操作・キーボードは
+       pointer イベントを出さず click だけを出すので、pointerup だけでは どのボタンも押せなかった。
+       直前 700ms 以内に pointerup で発火していたら捨てる(同じ指の click で2回にならない)。手応え音は指のときと同じ */
+    el.addEventListener('click', e=>{
+      if(Date.now() - lastFire < 700) return;
+      if(!o.silent) Sound.tap();
+      fn(e);
+    });
     el.addEventListener('contextmenu', e=> e.preventDefault());   // 長押しメニュー抑止
   }
   return { bind };

@@ -373,6 +373,61 @@ try{ winEvents.resize[0](); }catch(e){ okNoSet = false; console.log('    ' + e.m
 check('setProperty が無い環境でも例外を出さない(安全側に無視)', okNoSet);
 docEl.style.setProperty = (k, v) => { setProps[k] = v; };
 
+/* ---- 点検の第2便(2026-10-30) ---- */
+console.log('[13] みせる画面: このカードを書いた日・外国語のときは見出しに日本語も/保存できないときの知らせ/トーストを読み上げに');
+{
+  const I = sandbox.window.MOSHIMO_I18N;
+  const base = JSON.parse(lsData['moshimo.card.v1']);
+  const c13 = JSON.parse(JSON.stringify(base)); c13.updated = new Date(2026, 9, 30, 12, 0, 0).getTime();
+  lsData['moshimo.card.v1'] = JSON.stringify(c13);
+  tap(created['tab-card']); tap(created['btn-show']);
+  check('書いた日(ja)がいちばん下に出る', allText(created['show-list']).indexOf('このカードを 書いた日: 2026年10月30日') >= 0);
+  check('ja のときは見出しに日本語を重ねない', created['show-head'].children.length === 0 && created['show-head'].textContent === I.ja.show.head);
+  tap(created['show-close']);
+  created['set-lang'].value = 'en'; fire(created['set-lang'], 'change');
+  const hj = created['show-head'].children[0];
+  check('en のとき見出しに日本語も添える(lang=ja)', created['show-head'].textContent.indexOf(I.en.show.head) === 0 && !!hj && hj.textContent === I.ja.show.head && hj.getAttribute('lang') === 'ja');
+  tap(created['tab-card']); tap(created['btn-show']);
+  const ISO = new RegExp('[' + String.fromCharCode(0x2066) + '-' + String.fromCharCode(0x2069) + ']', 'g');   // 日付を囲む LRI…PDI
+  check('書いた日(en)は 2026-10-30(LRI…PDI で囲む)', allText(created['show-list']).indexOf('Date this card was written: ' + String.fromCharCode(0x2066) + '2026-10-30' + String.fromCharCode(0x2069)) >= 0
+    && allText(created['show-list']).replace(ISO, '').indexOf('Date this card was written: 2026-10-30') >= 0);
+  tap(created['show-close']);
+  created['set-lang'].value = 'ar'; fire(created['set-lang'], 'change');
+  check('ar でも日本語の見出しが1つだけ', created['show-head'].children.length === 1 && created['show-head'].children[0].textContent === I.ja.show.head);
+  created['set-lang'].value = 'ja'; fire(created['set-lang'], 'change');
+  check('ja に戻すと日本語の添えは消える', created['show-head'].children.length === 0);
+  const c0 = JSON.parse(JSON.stringify(base)); delete c0.updated;
+  lsData['moshimo.card.v1'] = JSON.stringify(c0);
+  tap(created['tab-card']); tap(created['btn-show']);
+  check('書いた日の無いカードでは出さない', allText(created['show-list']).indexOf('書いた日') < 0);
+  tap(created['show-close']);
+  check('12言語に show.written({d} 入り)がある', ['ja','en','de','fr','es','it','pt','nl','sv','ko','zh','ar'].every(l => typeof I[l].show.written === 'string' && I[l].show.written.indexOf('{d}') >= 0 && !/[—―–]/.test(I[l].show.written)));
+  lsData['moshimo.card.v1'] = JSON.stringify(base);
+  /* 自動保存が失敗したら1回だけ知らせる */
+  tap(created['tab-edit']);
+  const realSet = sandbox.localStorage.setItem;
+  sandbox.localStorage.setItem = () => { throw new Error('QuotaExceededError'); };
+  created['toast'].textContent = '';
+  created['fld-free'].value = 'いっぱい1'; fire(created['fld-free'], 'input');
+  const t1 = created['toast'].textContent;
+  created['toast'].textContent = '';
+  created['fld-free'].value = 'いっぱい2'; fire(created['fld-free'], 'input');
+  const t2 = created['toast'].textContent;
+  sandbox.localStorage.setItem = realSet;
+  check('自動保存の失敗: 「ほぞんできませんでした」を1回だけ', t1 === I.ja.edit.saveFail && t2 === '');
+  created['fld-free'].value = 'もどった'; fire(created['fld-free'], 'input');
+  check('保存できたら知らせは出さず保存される', created['toast'].textContent === '' && JSON.parse(lsData['moshimo.card.v1']).fields.free === 'もどった');
+  /* よみこむ: カードを書けなければ「よみこみました」を出さない */
+  sandbox.localStorage.setItem = (k, v) => { if(k === 'moshimo.card.v1') throw new Error('QuotaExceededError'); return realSet(k, v); };
+  const before = lsData['moshimo.card.v1'];
+  fire(created['bk-file'], 'change', { target:{ files:[{ _text: good }], value:'' } });
+  sandbox.localStorage.setItem = realSet;
+  check('よみこむ: 書けなければ「よみこめませんでした」・カードはそのまま', created['toast'].textContent.indexOf('よみこめませんでした') >= 0 && lsData['moshimo.card.v1'] === before);
+  check('トーストは読み上げに伝わる(role=status・aria-live=polite)', /<div id="toast" class="toast" role="status" aria-live="polite"><\/div>/.test(fs.readFileSync(__dirname + '/index.html', 'utf8')));
+  if(fs.existsSync(__dirname + '/package.json')) check('package.json の version が app.js の VER と合う', JSON.parse(fs.readFileSync(__dirname + '/package.json', 'utf8')).version.replace(/\.0$/, '') === (fs.readFileSync(__dirname + '/app.js', 'utf8').match(/VER = '([^']+)'/) || [])[1]);
+  tap(created['tab-card']);
+}
+
 console.log('');
 if(ng){ console.error('SMOKE NG: ' + ng + '件 失敗 / OK ' + ok + '件'); process.exit(1); }
 console.log('SMOKE OK: 全' + ok + '件 合格');

@@ -7,7 +7,8 @@
    ・set.lang は言語切替ラベルなので全言語 'ことば / Language' 固定
    ・配列(fsSizes等)は選択肢の並び。全言語で要素数を揃える
    ・ar は RTL。app.js が ar のとき document.dir='rtl' にする
-   ・edit.allOptional=かきこみ画面の全体案内(どの項目も任意)。show.call=緊急連絡先の発信ボタン(2026-07-23追加) */
+   ・edit.allOptional=かきこみ画面の全体案内(どの項目も任意)。show.call=緊急連絡先の発信ボタン(2026-07-23追加)
+   ・show.written=みせる画面のいちばん下の「このカードを書いた日」。{d} は app.js が日付に差し替える(2026-10-30追加) */
 (function(){
 'use strict';
 
@@ -46,7 +47,8 @@ var ja = {
     rot:'⟳ よこむき',
     play:'🔔 おとを ならす',
     stop:'🔇 おとを とめる',
-    call:'📞 でんわする'
+    call:'📞 でんわする',
+    written:'このカードを 書いた日: {d}'
   },
   set: {
     hNormal:'ふだんの せってい',
@@ -141,7 +143,8 @@ var en = {
     rot:'⟳ Rotate',
     play:'🔔 Play sound',
     stop:'🔇 Stop sound',
-    call:'📞 Call'
+    call:'📞 Call',
+    written:'Date this card was written: {d}'
   },
   set: {
     hNormal:'Everyday settings',
@@ -231,7 +234,8 @@ var de = {
     "rot": "⟳ Drehen",
     "play": "🔔 Ton abspielen",
     "stop": "🔇 Ton stoppen",
-    "call": "📞 Anrufen"
+    "call": "📞 Anrufen",
+    "written": "Diese Karte wurde geschrieben am: {d}"
   },
   "set": {
     "hNormal": "Alltägliche Einstellungen",
@@ -321,7 +325,8 @@ var fr = {
     "rot": "⟳ Pivoter",
     "play": "🔔 Émettre un son",
     "stop": "🔇 Arrêter le son",
-    "call": "📞 Appeler"
+    "call": "📞 Appeler",
+    "written": "Date à laquelle cette carte a été écrite : {d}"
   },
   "set": {
     "hNormal": "Réglages habituels",
@@ -411,7 +416,8 @@ var es = {
     "rot": "⟳ Girar",
     "play": "🔔 Reproducir sonido",
     "stop": "🔇 Detener sonido",
-    "call": "📞 Llamar"
+    "call": "📞 Llamar",
+    "written": "Fecha en que se escribió esta tarjeta: {d}"
   },
   "set": {
     "hNormal": "Ajustes habituales",
@@ -501,7 +507,8 @@ var it = {
     "rot": "⟳ Ruota",
     "play": "🔔 Riproduci il suono",
     "stop": "🔇 Ferma il suono",
-    "call": "📞 Chiama"
+    "call": "📞 Chiama",
+    "written": "Data in cui è stata scritta questa card: {d}"
   },
   "set": {
     "hNormal": "Impostazioni abituali",
@@ -591,7 +598,8 @@ var pt = {
     "rot": "⟳ Girar",
     "play": "🔔 Tocar som",
     "stop": "🔇 Parar som",
-    "call": "📞 Ligar"
+    "call": "📞 Ligar",
+    "written": "Data em que este cartão foi escrito: {d}"
   },
   "set": {
     "hNormal": "Ajustes do dia a dia",
@@ -681,7 +689,8 @@ var nl = {
     "rot": "⟳ Draaien",
     "play": "🔔 Geluid afspelen",
     "stop": "🔇 Geluid stoppen",
-    "call": "📞 Bellen"
+    "call": "📞 Bellen",
+    "written": "Datum waarop deze kaart is geschreven: {d}"
   },
   "set": {
     "hNormal": "Gewone instellingen",
@@ -771,7 +780,8 @@ var sv = {
     "rot": "⟳ Vrid",
     "play": "🔔 Spela ljud",
     "stop": "🔇 Stoppa ljud",
-    "call": "📞 Ring"
+    "call": "📞 Ring",
+    "written": "Datum då kortet skrevs: {d}"
   },
   "set": {
     "hNormal": "Vanliga inställningar",
@@ -861,7 +871,8 @@ var ko = {
     "rot": "⟳ 가로 보기",
     "play": "🔔 소리 내기",
     "stop": "🔇 소리 멈추기",
-    "call": "📞 전화하기"
+    "call": "📞 전화하기",
+    "written": "이 카드를 쓴 날: {d}"
   },
   "set": {
     "hNormal": "평소 설정",
@@ -951,7 +962,8 @@ var zh = {
     "rot": "⟳ 横向",
     "play": "🔔 播放声音",
     "stop": "🔇 停止声音",
-    "call": "📞 拨打电话"
+    "call": "📞 拨打电话",
+    "written": "这张卡片的填写日期：{d}"
   },
   "set": {
     "hNormal": "平时的设置",
@@ -1041,7 +1053,8 @@ var ar = {
     "rot": "⟳ تدوير",
     "play": "🔔 تشغيل الصوت",
     "stop": "🔇 إيقاف الصوت",
-    "call": "📞 اتصال"
+    "call": "📞 اتصال",
+    "written": "تاريخ كتابة هذه البطاقة: {d}"
   },
   "set": {
     "hNormal": "الإعدادات اليومية",

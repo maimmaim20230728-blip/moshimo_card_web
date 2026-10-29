@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.13';
+const VER = '1.14';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -88,6 +88,7 @@ function applyI18n(){
     const el = $(id);
     if(el) el.textContent = T(I18N_MAP[id]);
   }
+  addShowHeadJa();   // みせる画面の見出しに日本語も添える(日本語以外のとき・2026-10-30)
   document.documentElement.lang = pref.lang;
   document.documentElement.dir = (RTL_LANGS.indexOf(pref.lang) >= 0) ? 'rtl' : 'ltr';
   $('btn-fs').textContent    = T('set.fsSizes')[pref.fs];
@@ -178,8 +179,13 @@ function collectCard(){
 function persistCard(){
   return saveJSON(LS_CARD, { v:1, fields: collectCard(), updated: Date.now() });
 }
-/* 自動保存: 入力のたびに静かに保存(押し忘れで消えるのを防ぐ)。トーストは出さない */
-function autoSaveCard(){ persistCard(); }
+/* 自動保存: 入力のたびに静かに保存(押し忘れで消えるのを防ぐ)。保存できたときはトーストを出さない。
+   保存できなかったら(容量いっぱい等)「ほぞんできませんでした」を1回だけ出す(打つたびには出さない。保存できたら次の失敗でまた1回・2026-10-30) */
+let autoSaveWarned = false;
+function autoSaveCard(){
+  if(persistCard()){ autoSaveWarned = false; return; }
+  if(!autoSaveWarned){ autoSaveWarned = true; toast(T('edit.saveFail')); }
+}
 /* 「ほぞんする」ボタン=明示保存。自動保存済みでも「保存できた」実感のため残す */
 function saveCard(){
   if(persistCard()) toast(T('edit.saved'));
@@ -253,11 +259,37 @@ function extractPhones(text){
   return out.slice(0, 3);
 }
 
+/* みせる画面の見出し: 日本語以外で使っているときは、その言語の見出しの下に日本語の見出しも添える
+   (日本の救急隊・まわりの人が読めるように・2026-10-30)。読み上げも日本語で読むよう lang="ja" */
+function addShowHeadJa(){
+  const h = $('show-head');
+  if(!h || pref.lang === 'ja') return;
+  const ja = walk(window.MOSHIMO_I18N.ja, 'show.head');
+  if(!ja || ja === T('show.head')) return;
+  const s = document.createElement('span');
+  s.className = 'show-head-ja';
+  s.setAttribute('lang', 'ja');
+  s.setAttribute('dir', 'ltr');
+  s.textContent = ja;
+  h.appendChild(s);
+}
+/* このカードを書いた日(card.updated = さいごに保存した時刻)。ja は「2026年10月30日」・ほかは 2026-10-30 */
+function writtenLabel(ts){
+  if(typeof ts !== 'number' || !isFinite(ts) || ts <= 0) return '';
+  const d = new Date(ts);
+  if(isNaN(d.getTime())) return '';
+  const p = n => (n < 10 ? '0' : '') + n;
+  /* 日本語以外の日付は LRI…PDI で囲む(ar で「30-10-2026」と逆に並ばないように・ほかの言語では見た目は変わらない) */
+  const ds = (pref.lang === 'ja') ? (d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日')
+                                  : (String.fromCharCode(0x2066) + d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) + String.fromCharCode(0x2069));
+  return String(T('show.written')).replace('{d}', ds);
+}
+
 function buildShow(){
   const card = loadJSON(LS_CARD);
   const list = $('show-list');
   list.textContent = '';
-  const hasAny = card && FIELD_KEYS.some(k => card.fields[k]);
+  const hasAny = card && card.fields && FIELD_KEYS.some(k => card.fields[k]);
   if(!hasAny){
     const d = document.createElement('div');
     d.className = 'show-empty';
@@ -297,6 +329,14 @@ function buildShow(){
     }
     list.appendChild(block);
   });
+  /* いちばん下に小さく「このカードを書いた日」(古い情報かどうかを、見る人が判断できるように・2026-10-30) */
+  const w = writtenLabel(card.updated);
+  if(w){
+    const d = document.createElement('div');
+    d.className = 'show-written';
+    d.textContent = w;
+    list.appendChild(d);
+  }
 }
 
 function openShow(){
@@ -558,7 +598,8 @@ function importBackup(e){
     try{
       const d = JSON.parse(r.result);
       if(d.app !== 'moshimo_card') throw new Error('different app');
-      if(d.card && d.card.fields) saveJSON(LS_CARD, d.card);
+      /* 保存できなかったら(容量いっぱい等)「よみこみました」を出さない(2026-10-30) */
+      if(d.card && d.card.fields && !saveJSON(LS_CARD, d.card)) throw new Error('save failed');
       pref = sanitizePref(d.prefs);
       savePref();
       applyAll();

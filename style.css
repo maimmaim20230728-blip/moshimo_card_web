@@ -183,6 +183,10 @@ input[type="file"].hidden{ display:none; }
   overflow-wrap:anywhere;
 }
 .show-empty{ margin-top:24px; font-size:1.2em; text-align:center; color:#555; }
+/* 日本語以外のとき、見出しの下に添える日本語の見出し(app.js addShowHeadJa・2026-10-30) */
+.show-head-ja{ display:block; margin-top:6px; font-size:.85em; }
+/* このカードを書いた日(いちばん下に小さく) */
+.show-written{ margin-top:22px; font-size:.85em; color:#555; text-align:center; }
 /* 緊急時に必ず押せるボタン。ナビゲーションバーに食い込ませない */
 .close-btn{
   position:fixed; min-height:64px;
@@ -198,6 +202,7 @@ input[type="file"].hidden{ display:none; }
 .fx-invert .show-value{ background:#161616; color:#fff; }
 .fx-invert .show-label{ color:#ccc; }
 .fx-invert .show-empty{ color:#ccc; }
+.fx-invert .show-written{ color:#ccc; }
 .fx-invert .show-head{ color:#ff5c5c; border-color:#ff5c5c; }
 .fx-invert .ctrl-btn{ background:#222; color:#eee; border-color:#555; }
 

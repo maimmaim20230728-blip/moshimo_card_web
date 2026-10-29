@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.12';
+const VER = '1.13';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -209,10 +209,48 @@ function releaseWake(){
   wakeLock = null;
 }
 
-/* 緊急連絡先の文字列から電話番号を1つ取り出す(見つからなければnull) */
-function extractPhone(text){
-  const m = String(text).match(/\+?\d[\d\-().\s]{5,}\d/);
-  return m ? m[0].replace(/[^\d+]/g, '') : null;
+/* 緊急連絡先の文字列から電話番号を最大3つ取り出す([{ tel:'09012345678', label:'090-1234-5678' }])。
+   🔴間違った番号に発信しないことが最優先。あやしいものは番号にしない(出さないほうが安全)。
+   ・全角を半角にそろえる(NFKC+ハイフンの仲間)・改行をまたがない
+   ・1つの番号は 国内 10〜11桁 / + 始まり 8〜15桁。それを超えてつながりそうなら分ける(2つの番号が空白1つで並んでも別)
+   ・〒のあとの郵便番号・「内線」「ext」のあとの番号・10桁未満は番号にしない */
+function extractPhones(text){
+  const s = String(text == null ? '' : text).normalize('NFKC').replace(/[\u2010-\u2015\u2212\u30fc]/g, '-');
+  const out = [];
+  s.split(/[\r\n\u2028\u2029]+/).forEach(line => {
+    const re = /\+?\(?\d[\d\-().\s]*/g;
+    let m;
+    while((m = re.exec(line))){
+      const ctx = line.slice(Math.max(0, m.index - 12), m.index);
+      let groups = m[0].match(/\d+/g) || [];
+      const plus = m[0].charAt(0) === '+';
+      if(/(内線|\bext\.?|\bextension|\bx)\s*[:：]?\s*$/i.test(ctx)) groups = groups.slice(1);                  // 内線の番号
+      else if(/(〒|郵便番号)\s*[:：]?\s*$/.test(ctx)){                                                          // 郵便番号
+        if(groups.length > 1 && groups[0].length === 3 && groups[1].length === 4) groups = groups.slice(2);
+        else if(groups.length && groups[0].length === 7) groups = groups.slice(1);
+      }
+      let acc = null;
+      const nums = [];
+      groups.forEach((g, i) => {
+        if(acc){
+          const cap = acc.plus ? (acc.d.indexOf('81') === 0 ? 13 : 15) : 11;
+          // 0以外で始まる並びのあとに 0 で始まる塊が来たら別の番号(日付や郵便番号のあとの電話番号を巻き込まない)
+          const fresh = !acc.plus && acc.d.charAt(0) !== '0' && g.length >= 2 && g.charAt(0) === '0';
+          if(acc.d.length + g.length <= cap && !fresh){ acc.d += g; acc.g.push(g); return; }
+          nums.push(acc);
+        }
+        acc = { d:g, g:[g], plus: plus && i === 0 };
+      });
+      if(acc) nums.push(acc);
+      nums.forEach(n => {
+        const len = n.d.length;
+        if(n.plus ? (len < 8 || len > 15 || (n.d.indexOf('81') === 0 && len > 13)) : (len < 10 || len > 11)) return;
+        const tel = (n.plus ? '+' : '') + n.d;
+        if(!out.some(o => o.tel === tel)) out.push({ tel, label:(n.plus ? '+' : '') + n.g.join('-') });
+      });
+    }
+  });
+  return out.slice(0, 3);
 }
 
 function buildShow(){
@@ -242,14 +280,20 @@ function buildShow(){
     block.appendChild(value);
     // 緊急連絡先に電話番号があれば、そのまま発信できるボタンを添える
     if(k === 'contact'){
-      const tel = extractPhone(v);
-      if(tel){
+      extractPhones(v).forEach(p => {       // 見つかった番号ごとに最大3つ(どの番号か分かるよう番号を添える)
         const a = document.createElement('a');
-        a.className = 'call-btn';
-        a.href = 'tel:' + tel;
-        a.textContent = T('show.call');
+        a.className = 'call-btn has-num';
+        a.href = 'tel:' + p.tel;
+        const lab = document.createElement('span');
+        lab.className = 'call-lab';
+        lab.textContent = T('show.call');
+        a.appendChild(lab);
+        const num = document.createElement('span');
+        num.className = 'call-num';
+        num.textContent = p.label;
+        a.appendChild(num);
         block.appendChild(a);
-      }
+      });
     }
     list.appendChild(block);
   });

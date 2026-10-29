@@ -119,6 +119,10 @@ select{ min-height:48px; font-size:1em; font-family:inherit; }
   background:#2e9e6b; color:#fff; text-align:center;
   font-size:1.3em; font-weight:800; border-radius:12px; text-decoration:none;
 }
+/* 番号を添えた発信ボタン: 文言(いまのまま)の下に番号。長い番号でも折り返して重ならない */
+.call-btn.has-num{ line-height:1.3; padding:10px 8px; box-sizing:border-box; }
+.call-btn .call-lab, .call-btn .call-num{ display:block; }
+.call-btn .call-num{ font-size:.85em; font-weight:700; letter-spacing:.02em; word-break:break-all; }
 .bk-row{ display:flex; gap:12px; }
 .bk-row .set-btn{ flex:1; }
 input[type="file"].hidden{ display:none; }

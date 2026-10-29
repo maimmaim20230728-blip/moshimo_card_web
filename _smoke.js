@@ -175,6 +175,27 @@ check('緊急連絡先が発信ボタン(tel:)になる', findTel(created['show-
 tap(created['show-close']);
 check('とじるで閉じる', showEl().classList.contains('hidden'));
 
+/* 発信ボタン: 番号が複数ある連絡先は、番号ごとに別のボタン(改行をまたいでつながない)・番号が無ければ出さない */
+function findTels(node, acc){
+  acc = acc || [];
+  if(node.href && String(node.href).indexOf('tel:') === 0) acc.push(node.href);
+  for(const c of node.children) findTels(c, acc);
+  return acc;
+}
+const savedCard = lsData['moshimo.card.v1'];
+function showWithContact(text){
+  const card = JSON.parse(savedCard); card.fields.contact = text;
+  lsData['moshimo.card.v1'] = JSON.stringify(card);
+  tap(created['tab-card']); tap(created['btn-show']);
+  const r = findTels(created['show-list']);
+  tap(created['show-close']);
+  return r;
+}
+check('連絡先に番号が2つ(改行)=ボタンも2つ(つなげた番号に発信しない)', JSON.stringify(showWithContact('はは 090-1111-2222\nちち 080-3333-4444')) === JSON.stringify(['tel:09011112222', 'tel:08033334444']));
+check('郵便番号と内線は番号にしない', JSON.stringify(showWithContact('〒123-4567\n03-1234-5678(内線123)')) === JSON.stringify(['tel:0312345678']));
+check('番号が無ければ発信ボタンを出さない', showWithContact('はは 70歳').length === 0);
+lsData['moshimo.card.v1'] = savedCard;
+
 console.log('[4] めだちかた(色を反転/点滅/両方)とよこむき');
 tap(created['tab-set']);
 tap(created['btn-fx']);                               // ふつう→いろを はんてん

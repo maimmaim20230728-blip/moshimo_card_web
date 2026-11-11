@@ -22,6 +22,7 @@ function makeEl(tag){
     type:'', hidden:false, disabled:false, lang:'', dir:'',
     appendChild(c){ this.children.push(c); return c; },
     setAttribute(k, v){ this._attr[k] = v; },
+    removeAttribute(k){ delete this._attr[k]; if(k === 'href') this.href = ''; },
     getAttribute(k){ return (k in this._attr) ? this._attr[k] : null; },
     addEventListener(t, h){ (this._ev[t] = this._ev[t] || []).push(h); },
     removeEventListener(){},
@@ -114,6 +115,7 @@ const sandbox = {
   }
 };
 sandbox.Blob = function(parts, opts){ this.parts = parts; this.opts = opts; sandbox.__lastBlob = this; };
+sandbox.print = function(){ sandbox.__printed = (sandbox.__printed || 0) + 1; };   // 印刷の画面の代わり
 sandbox.window = sandbox;
 vm.createContext(sandbox);
 
@@ -431,6 +433,152 @@ console.log('[13] みせる画面: このカードを書いた日・外国語の
   tap(created['tab-card']);
 }
 
+/* ---- 2026-11-11 採用案(84〜89) ---- */
+(async () => {
+const I14 = sandbox.window.MOSHIMO_I18N;
+const L12 = ['ja','en','de','fr','es','it','pt','nl','sv','ko','zh','ar'];
+const DASH = /[—–―]/;
+const labelsOf = node => node.children.filter(b => b.className === 'show-block').map(b => b.children[0].textContent);
+const bkKey = 'moshimo.bk.v1';
+const DAY = 24 * 60 * 60 * 1000;
+const fullCard = { v:1, updated: Date.now(), fields:{ name:'なまえA', blood:'A型', cond:'じびょうB', meds:'くすりC', allergy:'アレルギーD', doctor:'びょういんE', trouble:'にがてF', request:'おねがいG', contact:'はは 090-1234-5678', free:'じゆうH' } };
+const emptyCard = { v:1, updated: 1, fields:{ name:'', blood:'', cond:'', meds:'', allergy:'', doctor:'', trouble:'', request:'', contact:'', free:'' } };
+const setCard = c => { lsData['moshimo.card.v1'] = JSON.stringify(c); };
+
+console.log('[14] 84・86 かきこみの記入例(うすい文字)と、緊急連絡先の書き方');
+tap(created['tab-card']); tap(created['tab-edit']);
+check('ja: 10欄ぜんぶにうすい文字が入る', ['name','blood','cond','meds','allergy','doctor','trouble','request','contact','free'].every(k => created['fld-' + k].placeholder === I14.ja.edit.ph[k] && I14.ja.edit.ph[k].length > 0));
+check('ja: 緊急連絡先の下に「1行に1人」の書き方が出る(母 090- の例つき)', created['hint-contact'].textContent === I14.ja.edit.contactHint && created['hint-contact'].textContent.indexOf('1行に 1人') >= 0 && created['hint-contact'].textContent.indexOf('母 090-0000-0000') >= 0);
+created['set-lang'].value = 'en'; fire(created['set-lang'], 'change');
+check('en に切り替えるとうすい文字・書き方も英語に', created['fld-allergy'].placeholder === I14.en.edit.ph.allergy && created['hint-contact'].textContent === I14.en.edit.contactHint);
+created['set-lang'].value = 'ar'; fire(created['set-lang'], 'change');
+check('ar でもうすい文字が入る', created['fld-contact'].placeholder === I14.ar.edit.ph.contact);
+created['set-lang'].value = 'ja'; fire(created['set-lang'], 'change');
+check('うすい文字は入力欄の値(保存されるもの)ではない', created['fld-contact'].value !== created['fld-contact'].placeholder);
+check('12言語に新しい文言がそろい、ダッシュが無い', L12.every(l => {
+  const t = I14[l];
+  const strs = [t.edit.contactHint, t.show.call119, t.show.call119Ask, t.show.call119Go, t.show.call119Cancel, t.show.net119, t.home.bkRemind, t.set.order, t.set.print].concat(t.set.orders, Object.keys(t.edit.ph).map(k => t.edit.ph[k]));
+  return strs.every(x => typeof x === 'string' && x.length > 0 && !DASH.test(x)) && Object.keys(t.edit.ph).length === 10 && t.set.orders.length === 2;
+}));
+check('12言語の119の文言に「119」が入る', L12.every(l => I14[l].show.call119.indexOf('119') >= 0 && I14[l].show.call119Go.indexOf('119') >= 0));
+
+console.log('[15] 85 みせる画面の「119に電話」(確認つき・押した指のあとから来るクリックで発信しない)');
+setCard(fullCard);
+tap(created['tab-card']); tap(created['btn-show']);
+check('みせる画面に「119に電話」が常にある', created['s119-btn'].textContent === I14.ja.show.call119);
+check('はじめは確認が閉じていて、発信のリンク先も無い', created['s119-ask'].classList.contains('hidden') && created['s119-go'].getAttribute('href') === null);
+check('NET119 など声を出せない人への案内が出ている', created['s119-net'].textContent === I14.ja.show.net119 && created['s119-net'].textContent.indexOf('NET119') >= 0);
+tap(created['s119-btn']);
+check('押すと確認「119番に電話します。よろしいですか?」が出る(まだ発信しない)', !created['s119-ask'].classList.contains('hidden') && created['s119-q'].textContent === I14.ja.show.call119Ask && created['s119-go'].getAttribute('href') === null);
+check('出した直後は「かける」が押せない(wait・href なし・aria-disabled)', created['s119-go'].classList.contains('wait') && created['s119-go'].getAttribute('aria-disabled') === 'true');
+await new Promise(r => setTimeout(r, 900));
+check('800ms のあと「かける」が tel:119 になる', created['s119-go'].getAttribute('href') === 'tel:119' && !created['s119-go'].classList.contains('wait'));
+tap(created['s119-cancel']);
+check('「やめる」で確認が閉じ、発信のリンク先も消える', created['s119-ask'].classList.contains('hidden') && created['s119-go'].getAttribute('href') === null);
+tap(created['s119-btn']);
+tap(created['show-close']);
+tap(created['btn-show']);
+check('とじて開き直すと確認は閉じた状態(前の「かける」が残らない)', created['s119-ask'].classList.contains('hidden') && created['s119-go'].getAttribute('href') === null);
+tap(created['s119-btn']); tap(created['show-close']);
+await new Promise(r => setTimeout(r, 900));
+check('確認を出したまま閉じたあと、時間がたっても href が付かない', created['s119-go'].getAttribute('href') === null);
+setCard(emptyCard);
+tap(created['btn-show']);
+check('カードが空でも「119に電話」は出ている', created['s119-btn'].textContent === I14.ja.show.call119 && allText(created['show-list']).indexOf('まだ なにも') >= 0);
+check('119 は緊急連絡先の発信ボタン(番号抽出)には載らない(仕様どおり)', findTels(created['show-list']).length === 0);
+tap(created['show-close']);
+
+console.log('[16] 87 みせる画面の並び(せってい「ならびじゅん」)');
+setCard(fullCard);
+tap(created['tab-set']);
+check('ならびじゅんの既定は「ふつう」', created['btn-order'].textContent === I14.ja.set.orders[0] && created['lbl-order'].textContent === I14.ja.set.order);
+tap(created['tab-card']); tap(created['btn-show']);
+check('ふつう: 今までの順(なまえ→血液型→…)', JSON.stringify(labelsOf(created['show-list'])) === JSON.stringify(['name','blood','cond','meds','allergy','doctor','trouble','request','contact','free'].map(k => I14.ja.edit[k])));
+tap(created['show-close']);
+tap(created['tab-set']); tap(created['btn-order']);
+check('1回押すと「だいじな ものを うえに」になり保存される', created['btn-order'].textContent === I14.ja.set.orders[1] && JSON.parse(lsData['moshimo.pref.v1']).order === 'important');
+tap(created['tab-card']); tap(created['btn-show']);
+check('だいじな ものを うえに: びょうき・アレルギー・くすり・緊急連絡先が先、あとは今までの順', JSON.stringify(labelsOf(created['show-list'])) === JSON.stringify(['cond','allergy','meds','contact','name','blood','doctor','trouble','request','free'].map(k => I14.ja.edit[k])));
+check('並びを変えても緊急連絡先の発信ボタンは出る', findTel(created['show-list']) === 'tel:09012345678');
+tap(created['show-close']);
+const imp = JSON.stringify({ app:'moshimo_card', ver:1, card: fullCard, prefs:{ lang:'ja', fs:0, sound:true, theme:'green', bgm:'off', fx:'plain', alert:'none', vol:1, order:'bogus' } });
+fire(created['bk-file'], 'change', { target:{ files:[{ _text: imp }], value:'' } });
+check('バックアップの読み込みで変な並びの値は「ふつう」になる', JSON.parse(lsData['moshimo.pref.v1']).order === 'normal' && created['btn-order'].textContent === I14.ja.set.orders[0]);
+const imp2 = JSON.stringify({ app:'moshimo_card', ver:1, card: fullCard, prefs:{ lang:'ja', fs:0, sound:true, theme:'green', bgm:'off', fx:'plain', alert:'none', vol:1, order:'important' } });
+fire(created['bk-file'], 'change', { target:{ files:[{ _text: imp2 }], value:'' } });
+check('バックアップに入っていた「だいじな ものを うえに」は戻る', created['btn-order'].textContent === I14.ja.set.orders[1]);
+tap(created['btn-order']);
+check('もう一度で「ふつう」に戻る', created['btn-order'].textContent === I14.ja.set.orders[0] && JSON.parse(lsData['moshimo.pref.v1']).order === 'normal');
+
+console.log('[17] 88 バックアップの取り忘れ(14日・一度も かきだしていない・閉じると30日)');
+const home = () => { tap(created['tab-set']); tap(created['tab-card']); return !created['bk-remind'].classList.contains('hidden'); };
+setCard(fullCard);
+delete lsData[bkKey];
+check('書いた日の記録が無ければ出ない', home() === false);
+lsData[bkKey] = JSON.stringify({ since: Date.now() - 13 * DAY });
+check('13日目はまだ出ない', home() === false);
+lsData[bkKey] = JSON.stringify({ since: Date.now() - 15 * DAY });
+check('15日たって一度も かきだしていなければ一行出る', home() === true && created['bk-remind-txt'].textContent === I14.ja.home.bkRemind);
+check('一行に「せってい」「かきだす」が入る', created['bk-remind-txt'].textContent.indexOf('せってい') >= 0 && created['bk-remind-txt'].textContent.indexOf('かきだす') >= 0);
+check('閉じるボタンに名前がある(読み上げ)', created['bk-remind-close'].getAttribute('aria-label') === I14.ja.show.close);
+tap(created['bk-remind-close']);
+check('閉じると消え、閉じた日が端末の中に残る', created['bk-remind'].classList.contains('hidden') && typeof JSON.parse(lsData[bkKey]).dismissed === 'number');
+check('閉じたあとホームに戻っても出ない', home() === false);
+lsData[bkKey] = JSON.stringify({ since: Date.now() - 80 * DAY, dismissed: Date.now() - 31 * DAY });
+check('閉じてから31日たつとまた出る', home() === true);
+lsData[bkKey] = JSON.stringify({ since: Date.now() - 80 * DAY });
+check('準備: また出る状態', home() === true);
+tap(created['tab-set']); tap(created['bk-export']);
+check('「かきだす」をすると記録され、出なくなる', typeof JSON.parse(lsData[bkKey]).exported === 'number' && home() === false);
+lsData[bkKey] = JSON.stringify({ since: Date.now() - 80 * DAY });
+setCard(emptyCard);
+check('カードが空なら出ない', home() === false);
+setCard(fullCard);
+delete lsData[bkKey];
+tap(created['tab-edit']);
+created['fld-name'].value = 'きろく'; fire(created['fld-name'], 'input');
+check('カードを書くと、書いた日が端末の中に記録される', typeof JSON.parse(lsData[bkKey]).since === 'number');
+check('記録は端末の中(localStorage)だけ: 外へ送る道具を使っていない', !/fetch\(|XMLHttpRequest|sendBeacon|WebSocket/.test(fs.readFileSync(__dirname + '/app.js', 'utf8')));
+lsData[bkKey] = 'こわれた';
+check('記録がこわれていても例外にならず出ない', home() === false);
+delete lsData[bkKey];
+
+console.log('[18] 89 紙に印刷(A6 1枚・Web版だけ)');
+tap(created['tab-set']);
+check('Web版では「紙に いんさつ」の行が出る', !created['print-row'].classList.contains('hidden') && created['btn-print'].textContent === I14.ja.set.print);
+setCard(fullCard);
+sandbox.__printed = 0;
+tap(created['btn-print']);
+const ps = allText(created['print-sheet']);
+check('押すと印刷の画面が開く', sandbox.__printed === 1);
+check('紙に、アプリ名・見出し・ぜんぶの項目・書いた日が入る', ps.indexOf(I14.ja.app.name) >= 0 && ps.indexOf(I14.ja.show.head) >= 0 && ['なまえA','A型','じびょうB','くすりC','アレルギーD','びょういんE','にがてF','おねがいG','はは 090-1234-5678','じゆうH'].every(x => ps.indexOf(x) >= 0) && ps.indexOf('このカードを 書いた日') >= 0);
+check('少ない量なら一番大きい文字(ps-s0)', created['print-sheet'].className === 'ps-s0');
+const big = JSON.parse(JSON.stringify(fullCard)); big.fields.free = 'あ'.repeat(950);
+setCard(big); tap(created['btn-print']);
+check('多い量なら一番小さい文字(ps-s3)', created['print-sheet'].className === 'ps-s3');
+const mid = JSON.parse(JSON.stringify(fullCard)); mid.fields.free = 'あ'.repeat(400);
+setCard(mid); tap(created['btn-print']);
+check('中くらいなら ps-s1', created['print-sheet'].className === 'ps-s1');
+sandbox.__printed = 0;
+created['toast'].textContent = '';
+setCard(emptyCard);
+tap(created['btn-print']);
+check('カードが空なら印刷せず「まだ なにも かかれていません」', sandbox.__printed === 0 && created['toast'].textContent === I14.ja.show.empty);
+setCard(fullCard);
+const appSrc = fs.readFileSync(__dirname + '/app.js', 'utf8');
+check('Play版(Capacitor)では印刷の行を出さない作りになっている(canPrint が isNativeApp を見る)', /function canPrint\(\)\{ return !isNativeApp\(\)/.test(appSrc));
+const css14 = fs.readFileSync(__dirname + '/style.css', 'utf8').replace(/\s+/g, ' ');
+check('印刷の紙は画面では隠れ、@media print で A6 の1枚に出る', /#print-sheet\{ display:none; \}/.test(css14) && /@media print\{ @page\{ size:A6 portrait;/.test(css14) && /body > \*:not\(#print-sheet\)\{ display:none !important; \}/.test(css14));
+check('隠す設定が .hidden に負けない(bk-remind・s119-ask・print-row)', /\.bk-remind\.hidden\{ display:none; \}/.test(css14) && /\.s119-ask\.hidden\{ display:none; \}/.test(css14) && /\.print-row\.hidden\{ display:none; \}/.test(css14));
+check('文字サイズを4段(11pt・9pt・7.5pt・6.5pt)で用意', ['11pt','9pt','7.5pt','6.5pt'].every(x => css14.indexOf('font-size:' + x) >= 0));
+
+console.log('[19] 版');
+check('SW のキャッシュ名が moshimo-v23', /const CACHE = 'moshimo-v23'/.test(fs.readFileSync(__dirname + '/sw.js', 'utf8')));
+check('画面の版が 1.16', /const VER = '1\.16'/.test(appSrc) && created['about-ver'].textContent === 'v1.16');
+const gr = fs.existsSync(__dirname + '/android/app/build.gradle') ? fs.readFileSync(__dirname + '/android/app/build.gradle', 'utf8') : '';
+if(gr) check('build.gradle が versionCode 10 / versionName 1.16', /versionCode 10\b/.test(gr) && /versionName "1\.16"/.test(gr));
+
 console.log('');
 if(ng){ console.error('SMOKE NG: ' + ng + '件 失敗 / OK ' + ok + '件'); process.exit(1); }
 console.log('SMOKE OK: 全' + ok + '件 合格');
+})().catch(e => { console.error(e); process.exit(1); });

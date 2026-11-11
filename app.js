@@ -6,9 +6,10 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.15';
+const VER = '1.16';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
+const LS_BK   = 'moshimo.bk.v1';   // バックアップの取り忘れの知らせ用(端末の中だけ・どこにも送らない)
 
 /* カード項目(保存キー・言語非依存)。表示名は i18n の edit.* と1:1 */
 const FIELD_KEYS = ['name','blood','cond','meds','allergy','doctor','trouble','request','contact','free'];
@@ -20,6 +21,9 @@ const THEMES = ['green','aqua','white','dark'];
 const BGMS   = ['off','green','blue'];
 const FXS    = ['plain','invert','blink','invertBlink'];
 const ALERTS = ['none','chime','alarm','whistle'];
+const ORDERS = ['normal','important'];   // みせる画面の並び: ふつう / だいじな ものを うえに
+/* だいじな ものを うえに: びょうき・アレルギー・くすり・緊急連絡先を先に(あとは今までの順) */
+const IMPORTANT_FIRST = ['cond','allergy','meds','contact'];
 const VOL_LEVELS = 4;    // ちいさい / ふつう / おおきい / 爆音(災害用)
 const BOOM_VOL = 3;      // 爆音(災害用)
 
@@ -45,6 +49,7 @@ function sanitizePref(p){
     bgm:   BGMS.indexOf(p.bgm)     >= 0 ? p.bgm   : 'green',
     fx:    FXS.indexOf(p.fx)       >= 0 ? p.fx    : 'plain',
     alert: ALERTS.indexOf(p.alert) >= 0 ? p.alert : 'none',
+    order: ORDERS.indexOf(p.order) >= 0 ? p.order : 'normal',
     vol:   (Number.isInteger(p.vol) && p.vol >= 0 && p.vol < VOL_LEVELS) ? p.vol : 1
   };
 }
@@ -77,6 +82,10 @@ const I18N_MAP = {
   'lbl-fs':'set.fs', 'lbl-lang':'set.lang', 'lbl-theme':'set.theme',
   'lbl-bgm':'set.bgm', 'lbl-sound':'set.sound',
   'lbl-fx':'set.fx', 'lbl-alert':'set.alert', 'lbl-vol':'set.vol', 'boom-hint':'set.boomHint',
+  'lbl-order':'set.order', 'hint-contact':'edit.contactHint', 'btn-print':'set.print',
+  'bk-remind-txt':'home.bkRemind',
+  's119-btn':'show.call119', 's119-q':'show.call119Ask', 's119-go':'show.call119Go',
+  's119-cancel':'show.call119Cancel', 's119-net':'show.net119',
   'bk-hint':'set.bkHint', 'bk-export':'set.bkExport', 'bk-import':'set.bkImport',
   'paper-note':'set.paperNote', 'link-privacy':'set.privacy', 'about-credit':'set.credit',
   'tab-card':'tab.card', 'tab-edit':'tab.edit', 'tab-set':'tab.set',
@@ -98,6 +107,10 @@ function applyI18n(){
   $('btn-fx').textContent    = T('set.fxs')[FXS.indexOf(pref.fx)];
   $('btn-alert').textContent = T('set.alerts')[ALERTS.indexOf(pref.alert)];
   $('btn-vol').textContent   = T('set.vols')[pref.vol];
+  $('btn-order').textContent = T('set.orders')[ORDERS.indexOf(pref.order)];
+  /* かきこみ欄のうすい文字(れい) */
+  FIELD_KEYS.forEach(k => { $('fld-' + k).placeholder = T('edit.ph.' + k) || ''; });
+  $('bk-remind-close').setAttribute('aria-label', T('show.close'));
   /* 爆音を選んだときだけ、耳の近くで鳴らさない・本体音量も上げる、の注意を出す */
   if($('boom-hint')) $('boom-hint').classList.toggle('hidden', pref.vol !== BOOM_VOL);
   $('about-ver').textContent = 'v' + VER;
@@ -162,6 +175,35 @@ function renderHome(){
   $('home-preview').textContent = n
     ? T('home.filled').replace('{n}', String(n))
     : T('home.empty');
+  $('bk-remind').classList.toggle('hidden', !bkRemindDue(Date.now()));
+}
+
+/* ---- バックアップの取り忘れをやさしく知らせる(2026-11-11) ----
+   端末の中だけに保存なので、機種変更や初期化で消える。カードに中身が入ってから14日たっても一度も「かきだす」をしていなければ、
+   ホームに小さく一行だけ出す。閉じると30日は出さない。記録(since・exported・dismissed)は端末の中だけ・どこにも送らない。
+   「かきだす」の流れ(共有の画面で保存先を選ぶ)は今のまま */
+const BK_AFTER_MS  = 14 * 24 * 60 * 60 * 1000;
+const BK_SNOOZE_MS = 30 * 24 * 60 * 60 * 1000;
+function bkState(){ const b = loadJSON(LS_BK); return (b && typeof b === 'object' && !Array.isArray(b)) ? b : {}; }
+function noteCardWritten(){
+  if(!cardFilled()) return;
+  const b = bkState();
+  if(typeof b.since !== 'number'){ b.since = Date.now(); saveJSON(LS_BK, b); }
+}
+function noteExported(){
+  const b = bkState(); b.exported = Date.now(); saveJSON(LS_BK, b);
+}
+function bkRemindDue(now){
+  if(!cardFilled()) return false;
+  const b = bkState();
+  if(typeof b.exported === 'number') return false;
+  if(typeof b.since !== 'number' || now - b.since < BK_AFTER_MS) return false;
+  if(typeof b.dismissed === 'number' && now - b.dismissed < BK_SNOOZE_MS) return false;
+  return true;
+}
+function dismissBkRemind(){
+  const b = bkState(); b.dismissed = Date.now(); saveJSON(LS_BK, b);
+  renderHome();
 }
 
 /* ---- かきこみ ---- */
@@ -177,7 +219,9 @@ function collectCard(){
   return fields;
 }
 function persistCard(){
-  return saveJSON(LS_CARD, { v:1, fields: collectCard(), updated: Date.now() });
+  const ok = saveJSON(LS_CARD, { v:1, fields: collectCard(), updated: Date.now() });
+  if(ok) noteCardWritten();
+  return ok;
 }
 /* 自動保存: 入力のたびに静かに保存(押し忘れで消えるのを防ぐ)。保存できたときはトーストを出さない。
    保存できなかったら(容量いっぱい等)「ほぞんできませんでした」を1回だけ出す(打つたびには出さない。保存できたら次の失敗でまた1回・2026-10-30) */
@@ -285,6 +329,82 @@ function writtenLabel(ts){
   return String(T('show.written')).replace('{d}', ds);
 }
 
+/* みせる画面・印刷の並び。せっていの「ならびじゅん」が「だいじな ものを うえに」のときだけ入れ替える */
+function orderedKeys(){
+  if(pref.order !== 'important') return FIELD_KEYS;
+  return IMPORTANT_FIRST.concat(FIELD_KEYS.filter(k => IMPORTANT_FIRST.indexOf(k) < 0));
+}
+
+/* ---- みせる画面の「119 に電話」(いつも出す・2026-11-11) ----
+   カードに何も書いていない人・声を出せない人のための入口。119 は3桁なので、緊急連絡先の番号抽出(extractPhones)には載らない(仕様どおり)。
+   誤タップで発信しないよう、押すと「119番に電話します。よろしいですか?」を出し、「119に かける」を押したときだけ発信する。
+   「かける」は出した直後の 800ms は押せない(押した指のあとから来る click で発信しない・tap.js の 👻 と同じ考え) */
+let s119Timer = 0;
+function close119(){
+  clearTimeout(s119Timer); s119Timer = 0;
+  const ask = $('s119-ask'), go = $('s119-go');
+  if(ask) ask.classList.add('hidden');
+  if(go){ go.removeAttribute('href'); go.classList.add('wait'); go.setAttribute('aria-disabled', 'true'); }
+}
+function open119(){
+  close119();
+  $('s119-ask').classList.remove('hidden');
+  s119Timer = setTimeout(() => {
+    s119Timer = 0;
+    const go = $('s119-go');
+    go.setAttribute('href', 'tel:119');
+    go.classList.remove('wait');
+    go.setAttribute('aria-disabled', 'false');
+  }, 800);
+}
+
+/* ---- 紙に印刷(A6 1枚・Web版だけ・2026-11-11) ----
+   画面には出さない #print-sheet に中身を作って window.print()。@media print で、これだけを A6 に出す(style.css)。
+   書いた量で文字の大きさを3段に変えて1枚に収める。Play版は印刷の画面が無いので、せっていのボタンごと出さない */
+function canPrint(){ return !isNativeApp() && typeof window.print === 'function'; }
+function buildPrintSheet(){
+  const card = loadJSON(LS_CARD);
+  const root = $('print-sheet');
+  root.textContent = '';
+  let total = 0;
+  const head = document.createElement('div');
+  head.className = 'ps-head';
+  head.textContent = T('app.name');
+  root.appendChild(head);
+  const sub = document.createElement('div');
+  sub.className = 'ps-sub';
+  sub.textContent = T('show.head');
+  root.appendChild(sub);
+  orderedKeys().forEach(k => {
+    const v = card.fields[k];
+    if(!v) return;
+    total += String(v).length + 8;
+    const b = document.createElement('div');
+    b.className = 'ps-block';
+    const l = document.createElement('div');
+    l.className = 'ps-label';
+    l.textContent = T('edit.' + k);
+    const t = document.createElement('div');
+    t.className = 'ps-value';
+    t.textContent = v;
+    b.appendChild(l); b.appendChild(t);
+    root.appendChild(b);
+  });
+  const w = writtenLabel(card.updated);
+  if(w){
+    const d = document.createElement('div');
+    d.className = 'ps-written';
+    d.textContent = w;
+    root.appendChild(d);
+  }
+  root.className = 'ps-s' + (total <= 300 ? 0 : total <= 600 ? 1 : total <= 900 ? 2 : 3);
+}
+function printCard(){
+  if(!cardFilled()){ toast(T('show.empty')); return; }
+  buildPrintSheet();
+  try{ window.print(); }catch(_){}
+}
+
 function buildShow(){
   const card = loadJSON(LS_CARD);
   const list = $('show-list');
@@ -297,7 +417,7 @@ function buildShow(){
     list.appendChild(d);
     return;
   }
-  FIELD_KEYS.forEach(k => {
+  orderedKeys().forEach(k => {
     const v = card.fields[k];
     if(!v) return;
     const block = document.createElement('div');
@@ -347,6 +467,7 @@ function openShow(){
   s.classList.toggle('fx-invert', pref.fx === 'invert' || pref.fx === 'invertBlink');
   s.classList.toggle('fx-blink',  pref.fx === 'blink'  || pref.fx === 'invertBlink');
   showing = true;
+  close119();                           // 前に開いた「119に電話」の確かめは閉じた状態から
   if(pref.alert !== 'none'){
     Sound.pauseBgm();                   // 緊急音優先: よびだし音の間は穏やかなBGMを止める(重ならない)
     Sound.startAlert(pref.alert, pref.vol);   // せっていで音を選んでいれば自動で鳴らす
@@ -361,6 +482,7 @@ function closeShow(){
   showing = false;
   soundPlaying = false;
   $('scr-show').classList.add('hidden');
+  close119();
   Sound.stopAlert();
   releaseWake();
   Sound.resumeBgm();
@@ -577,7 +699,7 @@ function exportBackup(){
   /* Play版(2026-09-30): 一時フォルダに書いて共有の画面へ。選べたら「かきだしました」・閉じたら何も出さない・書けなければ「ほぞんできませんでした」 */
   if(isNativeApp()){
     nativeSaveFile(fname, JSON.stringify(data), T('set.bkExport'), r => {
-      if(r === 'ok') toast(T('set.exported'));
+      if(r === 'ok'){ noteExported(); toast(T('set.exported')); }
       else if(r === 'fail') toast(T('edit.saveFail'));
     });
     return;
@@ -588,6 +710,7 @@ function exportBackup(){
   a.download = fname;
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+  noteExported();
   toast(T('set.exported'));
 }
 function importBackup(e){
@@ -663,6 +786,17 @@ function init(){
     pref.alert = next(ALERTS, pref.alert);
     savePref(); applyI18n();
   });
+  Tap.bind($('btn-order'), () => {
+    pref.order = next(ORDERS, pref.order);   // ふつう ⇄ だいじな ものを うえに
+    savePref(); applyI18n();
+  });
+  Tap.bind($('s119-btn'), open119);
+  Tap.bind($('s119-cancel'), close119);
+  Tap.bind($('bk-remind-close'), dismissBkRemind);
+  if(canPrint()){
+    $('print-row').classList.remove('hidden');
+    Tap.bind($('btn-print'), printCard);
+  }
   Tap.bind($('btn-vol'), () => {
     pref.vol = (pref.vol + 1) % VOL_LEVELS;   // ちいさい→ふつう→おおきい→爆音(災害用)
     savePref(); applyI18n();
@@ -685,6 +819,7 @@ function init(){
     });
   }
 
+  noteCardWritten();                    // 前から中身のあるカードは、この更新のあとから日数を数える
   applyAll();
   showScreen('scr-home');
   if(!guideDone()) openGuide(true);     // はじめての つかいかた(読み終えるまで毎回・2026-09-30)

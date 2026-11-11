@@ -50,6 +50,11 @@
     <p id="home-hint" class="tagline">もしもの時は、これを見せてください。</p>
     <button id="btn-show" class="show-btn">🆘 これを みせる</button>
     <div id="home-preview" class="preview"></div>
+    <!-- バックアップの取り忘れをやさしく知らせる一行(閉じられる・端末の中の記録だけ・app.js bkRemindDue) -->
+    <div id="bk-remind" class="bk-remind hidden">
+      <p id="bk-remind-txt" class="bk-remind-txt"></p>
+      <button id="bk-remind-close" class="bk-remind-close" type="button">×</button>
+    </div>
   </section>
 
   <!-- かきこみ(10項目・SPEC_V1) -->
@@ -81,6 +86,7 @@
 
     <label id="lbl-contact" for="fld-contact">きんきゅう れんらくさき</label>
     <textarea id="fld-contact" rows="2"></textarea>
+    <p id="hint-contact" class="field-hint"></p>
 
     <label id="lbl-free" for="fld-free">じゆうに かくところ</label>
     <textarea id="fld-free" rows="3"></textarea>
@@ -100,6 +106,7 @@
 
     <h2 id="set-h-show" class="sec-h">みせるときの せってい</h2>
     <div class="set-row"><span id="lbl-fx">めだちかた</span><button id="btn-fx" class="set-btn"></button></div>
+    <div class="set-row"><span id="lbl-order">ならびじゅん</span><button id="btn-order" class="set-btn"></button></div>
     <div class="set-row"><span id="lbl-alert">おと</span><button id="btn-alert" class="set-btn"></button></div>
     <div class="set-row"><span id="lbl-vol">おとの おおきさ</span><button id="btn-vol" class="set-btn"></button></div>
     <p id="boom-hint" class="hint hidden">爆音は 災害の ときに とおくの 人に 気づいてもらう ための おとです。みみの ちかくで ならさないで ください。スマホ本体の 音量も 大きくしてください。</p>
@@ -111,6 +118,10 @@
       <button id="bk-import" class="set-btn">よみこむ</button>
     </div>
     <input id="bk-file" type="file" accept="application/json,.json" class="hidden">
+    <!-- 紙に印刷(A6 1枚)。Web版だけ(Play版は app.js が隠したまま・2026-11-11) -->
+    <div id="print-row" class="bk-row print-row hidden">
+      <button id="btn-print" class="set-btn" type="button">紙に いんさつ(A6)</button>
+    </div>
 
     <p id="paper-note" class="hint">お住まいの ちいきの 紙のヘルプカード・ヘルプマークと あわせて つかえます。</p>
     <p class="credit"><a id="link-privacy" href="privacy.html">プライバシーポリシー</a></p>
@@ -129,6 +140,18 @@
     </div>
     <div id="show-head" class="show-head"></div>
     <div id="show-list"></div>
+    <!-- 119 に電話(いつも出す・確認の一手間つき・声が出せない人向けの案内つき・2026-11-11) -->
+    <div id="show-119" class="show-119">
+      <button id="s119-btn" class="s119-btn" type="button">📞 119に 電話する</button>
+      <div id="s119-ask" class="s119-ask hidden">
+        <p id="s119-q" class="s119-q"></p>
+        <div class="s119-row">
+          <a id="s119-go" class="call-btn s119-go wait" aria-disabled="true" role="button"></a>
+          <button id="s119-cancel" class="ctrl-btn s119-cancel" type="button"></button>
+        </div>
+      </div>
+      <p id="s119-net" class="s119-net"></p>
+    </div>
     <button id="show-close" class="close-btn">とじる</button>
   </div>
 </section>
@@ -140,6 +163,9 @@
 </nav>
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- 印刷用の紙(画面には出ない。app.js が中身を作って window.print) -->
+<div id="print-sheet" aria-hidden="true"></div>
 
 <script src="audio.js"></script>
 <script src="tap.js"></script>

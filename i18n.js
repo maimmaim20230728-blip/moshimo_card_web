@@ -22,7 +22,8 @@ var ja = {
   home: {
     show:'🆘 これを みせる',
     empty:'まだカードは からっぽです。「かきこみ」から つくれます。',
-    filled:'かいてあること: {n}こ'
+    filled:'かいてあること: {n}こ',
+    bkRemind:'カードを 書いてから しばらく たちました。スマホを かえたり 初期化すると 消えます。「せってい」の「かきだす」で ほぞんできます。'
   },
   edit: {
     allOptional:'ぜんぶ 書かなくても だいじょうぶです。ひつような ところだけ 書いてください。',
@@ -38,7 +39,20 @@ var ja = {
     free:'じゆうに かくところ',
     save:'ほぞんする',
     saved:'ほぞんしました ✓',
-    saveFail:'ほぞんできませんでした'
+    saveFail:'ほぞんできませんでした',
+    contactHint:'1行に 1人ずつ、「母 090-0000-0000」のように 書いてください。だれの 番号か わかると、見た人が まよいません。',
+    ph:{
+      name:'れい: 山田 太郎',
+      blood:'れい: A型(Rh+)',
+      cond:'れい: ぜんそく、てんかん、耳が きこえない',
+      meds:'れい: 血圧の くすり(朝 1錠)',
+      allergy:'れい: そば、たまご、ペニシリン',
+      doctor:'れい: ○○びょういん、△△ やっきょく',
+      trouble:'れい: 大きな 音が にがて、声が 出にくい',
+      request:'れい: ゆっくり 話してください。家族に 電話してください。',
+      contact:'れい: 母 090-0000-0000',
+      free:'れい: 保険証の ばしょ、うちで かっている ペット'
+    }
   },
   show: {
     head:'これは わたしの「もしもカード」です。読んでください。',
@@ -48,7 +62,12 @@ var ja = {
     play:'🔔 おとを ならす',
     stop:'🔇 おとを とめる',
     call:'📞 でんわする',
-    written:'このカードを 書いた日: {d}'
+    written:'このカードを 書いた日: {d}',
+    call119:'📞 119に 電話する(救急・火事)',
+    call119Ask:'119番に 電話します。よろしいですか?',
+    call119Go:'📞 119に かける',
+    call119Cancel:'やめる',
+    net119:'声が 出せない ときは、お住まいの ちいきに「NET119」など、声を 出さずに 知らせる しくみが あるかもしれません(多くは 先に 登録が いります)。'
   },
   set: {
     hNormal:'ふだんの せってい',
@@ -69,6 +88,8 @@ var ja = {
     alerts:['ならさない','チャイム','アラーム','ホイッスル'],
     vol:'おとの おおきさ',
     vols:['ちいさい','ふつう','おおきい','爆音(災害用)'],
+    order:'ならびじゅん',
+    orders:['ふつう','だいじな ものを うえに'],
     boomHint:'爆音は 災害の ときに とおくの 人に 気づいてもらう ための おとです。みみの ちかくで ならさないで ください。スマホ本体の 音量も 大きくしてください。',
     bkHint:'あたらしい スマホに うつるときは、「かきだす」で ファイルを ほぞんして、あたらしい スマホで「よみこむ」を おしてください。',
     bkExport:'かきだす',
@@ -77,6 +98,7 @@ var ja = {
     imported:'よみこみました ✓',
     importFail:'よみこめませんでした',
     paperNote:'お住まいの ちいきの 紙のヘルプカード・ヘルプマークと あわせて つかえます。',
+    print:'紙に いんさつ(A6)',
     privacy:'プライバシーポリシー',
     credit:'アプリ開発：介護と支援の相談どころ そよぎ'
   },
@@ -118,7 +140,8 @@ var en = {
   home: {
     show:'🆘 Show this card',
     empty:'The card is still empty. You can fill it in on the "Write" tab.',
-    filled:'Filled items: {n}'
+    filled:'Filled items: {n}',
+    bkRemind:'It has been a while since you wrote your card. It is lost if you change phones or reset this one. Tap "Export" in "Settings" to keep a copy.'
   },
   edit: {
     allOptional:"You don't need to fill in everything. Just write the parts that matter for you.",
@@ -134,7 +157,20 @@ var en = {
     free:'Anything else',
     save:'Save',
     saved:'Saved ✓',
-    saveFail:'Could not save'
+    saveFail:'Could not save',
+    contactHint:'One person per line, like "Mother 090-0000-0000". Writing whose number it is helps the people who see it.',
+    ph:{
+      name:'e.g. Taro Yamada',
+      blood:'e.g. Type A (Rh+)',
+      cond:'e.g. asthma, epilepsy, deaf',
+      meds:'e.g. blood pressure pills (1 each morning)',
+      allergy:'e.g. buckwheat, eggs, penicillin',
+      doctor:'e.g. ABC Hospital, XYZ Pharmacy',
+      trouble:'e.g. loud noises, hard to speak',
+      request:'e.g. Please speak slowly. Please call my family.',
+      contact:'e.g. Mother 090-0000-0000',
+      free:'e.g. where my insurance card is, my pet at home'
+    }
   },
   show: {
     head:'This is my MOSHIMO Card. Please read it.',
@@ -144,7 +180,12 @@ var en = {
     play:'🔔 Play sound',
     stop:'🔇 Stop sound',
     call:'📞 Call',
-    written:'Date this card was written: {d}'
+    written:'Date this card was written: {d}',
+    call119:'📞 Call 119 (Japan: ambulance, fire)',
+    call119Ask:'This will call 119. Is that OK?',
+    call119Go:'📞 Call 119',
+    call119Cancel:'Cancel',
+    net119:'If you cannot speak, some areas offer ways to report without a voice, such as "NET119" (usually you must register in advance).'
   },
   set: {
     hNormal:'Everyday settings',
@@ -165,6 +206,8 @@ var en = {
     alerts:['Silent','Chime','Alarm','Whistle'],
     vol:'Volume',
     vols:['Soft','Normal','Loud','Max (disaster)'],
+    order:'Order',
+    orders:['Normal','Important first'],
     boomHint:'The maximum level is meant to reach people far away in a disaster. Do not sound it close to anyone\'s ears. Also turn up the phone\'s own volume.',
     bkHint:'When moving to a new phone, tap "Export" to save a file, then tap "Import" on the new phone.',
     bkExport:'Export',
@@ -173,6 +216,7 @@ var en = {
     imported:'Imported ✓',
     importFail:'Could not import',
     paperNote:'You can use this together with the paper help card or help mark of your local area.',
+    print:'Print on paper (A6)',
     privacy:'Privacy Policy',
     credit:'App development: Soyogi / SOYOGI'
   },
@@ -209,7 +253,8 @@ var de = {
   "home": {
     "show": "🆘 Diese Karte zeigen",
     "empty": "Die Karte ist noch leer. Sie können sie im Bereich „Eintragen“ ausfüllen.",
-    "filled": "Ausgefüllte Angaben: {n}"
+    "filled": "Ausgefüllte Angaben: {n}",
+    "bkRemind": "Sie haben die Karte vor einiger Zeit geschrieben. Bei einem Handywechsel oder Zurücksetzen geht sie verloren. Tippen Sie unter „Einstellungen“ auf „Exportieren“, um eine Kopie zu sichern."
   },
   "edit": {
     "allOptional": "Sie müssen nicht alles ausfüllen. Schreiben Sie nur, was für Sie wichtig ist.",
@@ -225,7 +270,20 @@ var de = {
     "free": "Sonstiges",
     "save": "Speichern",
     "saved": "Gespeichert ✓",
-    "saveFail": "Speichern fehlgeschlagen"
+    "saveFail": "Speichern fehlgeschlagen",
+    "contactHint": "Eine Person pro Zeile, z. B. „Mutter 090-0000-0000“. Wenn dabeisteht, wessen Nummer es ist, finden sich Helfende besser zurecht.",
+    "ph": {
+      "name": "z. B. Taro Yamada",
+      "blood": "z. B. A (Rh+)",
+      "cond": "z. B. Asthma, Epilepsie, gehörlos",
+      "meds": "z. B. Blutdrucktabletten (morgens 1)",
+      "allergy": "z. B. Buchweizen, Eier, Penicillin",
+      "doctor": "z. B. Klinik ABC, Apotheke XYZ",
+      "trouble": "z. B. laute Geräusche, Sprechen fällt schwer",
+      "request": "z. B. Bitte langsam sprechen. Bitte meine Familie anrufen.",
+      "contact": "z. B. Mutter 090-0000-0000",
+      "free": "z. B. wo meine Versichertenkarte ist, mein Haustier zu Hause"
+    }
   },
   "show": {
     "head": "Das ist meine MOSHIMO-Karte. Bitte lesen Sie sie.",
@@ -235,7 +293,12 @@ var de = {
     "play": "🔔 Ton abspielen",
     "stop": "🔇 Ton stoppen",
     "call": "📞 Anrufen",
-    "written": "Diese Karte wurde geschrieben am: {d}"
+    "written": "Diese Karte wurde geschrieben am: {d}",
+    "call119": "📞 119 anrufen (Japan: Rettung, Feuerwehr)",
+    "call119Ask": "119 wird angerufen. Ist das in Ordnung?",
+    "call119Go": "📞 119 anrufen",
+    "call119Cancel": "Abbrechen",
+    "net119": "Wenn Sie nicht sprechen können, gibt es in manchen Regionen Möglichkeiten für einen Notruf ohne Stimme, z. B. „NET119“ (meist ist vorher eine Anmeldung nötig)."
   },
   "set": {
     "hNormal": "Alltägliche Einstellungen",
@@ -256,6 +319,8 @@ var de = {
     "alerts": ["Stumm", "Glocke", "Alarm", "Pfeife"],
     "vol": "Lautstärke",
     "vols": ["Leise", "Normal", "Laut", "Maximal (Katastrophe)"],
+    "order": "Reihenfolge",
+    "orders": ["Normal", "Wichtiges zuerst"],
     "boomHint": "Die höchste Stufe soll bei einer Katastrophe weit entfernte Menschen erreichen. Lassen Sie sie nicht direkt am Ohr ertönen. Stellen Sie auch die Lautstärke des Handys hoch.",
     "bkHint": "Wenn Sie auf ein neues Handy wechseln, tippen Sie auf „Exportieren“, um eine Datei zu speichern, und tippen Sie dann auf dem neuen Handy auf „Importieren“.",
     "bkExport": "Exportieren",
@@ -264,6 +329,7 @@ var de = {
     "imported": "Importiert ✓",
     "importFail": "Import fehlgeschlagen",
     "paperNote": "Sie können diese Karte zusammen mit der gedruckten Hilfekarte oder dem Hilfe-Symbol Ihrer Region verwenden.",
+    "print": "Auf Papier drucken (A6)",
     "privacy": "Datenschutzerklärung",
     "credit": "App-Entwicklung: Soyogi / SOYOGI"
   },
@@ -300,7 +366,8 @@ var fr = {
   "home": {
     "show": "🆘 Montrer cette carte",
     "empty": "La carte est encore vide. Vous pouvez la remplir dans l'onglet « Écrire ».",
-    "filled": "Éléments remplis : {n}"
+    "filled": "Éléments remplis : {n}",
+    "bkRemind": "Cela fait un moment que vous avez écrit votre carte. Elle sera perdue si vous changez de téléphone ou le réinitialisez. Appuyez sur « Exporter » dans « Réglages » pour garder une copie."
   },
   "edit": {
     "allOptional": "Vous n'avez pas besoin de tout remplir. Notez seulement ce qui compte pour vous.",
@@ -316,7 +383,20 @@ var fr = {
     "free": "Autres informations",
     "save": "Enregistrer",
     "saved": "Enregistré ✓",
-    "saveFail": "Échec de l'enregistrement"
+    "saveFail": "Échec de l'enregistrement",
+    "contactHint": "Une personne par ligne, par exemple « Mère 090-0000-0000 ». Indiquer à qui est le numéro aide les personnes qui lisent la carte.",
+    "ph": {
+      "name": "ex. : Taro Yamada",
+      "blood": "ex. : A (Rh+)",
+      "cond": "ex. : asthme, épilepsie, sourd(e)",
+      "meds": "ex. : médicament pour la tension (1 le matin)",
+      "allergy": "ex. : sarrasin, œufs, pénicilline",
+      "doctor": "ex. : hôpital ABC, pharmacie XYZ",
+      "trouble": "ex. : les bruits forts, difficulté à parler",
+      "request": "ex. : Parlez lentement. Appelez ma famille.",
+      "contact": "ex. : Mère 090-0000-0000",
+      "free": "ex. : où est ma carte d'assurance, mon animal à la maison"
+    }
   },
   "show": {
     "head": "Ceci est ma carte MOSHIMO. Veuillez la lire.",
@@ -326,7 +406,12 @@ var fr = {
     "play": "🔔 Émettre un son",
     "stop": "🔇 Arrêter le son",
     "call": "📞 Appeler",
-    "written": "Date à laquelle cette carte a été écrite : {d}"
+    "written": "Date à laquelle cette carte a été écrite : {d}",
+    "call119": "📞 Appeler le 119 (Japon : urgences, pompiers)",
+    "call119Ask": "Le 119 va être appelé. Est-ce d'accord ?",
+    "call119Go": "📞 Appeler le 119",
+    "call119Cancel": "Annuler",
+    "net119": "Si vous ne pouvez pas parler, certaines régions proposent un moyen d'alerter sans la voix, comme « NET119 » (une inscription préalable est souvent nécessaire)."
   },
   "set": {
     "hNormal": "Réglages habituels",
@@ -347,6 +432,8 @@ var fr = {
     "alerts": ["Silencieux", "Carillon", "Alarme", "Sifflet"],
     "vol": "Volume",
     "vols": ["Faible", "Normal", "Fort", "Maximum (catastrophe)"],
+    "order": "Ordre",
+    "orders": ["Normal", "L'important d'abord"],
     "boomHint": "Le niveau maximum sert à alerter des personnes éloignées lors d'une catastrophe. Ne le faites pas retentir près des oreilles. Augmentez aussi le volume du téléphone.",
     "bkHint": "Pour passer à un nouveau téléphone, appuyez sur « Exporter » pour enregistrer un fichier, puis appuyez sur « Importer » sur le nouveau téléphone.",
     "bkExport": "Exporter",
@@ -355,6 +442,7 @@ var fr = {
     "imported": "Importé ✓",
     "importFail": "Échec de l'importation",
     "paperNote": "Vous pouvez l'utiliser avec la carte d'aide ou le pictogramme d'aide en papier de votre région.",
+    "print": "Imprimer sur papier (A6)",
     "privacy": "Politique de confidentialité",
     "credit": "Développement de l'application : Soyogi / SOYOGI"
   },
@@ -391,7 +479,8 @@ var es = {
   "home": {
     "show": "🆘 Mostrar esta tarjeta",
     "empty": "La tarjeta aún está vacía. Puede rellenarla en la pestaña «Escribir».",
-    "filled": "Elementos rellenados: {n}"
+    "filled": "Elementos rellenados: {n}",
+    "bkRemind": "Hace tiempo que escribió su tarjeta. Se pierde si cambia de teléfono o lo restablece. Toque «Exportar» en «Ajustes» para guardar una copia."
   },
   "edit": {
     "allOptional": "No hace falta rellenarlo todo. Escriba solo lo que le importe.",
@@ -407,7 +496,20 @@ var es = {
     "free": "Otra información",
     "save": "Guardar",
     "saved": "Guardado ✓",
-    "saveFail": "No se pudo guardar"
+    "saveFail": "No se pudo guardar",
+    "contactHint": "Una persona por línea, por ejemplo «Madre 090-0000-0000». Si se indica de quién es el número, quien lea la tarjeta no se confunde.",
+    "ph": {
+      "name": "p. ej.: Taro Yamada",
+      "blood": "p. ej.: A (Rh+)",
+      "cond": "p. ej.: asma, epilepsia, sordera",
+      "meds": "p. ej.: pastilla para la tensión (1 por la mañana)",
+      "allergy": "p. ej.: alforfón, huevo, penicilina",
+      "doctor": "p. ej.: Hospital ABC, Farmacia XYZ",
+      "trouble": "p. ej.: los ruidos fuertes, me cuesta hablar",
+      "request": "p. ej.: Hable despacio. Llame a mi familia.",
+      "contact": "p. ej.: Madre 090-0000-0000",
+      "free": "p. ej.: dónde está mi tarjeta del seguro, mi mascota en casa"
+    }
   },
   "show": {
     "head": "Esta es mi tarjeta MOSHIMO. Por favor, léala.",
@@ -417,7 +519,12 @@ var es = {
     "play": "🔔 Reproducir sonido",
     "stop": "🔇 Detener sonido",
     "call": "📞 Llamar",
-    "written": "Fecha en que se escribió esta tarjeta: {d}"
+    "written": "Fecha en que se escribió esta tarjeta: {d}",
+    "call119": "📞 Llamar al 119 (Japón: ambulancia, bomberos)",
+    "call119Ask": "Se llamará al 119. ¿Está bien?",
+    "call119Go": "📞 Llamar al 119",
+    "call119Cancel": "Cancelar",
+    "net119": "Si no puede hablar, en algunas zonas hay formas de avisar sin voz, como «NET119» (normalmente hay que registrarse antes)."
   },
   "set": {
     "hNormal": "Ajustes habituales",
@@ -438,6 +545,8 @@ var es = {
     "alerts": ["Silencio", "Timbre", "Alarma", "Silbato"],
     "vol": "Volumen",
     "vols": ["Bajo", "Normal", "Alto", "Máximo (catástrofe)"],
+    "order": "Orden",
+    "orders": ["Normal", "Lo importante primero"],
     "boomHint": "El nivel máximo sirve para que le oigan personas lejanas en una catástrofe. No lo haga sonar cerca de los oídos. Suba también el volumen del teléfono.",
     "bkHint": "Al cambiar a un teléfono nuevo, toque «Exportar» para guardar un archivo y luego toque «Importar» en el teléfono nuevo.",
     "bkExport": "Exportar",
@@ -446,6 +555,7 @@ var es = {
     "imported": "Importado ✓",
     "importFail": "No se pudo importar",
     "paperNote": "Puede usarla junto con la tarjeta de ayuda o el distintivo de ayuda en papel de su localidad.",
+    "print": "Imprimir en papel (A6)",
     "privacy": "Política de privacidad",
     "credit": "Desarrollo de la app: Soyogi / SOYOGI"
   },
@@ -482,7 +592,8 @@ var it = {
   "home": {
     "show": "🆘 Mostra questa scheda",
     "empty": "La scheda è ancora vuota. Puoi compilarla nella sezione \"Compila\".",
-    "filled": "Voci compilate: {n}"
+    "filled": "Voci compilate: {n}",
+    "bkRemind": "È passato un po' di tempo da quando ha scritto la carta. Si perde se cambia telefono o lo ripristina. Tocchi «Esporta» in «Impostazioni» per tenere una copia."
   },
   "edit": {
     "allOptional": "Non devi compilare tutto. Scrivi solo ciò che conta per te.",
@@ -498,7 +609,20 @@ var it = {
     "free": "Note libere",
     "save": "Salva",
     "saved": "Salvato ✓",
-    "saveFail": "Impossibile salvare"
+    "saveFail": "Impossibile salvare",
+    "contactHint": "Una persona per riga, ad esempio «Madre 090-0000-0000». Scrivere di chi è il numero aiuta chi legge la carta.",
+    "ph": {
+      "name": "es.: Taro Yamada",
+      "blood": "es.: A (Rh+)",
+      "cond": "es.: asma, epilessia, sordità",
+      "meds": "es.: pastiglia per la pressione (1 al mattino)",
+      "allergy": "es.: grano saraceno, uova, penicillina",
+      "doctor": "es.: ospedale ABC, farmacia XYZ",
+      "trouble": "es.: i rumori forti, faccio fatica a parlare",
+      "request": "es.: Parli piano. Chiami la mia famiglia.",
+      "contact": "es.: Madre 090-0000-0000",
+      "free": "es.: dove si trova la tessera sanitaria, il mio animale a casa"
+    }
   },
   "show": {
     "head": "Questa è la mia MOSHIMO Card. Vi prego di leggerla.",
@@ -508,7 +632,12 @@ var it = {
     "play": "🔔 Riproduci il suono",
     "stop": "🔇 Ferma il suono",
     "call": "📞 Chiama",
-    "written": "Data in cui è stata scritta questa card: {d}"
+    "written": "Data in cui è stata scritta questa card: {d}",
+    "call119": "📞 Chiama il 119 (Giappone: ambulanza, vigili del fuoco)",
+    "call119Ask": "Verrà chiamato il 119. Va bene?",
+    "call119Go": "📞 Chiama il 119",
+    "call119Cancel": "Annulla",
+    "net119": "Se non riesce a parlare, in alcune zone esistono modi per chiamare senza voce, come «NET119» (di solito serve registrarsi prima)."
   },
   "set": {
     "hNormal": "Impostazioni abituali",
@@ -529,6 +658,8 @@ var it = {
     "alerts": ["Silenzioso", "Campanello", "Allarme", "Fischietto"],
     "vol": "Volume",
     "vols": ["Basso", "Normale", "Alto", "Massimo (catastrofe)"],
+    "order": "Ordine",
+    "orders": ["Normale", "Prima le cose importanti"],
     "boomHint": "Il livello massimo serve a farsi sentire da persone lontane durante una catastrofe. Non farlo suonare vicino alle orecchie. Alza anche il volume del telefono.",
     "bkHint": "Quando passi a un nuovo telefono, tocca \"Esporta\" per salvare un file, poi tocca \"Importa\" sul nuovo telefono.",
     "bkExport": "Esporta",
@@ -537,6 +668,7 @@ var it = {
     "imported": "Importato ✓",
     "importFail": "Impossibile importare",
     "paperNote": "Puoi usarla insieme alla scheda o al contrassegno cartaceo di assistenza della tua zona.",
+    "print": "Stampa su carta (A6)",
     "privacy": "Informativa sulla privacy",
     "credit": "Sviluppo dell'app: Soyogi / SOYOGI"
   },
@@ -573,7 +705,8 @@ var pt = {
   "home": {
     "show": "🆘 Mostrar este cartão",
     "empty": "O cartão ainda está vazio. Pode criá-lo em «Preencher».",
-    "filled": "Itens preenchidos: {n}"
+    "filled": "Itens preenchidos: {n}",
+    "bkRemind": "Faz um tempo que você escreveu o cartão. Ele se perde se você trocar de celular ou restaurá-lo. Toque em \"Exportar\" em \"Ajustes\" para guardar uma cópia."
   },
   "edit": {
     "allOptional": "Não precisa preencher tudo. Escreva apenas o que for importante para você.",
@@ -589,7 +722,20 @@ var pt = {
     "free": "Outras informações",
     "save": "Salvar",
     "saved": "Salvo ✓",
-    "saveFail": "Não foi possível salvar"
+    "saveFail": "Não foi possível salvar",
+    "contactHint": "Uma pessoa por linha, por exemplo \"Mãe 090-0000-0000\". Escrever de quem é o número ajuda quem lê o cartão.",
+    "ph": {
+      "name": "ex.: Taro Yamada",
+      "blood": "ex.: A (Rh+)",
+      "cond": "ex.: asma, epilepsia, surdez",
+      "meds": "ex.: comprimido para a pressão (1 de manhã)",
+      "allergy": "ex.: trigo-sarraceno, ovo, penicilina",
+      "doctor": "ex.: Hospital ABC, Farmácia XYZ",
+      "trouble": "ex.: barulhos altos, dificuldade para falar",
+      "request": "ex.: Fale devagar. Ligue para a minha família.",
+      "contact": "ex.: Mãe 090-0000-0000",
+      "free": "ex.: onde está meu cartão do seguro, meu animal em casa"
+    }
   },
   "show": {
     "head": "Este é o meu Cartão MOSHIMO. Por favor, leia.",
@@ -599,7 +745,12 @@ var pt = {
     "play": "🔔 Tocar som",
     "stop": "🔇 Parar som",
     "call": "📞 Ligar",
-    "written": "Data em que este cartão foi escrito: {d}"
+    "written": "Data em que este cartão foi escrito: {d}",
+    "call119": "📞 Ligar para o 119 (Japão: ambulância, bombeiros)",
+    "call119Ask": "Vai ligar para o 119. Tudo bem?",
+    "call119Go": "📞 Ligar para o 119",
+    "call119Cancel": "Cancelar",
+    "net119": "Se você não consegue falar, algumas regiões têm formas de pedir ajuda sem voz, como o \"NET119\" (em geral é preciso se cadastrar antes)."
   },
   "set": {
     "hNormal": "Ajustes do dia a dia",
@@ -620,6 +771,8 @@ var pt = {
     "alerts": ["Sem som", "Sino", "Alarme", "Apito"],
     "vol": "Volume",
     "vols": ["Baixo", "Normal", "Alto", "Máximo (catástrofe)"],
+    "order": "Ordem",
+    "orders": ["Normal", "O importante primeiro"],
     "boomHint": "O nível máximo serve para alcançar pessoas distantes em uma catástrofe. Não o toque perto dos ouvidos. Aumente também o volume do telefone.",
     "bkHint": "Ao mudar para um telefone novo, toque em «Exportar» para salvar um arquivo e, depois, toque em «Importar» no telefone novo.",
     "bkExport": "Exportar",
@@ -628,6 +781,7 @@ var pt = {
     "imported": "Importado ✓",
     "importFail": "Não foi possível importar",
     "paperNote": "Pode usar isto junto com o cartão de ajuda em papel ou o símbolo de ajuda da sua região.",
+    "print": "Imprimir em papel (A6)",
     "privacy": "Política de Privacidade",
     "credit": "Desenvolvimento do app: Soyogi / SOYOGI"
   },
@@ -664,7 +818,8 @@ var nl = {
   "home": {
     "show": "🆘 Laat deze kaart zien",
     "empty": "De kaart is nog leeg. Je kunt hem invullen op het tabblad \"Invullen\".",
-    "filled": "Ingevulde onderdelen: {n}"
+    "filled": "Ingevulde onderdelen: {n}",
+    "bkRemind": "U hebt de kaart al een tijdje geleden geschreven. Ze gaat verloren als u van telefoon wisselt of hem reset. Tik bij \"Instellingen\" op \"Exporteren\" om een kopie te bewaren."
   },
   "edit": {
     "allOptional": "Je hoeft niet alles in te vullen. Schrijf alleen wat voor jou belangrijk is.",
@@ -680,7 +835,20 @@ var nl = {
     "free": "Verder nog iets",
     "save": "Opslaan",
     "saved": "Opgeslagen ✓",
-    "saveFail": "Opslaan mislukt"
+    "saveFail": "Opslaan mislukt",
+    "contactHint": "Eén persoon per regel, bijvoorbeeld \"Moeder 090-0000-0000\". Als erbij staat van wie het nummer is, weet de lezer meteen wie het is.",
+    "ph": {
+      "name": "bijv. Taro Yamada",
+      "blood": "bijv. A (Rh+)",
+      "cond": "bijv. astma, epilepsie, doof",
+      "meds": "bijv. bloeddrukpil (1 per ochtend)",
+      "allergy": "bijv. boekweit, ei, penicilline",
+      "doctor": "bijv. ziekenhuis ABC, apotheek XYZ",
+      "trouble": "bijv. harde geluiden, moeite met praten",
+      "request": "bijv. Praat langzaam. Bel mijn familie.",
+      "contact": "bijv. Moeder 090-0000-0000",
+      "free": "bijv. waar mijn verzekeringspas is, mijn huisdier thuis"
+    }
   },
   "show": {
     "head": "Dit is mijn MOSHIMO Card. Lees dit alstublieft.",
@@ -690,7 +858,12 @@ var nl = {
     "play": "🔔 Geluid afspelen",
     "stop": "🔇 Geluid stoppen",
     "call": "📞 Bellen",
-    "written": "Datum waarop deze kaart is geschreven: {d}"
+    "written": "Datum waarop deze kaart is geschreven: {d}",
+    "call119": "📞 Bel 119 (Japan: ambulance, brandweer)",
+    "call119Ask": "Er wordt 119 gebeld. Is dat goed?",
+    "call119Go": "📞 Bel 119",
+    "call119Cancel": "Annuleren",
+    "net119": "Als u niet kunt praten, hebben sommige regio's een manier om zonder stem te melden, zoals \"NET119\" (meestal moet u zich vooraf aanmelden)."
   },
   "set": {
     "hNormal": "Gewone instellingen",
@@ -711,6 +884,8 @@ var nl = {
     "alerts": ["Geen geluid", "Belletje", "Alarm", "Fluitje"],
     "vol": "Volume",
     "vols": ["Zacht", "Normaal", "Hard", "Maximaal (ramp)"],
+    "order": "Volgorde",
+    "orders": ["Normaal", "Belangrijk eerst"],
     "boomHint": "Het hoogste niveau is bedoeld om bij een ramp mensen ver weg te bereiken. Laat het niet vlak bij de oren klinken. Zet ook het volume van de telefoon hoog.",
     "bkHint": "Als je overstapt naar een nieuwe telefoon, tik dan op \"Exporteren\" om een bestand op te slaan. Tik daarna op de nieuwe telefoon op \"Importeren\".",
     "bkExport": "Exporteren",
@@ -719,6 +894,7 @@ var nl = {
     "imported": "Geïmporteerd ✓",
     "importFail": "Importeren mislukt",
     "paperNote": "Je kunt dit samen gebruiken met de papieren hulpkaart of het hulpteken uit jouw regio.",
+    "print": "Op papier afdrukken (A6)",
     "privacy": "Privacybeleid",
     "credit": "App-ontwikkeling: Soyogi / SOYOGI"
   },
@@ -755,7 +931,8 @@ var sv = {
   "home": {
     "show": "🆘 Visa det här kortet",
     "empty": "Kortet är fortfarande tomt. Du kan fylla i det under fliken \"Skriv\".",
-    "filled": "Ifyllda uppgifter: {n}"
+    "filled": "Ifyllda uppgifter: {n}",
+    "bkRemind": "Det var ett tag sedan du skrev kortet. Det försvinner om du byter telefon eller återställer den. Tryck på \"Exportera\" under \"Inställningar\" för att spara en kopia."
   },
   "edit": {
     "allOptional": "Du behöver inte fylla i allt. Skriv bara det som är viktigt för dig.",
@@ -771,7 +948,20 @@ var sv = {
     "free": "Övrigt",
     "save": "Spara",
     "saved": "Sparat ✓",
-    "saveFail": "Det gick inte att spara"
+    "saveFail": "Det gick inte att spara",
+    "contactHint": "En person per rad, till exempel \"Mamma 090-0000-0000\". Om det står vems nummer det är blir det lätt för den som läser.",
+    "ph": {
+      "name": "t.ex. Taro Yamada",
+      "blood": "t.ex. A (Rh+)",
+      "cond": "t.ex. astma, epilepsi, döv",
+      "meds": "t.ex. blodtryckstablett (1 på morgonen)",
+      "allergy": "t.ex. bovete, ägg, penicillin",
+      "doctor": "t.ex. sjukhus ABC, apotek XYZ",
+      "trouble": "t.ex. höga ljud, svårt att prata",
+      "request": "t.ex. Prata långsamt. Ring min familj.",
+      "contact": "t.ex. Mamma 090-0000-0000",
+      "free": "t.ex. var mitt försäkringskort finns, mitt husdjur hemma"
+    }
   },
   "show": {
     "head": "Det här är mitt MOSHIMO Card. Läs det, tack.",
@@ -781,7 +971,12 @@ var sv = {
     "play": "🔔 Spela ljud",
     "stop": "🔇 Stoppa ljud",
     "call": "📞 Ring",
-    "written": "Datum då kortet skrevs: {d}"
+    "written": "Datum då kortet skrevs: {d}",
+    "call119": "📞 Ring 119 (Japan: ambulans, brandkår)",
+    "call119Ask": "119 kommer att ringas. Är det okej?",
+    "call119Go": "📞 Ring 119",
+    "call119Cancel": "Avbryt",
+    "net119": "Om du inte kan tala finns det i vissa områden sätt att larma utan röst, till exempel \"NET119\" (oftast måste man registrera sig i förväg)."
   },
   "set": {
     "hNormal": "Vanliga inställningar",
@@ -802,6 +997,8 @@ var sv = {
     "alerts": ["Tyst", "Klockspel", "Alarm", "Visselpipa"],
     "vol": "Volym",
     "vols": ["Låg", "Normal", "Hög", "Maximalt (katastrof)"],
+    "order": "Ordning",
+    "orders": ["Normal", "Viktigt först"],
     "boomHint": "Den högsta nivån är till för att nå personer långt bort vid en katastrof. Låt den inte ljuda nära öronen. Höj även telefonens egen volym.",
     "bkHint": "När du byter till en ny telefon: tryck på \"Exportera\" för att spara en fil, och tryck sedan på \"Importera\" på den nya telefonen.",
     "bkExport": "Exportera",
@@ -810,6 +1007,7 @@ var sv = {
     "imported": "Importerat ✓",
     "importFail": "Det gick inte att importera",
     "paperNote": "Du kan använda den tillsammans med ett hjälpkort eller en hjälpmärkning i pappersform från din kommun.",
+    "print": "Skriv ut på papper (A6)",
     "privacy": "Integritetspolicy",
     "credit": "Apputveckling: Soyogi / SOYOGI"
   },
@@ -846,7 +1044,8 @@ var ko = {
   "home": {
     "show": "🆘 이것을 보여 주기",
     "empty": "아직 카드가 비어 있어요. \"작성\"에서 만들 수 있어요.",
-    "filled": "적힌 항목: {n}개"
+    "filled": "적힌 항목: {n}개",
+    "bkRemind": "카드를 쓴 지 시간이 꽤 지났어요. 휴대폰을 바꾸거나 초기화하면 사라져요. \"설정\"의 \"내보내기\"로 사본을 저장해 두세요."
   },
   "edit": {
     "allOptional": "모두 적지 않아도 괜찮아요. 필요한 것만 적어 주세요.",
@@ -862,7 +1061,20 @@ var ko = {
     "free": "자유롭게 적는 곳",
     "save": "저장하기",
     "saved": "저장했어요 ✓",
-    "saveFail": "저장하지 못했어요"
+    "saveFail": "저장하지 못했어요",
+    "contactHint": "한 줄에 한 명씩 \"어머니 090-0000-0000\"처럼 적어 주세요. 누구의 번호인지 알 수 있으면 보는 사람이 헷갈리지 않아요.",
+    "ph": {
+      "name": "예: 야마다 타로",
+      "blood": "예: A형 (Rh+)",
+      "cond": "예: 천식, 간질, 청각 장애",
+      "meds": "예: 혈압약 (아침에 1알)",
+      "allergy": "예: 메밀, 달걀, 페니실린",
+      "doctor": "예: ABC 병원, XYZ 약국",
+      "trouble": "예: 큰 소리가 힘들어요, 말하기 어려워요",
+      "request": "예: 천천히 말해 주세요. 가족에게 전화해 주세요.",
+      "contact": "예: 어머니 090-0000-0000",
+      "free": "예: 보험증이 있는 곳, 집에 있는 반려동물"
+    }
   },
   "show": {
     "head": "이것은 저의 \"모시모 카드\"입니다. 읽어 주세요.",
@@ -872,7 +1084,12 @@ var ko = {
     "play": "🔔 소리 내기",
     "stop": "🔇 소리 멈추기",
     "call": "📞 전화하기",
-    "written": "이 카드를 쓴 날: {d}"
+    "written": "이 카드를 쓴 날: {d}",
+    "call119": "📞 119에 전화 (일본: 구급, 화재)",
+    "call119Ask": "119에 전화합니다. 괜찮으세요?",
+    "call119Go": "📞 119에 걸기",
+    "call119Cancel": "취소",
+    "net119": "말을 할 수 없을 때는, 지역에 따라 목소리 없이 신고할 수 있는 \"NET119\" 같은 방법이 있을 수 있어요 (대개 미리 등록해야 해요)."
   },
   "set": {
     "hNormal": "평소 설정",
@@ -893,6 +1110,8 @@ var ko = {
     "alerts": ["안 울림", "차임", "알람", "호루라기"],
     "vol": "소리 크기",
     "vols": ["작게", "보통", "크게", "최대 (재난용)"],
+    "order": "순서",
+    "orders": ["보통", "중요한 것 먼저"],
     "boomHint": "최대 음량은 재난 때 멀리 있는 사람이 알아차리도록 하기 위한 소리입니다. 귀 가까이에서 울리지 마세요. 휴대전화 자체의 음량도 크게 해 주세요.",
     "bkHint": "새 스마트폰으로 옮길 때는 \"내보내기\"로 파일을 저장하고, 새 스마트폰에서 \"불러오기\"를 눌러 주세요.",
     "bkExport": "내보내기",
@@ -901,6 +1120,7 @@ var ko = {
     "imported": "불러왔어요 ✓",
     "importFail": "불러오지 못했어요",
     "paperNote": "사시는 지역의 종이 도움 카드 · 도움 마크와 함께 사용할 수 있어요.",
+    "print": "종이로 인쇄 (A6)",
     "privacy": "개인정보 처리방침",
     "credit": "앱 개발: Soyogi / SOYOGI"
   },
@@ -937,7 +1157,8 @@ var zh = {
   "home": {
     "show": "🆘 出示这张卡片",
     "empty": "卡片还是空的。可以在“填写”里创建。",
-    "filled": "已填写的内容：{n} 项"
+    "filled": "已填写的内容：{n} 项",
+    "bkRemind": "你写下这张卡片已经有一段时间了。换手机或恢复出厂设置后,卡片会消失。请点“设置”里的“导出”保存一份。"
   },
   "edit": {
     "allOptional": "不必全部填写。只写对您重要的部分就好。",
@@ -953,7 +1174,20 @@ var zh = {
     "free": "自由填写",
     "save": "保存",
     "saved": "已保存 ✓",
-    "saveFail": "无法保存"
+    "saveFail": "无法保存",
+    "contactHint": "每行写一个人,例如“妈妈 090-0000-0000”。写明是谁的号码,看到的人就不会弄错。",
+    "ph": {
+      "name": "例:山田太郎",
+      "blood": "例:A型(Rh+)",
+      "cond": "例:哮喘、癫痫、听力障碍",
+      "meds": "例:降压药(早上1片)",
+      "allergy": "例:荞麦、鸡蛋、青霉素",
+      "doctor": "例:ABC医院、XYZ药店",
+      "trouble": "例:害怕大声音、不容易说话",
+      "request": "例:请慢慢说。请给我的家人打电话。",
+      "contact": "例:妈妈 090-0000-0000",
+      "free": "例:医保卡放在哪里、家里的宠物"
+    }
   },
   "show": {
     "head": "这是我的“紧急卡片”。请读一读。",
@@ -963,7 +1197,12 @@ var zh = {
     "play": "🔔 播放声音",
     "stop": "🔇 停止声音",
     "call": "📞 拨打电话",
-    "written": "这张卡片的填写日期：{d}"
+    "written": "这张卡片的填写日期：{d}",
+    "call119": "📞 拨打119(日本:急救、火警)",
+    "call119Ask": "将拨打119。可以吗?",
+    "call119Go": "📞 拨打119",
+    "call119Cancel": "取消",
+    "net119": "如果无法说话,有些地区提供不用出声也能报警的方式,例如“NET119”(通常需要事先登记)。"
   },
   "set": {
     "hNormal": "平时的设置",
@@ -984,6 +1223,8 @@ var zh = {
     "alerts": ["不响", "门铃声", "警报声", "哨声"],
     "vol": "声音大小",
     "vols": ["小", "普通", "大", "最大音量(灾害用)"],
+    "order": "顺序",
+    "orders": ["普通", "重要的放前面"],
     "boomHint": "最大音量是为了在灾害时让远处的人察觉。请不要在耳边鸣响。也请把手机本身的音量调大。",
     "bkHint": "换新手机时，请用“导出”保存文件，然后在新手机上按“导入”。",
     "bkExport": "导出",
@@ -992,6 +1233,7 @@ var zh = {
     "imported": "已导入 ✓",
     "importFail": "无法导入",
     "paperNote": "可以和您所在地区发放的纸质帮助卡、帮助标志一起使用。",
+    "print": "打印到纸上(A6)",
     "privacy": "隐私政策",
     "credit": "应用开发：护理与支援咨询处 Soyogi / SOYOGI"
   },
@@ -1028,7 +1270,8 @@ var ar = {
   "home": {
     "show": "🆘 أظهر هذه البطاقة",
     "empty": "البطاقة ما زالت فارغة. يمكنك تعبئتها من تبويب «الكتابة».",
-    "filled": "العناصر المكتوبة: {n}"
+    "filled": "العناصر المكتوبة: {n}",
+    "bkRemind": "مضى وقت منذ كتبت بطاقتك. ستضيع إذا غيّرت الهاتف أو أعدت ضبطه. اضغط «تصدير» في «الإعدادات» لحفظ نسخة."
   },
   "edit": {
     "allOptional": "لا حاجة لتعبئة كل شيء. اكتب فقط ما يهمّك.",
@@ -1044,7 +1287,20 @@ var ar = {
     "free": "كتابة حرة",
     "save": "حفظ",
     "saved": "تم الحفظ ✓",
-    "saveFail": "تعذّر الحفظ"
+    "saveFail": "تعذّر الحفظ",
+    "contactHint": "اكتب شخصًا واحدًا في كل سطر، مثل «الأم 090-0000-0000». عندما يُكتب لمن الرقم، لا يرتبك من يرى البطاقة.",
+    "ph": {
+      "name": "مثال: تارو ياماده",
+      "blood": "مثال: A (Rh+)",
+      "cond": "مثال: الربو، الصرع، الصمم",
+      "meds": "مثال: دواء الضغط (حبة واحدة صباحًا)",
+      "allergy": "مثال: الحنطة السوداء، البيض، البنسلين",
+      "doctor": "مثال: مستشفى ABC، صيدلية XYZ",
+      "trouble": "مثال: الأصوات العالية، صعوبة الكلام",
+      "request": "مثال: تحدّث ببطء من فضلك. اتصل بعائلتي.",
+      "contact": "مثال: الأم 090-0000-0000",
+      "free": "مثال: مكان بطاقة التأمين، حيواني الأليف في البيت"
+    }
   },
   "show": {
     "head": "هذه هي بطاقتي «MOSHIMO Card». أرجو قراءتها.",
@@ -1054,7 +1310,12 @@ var ar = {
     "play": "🔔 تشغيل الصوت",
     "stop": "🔇 إيقاف الصوت",
     "call": "📞 اتصال",
-    "written": "تاريخ كتابة هذه البطاقة: {d}"
+    "written": "تاريخ كتابة هذه البطاقة: {d}",
+    "call119": "📞 اتصل بـ 119 (اليابان: إسعاف، إطفاء)",
+    "call119Ask": "سيتم الاتصال بـ 119. هل هذا مناسب؟",
+    "call119Go": "📞 اتصل بـ 119",
+    "call119Cancel": "إلغاء",
+    "net119": "إذا لم تستطع الكلام، تتوفر في بعض المناطق طرق للإبلاغ دون صوت مثل «NET119» (يلزم غالبًا التسجيل مسبقًا)."
   },
   "set": {
     "hNormal": "الإعدادات اليومية",
@@ -1075,6 +1336,8 @@ var ar = {
     "alerts": ["بلا صوت", "جرس", "إنذار", "صافرة"],
     "vol": "مستوى الصوت",
     "vols": ["منخفض", "عادي", "مرتفع", "أقصى (للكوارث)"],
+    "order": "الترتيب",
+    "orders": ["عادي", "المهم أولًا"],
     "boomHint": "أعلى مستوى مخصص لتنبيه من هم بعيدون أثناء الكوارث. لا تشغّله قرب الأذن. ارفع أيضًا مستوى صوت الهاتف نفسه.",
     "bkHint": "عند الانتقال إلى هاتف جديد، اضغط «تصدير» لحفظ ملف، ثم اضغط «استيراد» في الهاتف الجديد.",
     "bkExport": "تصدير",
@@ -1083,6 +1346,7 @@ var ar = {
     "imported": "تم الاستيراد ✓",
     "importFail": "تعذّر الاستيراد",
     "paperNote": "يمكنك استخدامها مع بطاقة المساعدة الورقية أو شارة المساعدة الخاصة بمنطقتك.",
+    "print": "طباعة على الورق (A6)",
     "privacy": "سياسة الخصوصية",
     "credit": "تطوير التطبيق: Soyogi / SOYOGI"
   },

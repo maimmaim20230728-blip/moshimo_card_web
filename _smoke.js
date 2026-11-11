@@ -193,6 +193,9 @@ function showWithContact(text){
 }
 check('連絡先に番号が2つ(改行)=ボタンも2つ(つなげた番号に発信しない)', JSON.stringify(showWithContact('はは 090-1111-2222\nちち 080-3333-4444')) === JSON.stringify(['tel:09011112222', 'tel:08033334444']));
 check('郵便番号と内線は番号にしない', JSON.stringify(showWithContact('〒123-4567\n03-1234-5678(内線123)')) === JSON.stringify(['tel:0312345678']));
+check('受付時間が続いても10桁で止まる(9:00-17:00)', JSON.stringify(showWithContact('03-1234-5678 9:00-17:00')) === JSON.stringify(['tel:0312345678']));
+check('受付時間が続いても10桁で止まる(9-17時)', JSON.stringify(showWithContact('03-1234-5678 9-17時')) === JSON.stringify(['tel:0312345678']));
+check('0800 は11桁のまま', JSON.stringify(showWithContact('0800-123-4567')) === JSON.stringify(['tel:08001234567']));
 check('番号が無ければ発信ボタンを出さない', showWithContact('はは 70歳').length === 0);
 lsData['moshimo.card.v1'] = savedCard;
 

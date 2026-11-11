@@ -6,7 +6,7 @@
    ・カードは1枚(2026-07-23ヒロさん監修)。項目10・バックアップ・みせる演出はSPEC_V1参照 */
 (function(){
 
-const VER = '1.14';
+const VER = '1.15';
 const LS_CARD = 'moshimo.card.v1';
 const LS_PREF = 'moshimo.pref.v1';
 
@@ -239,7 +239,7 @@ function extractPhones(text){
       const nums = [];
       groups.forEach((g, i) => {
         if(acc){
-          const cap = acc.plus ? (acc.d.indexOf('81') === 0 ? 13 : 15) : 11;
+          const cap = acc.plus ? (acc.d.indexOf('81') === 0 ? 13 : 15) : ((acc.d.length >= 3 && acc.d.charAt(0) === '0' && !/^0[5789]0/.test(acc.d)) ? 10 : 11);
           // 0以外で始まる並びのあとに 0 で始まる塊が来たら別の番号(日付や郵便番号のあとの電話番号を巻き込まない)
           const fresh = !acc.plus && acc.d.charAt(0) !== '0' && g.length >= 2 && g.charAt(0) === '0';
           if(acc.d.length + g.length <= cap && !fresh){ acc.d += g; acc.g.push(g); return; }

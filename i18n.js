@@ -593,7 +593,7 @@ var it = {
     "show": "🆘 Mostra questa scheda",
     "empty": "La scheda è ancora vuota. Puoi compilarla nella sezione \"Compila\".",
     "filled": "Voci compilate: {n}",
-    "bkRemind": "È passato un po' di tempo da quando ha scritto la carta. Si perde se cambia telefono o lo ripristina. Tocchi «Esporta» in «Impostazioni» per tenere una copia."
+    "bkRemind": "È passato un po' di tempo da quando hai scritto la scheda. Si perde se cambi telefono o lo ripristini. Tocca \"Esporta\" in \"Impostazioni\" per tenerne una copia."
   },
   "edit": {
     "allOptional": "Non devi compilare tutto. Scrivi solo ciò che conta per te.",
@@ -610,7 +610,7 @@ var it = {
     "save": "Salva",
     "saved": "Salvato ✓",
     "saveFail": "Impossibile salvare",
-    "contactHint": "Una persona per riga, ad esempio «Madre 090-0000-0000». Scrivere di chi è il numero aiuta chi legge la carta.",
+    "contactHint": "Una persona per riga, ad esempio \"Madre 090-0000-0000\". Scrivere di chi è il numero aiuta chi legge la scheda.",
     "ph": {
       "name": "es.: Taro Yamada",
       "blood": "es.: A (Rh+)",
@@ -637,7 +637,7 @@ var it = {
     "call119Ask": "Verrà chiamato il 119. Va bene?",
     "call119Go": "📞 Chiama il 119",
     "call119Cancel": "Annulla",
-    "net119": "Se non riesce a parlare, in alcune zone esistono modi per chiamare senza voce, come «NET119» (di solito serve registrarsi prima)."
+    "net119": "Se non riesci a parlare, in alcune zone esistono modi per chiamare senza voce, come \"NET119\" (di solito serve registrarsi prima)."
   },
   "set": {
     "hNormal": "Impostazioni abituali",
@@ -706,7 +706,7 @@ var pt = {
     "show": "🆘 Mostrar este cartão",
     "empty": "O cartão ainda está vazio. Pode criá-lo em «Preencher».",
     "filled": "Itens preenchidos: {n}",
-    "bkRemind": "Faz um tempo que você escreveu o cartão. Ele se perde se você trocar de celular ou restaurá-lo. Toque em \"Exportar\" em \"Ajustes\" para guardar uma cópia."
+    "bkRemind": "Faz um tempo que você escreveu o cartão. Ele se perde se você trocar de telefone ou restaurá-lo. Toque em «Exportar» em «Ajustes» para guardar uma cópia."
   },
   "edit": {
     "allOptional": "Não precisa preencher tudo. Escreva apenas o que for importante para você.",
@@ -723,7 +723,7 @@ var pt = {
     "save": "Salvar",
     "saved": "Salvo ✓",
     "saveFail": "Não foi possível salvar",
-    "contactHint": "Uma pessoa por linha, por exemplo \"Mãe 090-0000-0000\". Escrever de quem é o número ajuda quem lê o cartão.",
+    "contactHint": "Uma pessoa por linha, por exemplo «Mãe 090-0000-0000». Escrever de quem é o número ajuda quem lê o cartão.",
     "ph": {
       "name": "ex.: Taro Yamada",
       "blood": "ex.: A (Rh+)",
@@ -750,7 +750,7 @@ var pt = {
     "call119Ask": "Vai ligar para o 119. Tudo bem?",
     "call119Go": "📞 Ligar para o 119",
     "call119Cancel": "Cancelar",
-    "net119": "Se você não consegue falar, algumas regiões têm formas de pedir ajuda sem voz, como o \"NET119\" (em geral é preciso se cadastrar antes)."
+    "net119": "Se você não consegue falar, algumas regiões têm formas de pedir ajuda sem voz, como o «NET119» (em geral é preciso se cadastrar antes)."
   },
   "set": {
     "hNormal": "Ajustes do dia a dia",
@@ -819,7 +819,7 @@ var nl = {
     "show": "🆘 Laat deze kaart zien",
     "empty": "De kaart is nog leeg. Je kunt hem invullen op het tabblad \"Invullen\".",
     "filled": "Ingevulde onderdelen: {n}",
-    "bkRemind": "U hebt de kaart al een tijdje geleden geschreven. Ze gaat verloren als u van telefoon wisselt of hem reset. Tik bij \"Instellingen\" op \"Exporteren\" om een kopie te bewaren."
+    "bkRemind": "Je hebt je kaart een tijdje geleden geschreven. Als je een andere telefoon neemt of je telefoon reset, ben je de kaart kwijt. Tik bij \"Instellingen\" op \"Exporteren\" om een kopie te bewaren."
   },
   "edit": {
     "allOptional": "Je hoeft niet alles in te vullen. Schrijf alleen wat voor jou belangrijk is.",
@@ -863,7 +863,7 @@ var nl = {
     "call119Ask": "Er wordt 119 gebeld. Is dat goed?",
     "call119Go": "📞 Bel 119",
     "call119Cancel": "Annuleren",
-    "net119": "Als u niet kunt praten, hebben sommige regio's een manier om zonder stem te melden, zoals \"NET119\" (meestal moet u zich vooraf aanmelden)."
+    "net119": "Als je niet kunt praten, hebben sommige regio's een manier om zonder stem te melden, zoals \"NET119\" (meestal moet je je vooraf aanmelden)."
   },
   "set": {
     "hNormal": "Gewone instellingen",
@@ -1066,7 +1066,7 @@ var ko = {
     "ph": {
       "name": "예: 야마다 타로",
       "blood": "예: A형 (Rh+)",
-      "cond": "예: 천식, 간질, 청각 장애",
+      "cond": "예: 천식, 뇌전증, 청각 장애",
       "meds": "예: 혈압약 (아침에 1알)",
       "allergy": "예: 메밀, 달걀, 페니실린",
       "doctor": "예: ABC 병원, XYZ 약국",
@@ -1158,7 +1158,7 @@ var zh = {
     "show": "🆘 出示这张卡片",
     "empty": "卡片还是空的。可以在“填写”里创建。",
     "filled": "已填写的内容：{n} 项",
-    "bkRemind": "你写下这张卡片已经有一段时间了。换手机或恢复出厂设置后,卡片会消失。请点“设置”里的“导出”保存一份。"
+    "bkRemind": "您写下这张卡片已经有一段时间了。换手机或恢复出厂设置后，卡片会消失。请点“设置”里的“导出”保存一份。"
   },
   "edit": {
     "allOptional": "不必全部填写。只写对您重要的部分就好。",
@@ -1175,18 +1175,18 @@ var zh = {
     "save": "保存",
     "saved": "已保存 ✓",
     "saveFail": "无法保存",
-    "contactHint": "每行写一个人,例如“妈妈 090-0000-0000”。写明是谁的号码,看到的人就不会弄错。",
+    "contactHint": "每行写一个人，例如“妈妈 090-0000-0000”。写明是谁的号码，看到的人就不会弄错。",
     "ph": {
-      "name": "例:山田太郎",
-      "blood": "例:A型(Rh+)",
-      "cond": "例:哮喘、癫痫、听力障碍",
-      "meds": "例:降压药(早上1片)",
-      "allergy": "例:荞麦、鸡蛋、青霉素",
-      "doctor": "例:ABC医院、XYZ药店",
-      "trouble": "例:害怕大声音、不容易说话",
-      "request": "例:请慢慢说。请给我的家人打电话。",
-      "contact": "例:妈妈 090-0000-0000",
-      "free": "例:医保卡放在哪里、家里的宠物"
+      "name": "例：山田太郎",
+      "blood": "例：A型（Rh+）",
+      "cond": "例：哮喘、癫痫、听力障碍",
+      "meds": "例：降压药（早上1片）",
+      "allergy": "例：荞麦、鸡蛋、青霉素",
+      "doctor": "例：ABC医院、XYZ药店",
+      "trouble": "例：害怕很大的声音、说话有困难",
+      "request": "例：请慢慢说。请给我的家人打电话。",
+      "contact": "例：妈妈 090-0000-0000",
+      "free": "例：医保卡放在哪里、家里的宠物"
     }
   },
   "show": {
@@ -1198,11 +1198,11 @@ var zh = {
     "stop": "🔇 停止声音",
     "call": "📞 拨打电话",
     "written": "这张卡片的填写日期：{d}",
-    "call119": "📞 拨打119(日本:急救、火警)",
-    "call119Ask": "将拨打119。可以吗?",
+    "call119": "📞 拨打119（日本：急救、火警）",
+    "call119Ask": "将拨打119。可以吗？",
     "call119Go": "📞 拨打119",
     "call119Cancel": "取消",
-    "net119": "如果无法说话,有些地区提供不用出声也能报警的方式,例如“NET119”(通常需要事先登记)。"
+    "net119": "如果无法说话，有些地区提供不用出声也能报警的方式，例如“NET119”（通常需要事先登记）。"
   },
   "set": {
     "hNormal": "平时的设置",
@@ -1233,7 +1233,7 @@ var zh = {
     "imported": "已导入 ✓",
     "importFail": "无法导入",
     "paperNote": "可以和您所在地区发放的纸质帮助卡、帮助标志一起使用。",
-    "print": "打印到纸上(A6)",
+    "print": "打印到纸上（A6）",
     "privacy": "隐私政策",
     "credit": "应用开发：护理与支援咨询处 Soyogi / SOYOGI"
   },

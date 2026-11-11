@@ -324,7 +324,7 @@ html[lang="zh"] .guide-h, html[lang="zh"] .guide-p{ word-break:normal; }   /* �
 .print-row{ margin-top:12px; }
 .print-row.hidden{ display:none; }
 
-/* 印刷用の紙(画面には出さない)。A6 1枚に、書いた量で文字の大きさを3段に変えて収める */
+/* 印刷用の紙(画面には出さない)。A6 1枚に、書いた量で文字の大きさを4段に変えて収める */
 #print-sheet{ display:none; }
 @media print{
   @page{ size:A6 portrait; margin:6mm; }

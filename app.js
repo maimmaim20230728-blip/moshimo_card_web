@@ -360,7 +360,7 @@ function open119(){
 
 /* ---- 紙に印刷(A6 1枚・Web版だけ・2026-11-11) ----
    画面には出さない #print-sheet に中身を作って window.print()。@media print で、これだけを A6 に出す(style.css)。
-   書いた量で文字の大きさを3段に変えて1枚に収める。Play版は印刷の画面が無いので、せっていのボタンごと出さない */
+   書いた量で文字の大きさを4段に変えて1枚に収める。Play版は印刷の画面が無いので、せっていのボタンごと出さない */
 function canPrint(){ return !isNativeApp() && typeof window.print === 'function'; }
 function buildPrintSheet(){
   const card = loadJSON(LS_CARD);
